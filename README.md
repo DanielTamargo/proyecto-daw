@@ -74,11 +74,11 @@ Ya tenemos casi todo configurado, ahora tenemos que instalar las dependencias de
 Accedemos a la máquina virtual con `vagrant ssh` y a la consola mysql con `mysql -u root`
 ```bash
 # Creamos la base de datos para tenerla disponible
-CREATE DATABASE igobide;
+CREATE DATABASE hosteleria;
 
 # Creamos el usuario dev y le asignamos permisos
 CREATE USER 'dev'@'localhost' IDENTIFIED BY '12345Abcde';
-GRANT ALL PRIVILEGES ON igobide.* TO 'dev'@'localhost';
+GRANT ALL PRIVILEGES ON hosteleria.* TO 'dev'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
