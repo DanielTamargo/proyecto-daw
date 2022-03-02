@@ -1,10 +1,10 @@
 # Proyecto DAW
 
 > ## **Gestor de pedidos online para hostelería**
-> La Escuela de Hostelería quiere comenzar a gestionar los pedidos de sus clientes mediante una aplicación web y ha contactado con vosotros para llevar a cabo el desarrollo.
+> La Escuela de Hostelería quiere comenzar a gestionar los pedidos de sus clientes mediante una aplicación web y ha contactado con vosotros para llevar a cabo el desarrollo.  
 > Actualmente únicamente disponen de una página web con un listado de productos y precios.  
 >   
-> La idea que tienen en mente es, por un lado, disponer como mínimo de un catálogo de productos online que ellos mismos puedan gestionar mediante un usuario administrador, y por otro lado, una web responsive que los usuarios puedan visitar para realizar sus pedidos. También han pensado, como funcionalidades extra, que los administradores podrían gestionar el estado de cada pedido (recibido, en proceso, preparado), ver estadísticas de los pedidos recibidos, avisos automáticos a clientes cuando el pedido esté listo, etc.
+> La idea que tienen en mente es, por un lado, disponer como mínimo de un catálogo de productos online que ellos mismos puedan gestionar mediante un usuario administrador, y por otro lado, una web responsive que los usuarios puedan visitar para realizar sus pedidos. También han pensado, como funcionalidades extra, que los administradores podrían gestionar el estado de cada pedido (recibido, en proceso, preparado), ver estadísticas de los pedidos recibidos, avisos automáticos a clientes cuando el pedido esté listo, etc.  
 
 ## Grupo 1
 - Raúl Melgosa
@@ -20,8 +20,9 @@ Partiendo de que ya tenemos Laravel (homestead) funcionando, realizamos una seri
 Lo primero será clonar el repositorio, clonarlo donde tengas los demás proyectos de Laravel, así podrás localizarlo más rápido.  
 
 ## 2- Fichero .env
-> Notas del parche: *Protejámonos de los franceses*
-> El fichero de ejemplo .env ya no se llamará ejemplo.env, ahora será ejemplo-entorno. 
+> Notas del parche: *Protejámonos de los franceses*  
+> El fichero de ejemplo .env ya no se llamará ejemplo.env, ahora será ejemplo-entorno.  
+
 El fichero .env **nunca** debería publicarse, por lo que se incluye en el .gitignore. Como es un proyecto de clase y lo que buscamos es trabajar en conjunto y aprender, sí que subiremos un fichero llamado **ejemplo-entorno** el cual renombraremos a .env y así tendremos disponibles las variables de entorno que configuran nuestro proyecto.  
 Accedemos a la carpeta del proyecto y ejecutamos:  
 ```bash
