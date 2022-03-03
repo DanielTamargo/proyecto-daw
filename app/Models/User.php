@@ -12,33 +12,65 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    // Permite guardar las variables indicadas
     protected $fillable = [
-        'name',
         'email',
+        'username',
         'password',
+        'rol',
+        'nombre',
+        'direccion',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
+    // Atributos que deberían ser ocultos en la serialización
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
+    // Atributos que deberían tener un cast
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Relación: One to Many
+     * 
+     * Devuelve los pedidos del cliente
+    */
+    public function pedidos()
+    {
+        return $this->hasMany(Pedido::class, 'cliente_id', 'id');
+    }
+
+    /**
+     * Relación: One to Many
+     * 
+     * Devuelve los comentarios del cliente
+    */
+    public function comentarios()
+    {
+        return $this->hasMany(Comentario::class, 'cliente_id', 'id');
+    }
+
+    /**
+     * Relación: One to Many
+     * 
+     * Devuelve los productos añadidos al carrito del cliente
+    */
+    public function productosCarrito()
+    {
+        return $this->hasMany(ProductosCarrito::class, 'cliente_id', 'id');
+    }
+
+    /**
+     * Relación: One to Many
+     * 
+     * Devuelve los productos creados por el administrador
+    */
+    public function productosCreados()
+    {
+        return $this->hasMany(Producto::class, 'creado_por', 'id');
+    }
+
 }
