@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('dni');
             $table->string('nombre');
             $table->string('direccion');
+            $table->string('telefono');
             
             $table->rememberToken();
         });
