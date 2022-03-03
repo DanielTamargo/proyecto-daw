@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
+use DateTime;
+
 class Constants
 {
     /**
      * Las enumeraciones dieron ciertos problemas en el proyecto pasado, por lo que vamos a optar
      * por otra solución.
      * 
-     * 
      * Para fomentar unas buenas prácticas usaremos constantes como enumeraciones con unos valores fijos
      * en lugar de hardcodear los valores cuando se necesiten (pudiendo provocar el clásico 'muñoneo')
      */
-
 
     // EstadosPedidos
     const ESTADO_RECIBIDO  = 'recibido';
@@ -42,4 +42,17 @@ class Constants
     
     const CATEGORIAPRODUCTO_REFRESCO = 'refresco';
     const CATEGORIAPRODUCTO_VINO     = 'vino';
+
+
+    /**
+     * @param DateTime $start fecha mínima
+     * @param DateTime $end fecha máxima
+     * @return DateTime devuelve el timestamp obtenido aleatoriamente entre ambas fechas
+     */
+    public static function randomTimestampEntreFechas(DateTime $start, DateTime $end) {
+        $randomTimestamp = mt_rand($start->getTimestamp(), $end->getTimestamp());
+        $randomDate = new DateTime();
+        $randomDate->setTimestamp($randomTimestamp);
+        return $randomDate;
+    }
 }
