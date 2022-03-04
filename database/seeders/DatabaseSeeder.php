@@ -59,7 +59,7 @@ class DatabaseSeeder extends Seeder
 
 
         // Creamos dos administradores
-        $dani = User::create([
+        User::create([
             'email' => 'daniel.tamargo@ikasle.egibide.org',
             'username' => 'dani',
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
@@ -71,7 +71,7 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
             'email_verified_at' => now(),
         ]);
-        $raul = User::create([
+        User::create([
             'email' => 'raul.melgosa@ikasle.egibide.org',
             'username' => 'raul',
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
@@ -120,8 +120,14 @@ class DatabaseSeeder extends Seeder
         // Creamos categorías productos (utilizando el pivot)
         $maxId = Categoria::all()->last()->id;
         foreach ($productos as $producto) {
-            foreach (range(1, $maxId) as $num) {
-                if (rand(0, 100) < $categoria_probabilidad) CategoriasProducto::create(['producto_id' => $producto->id, 'categoria_id' => $num]);
+            $categoria_asignada = false; // <- mínimo necesitaremos haber asignado una categoría
+            while(!$categoria_asignada) {
+                foreach (range(1, $maxId) as $num) {
+                    if (rand(0, 100) < $categoria_probabilidad) {
+                        $categoria_asignada = true;
+                        CategoriasProducto::create(['producto_id' => $producto->id, 'categoria_id' => $num]);
+                    }
+                }
             }
         }
 
