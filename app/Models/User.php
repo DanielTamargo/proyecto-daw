@@ -60,7 +60,7 @@ class User extends Authenticatable
     */
     public function productosCarrito()
     {
-        return $this->hasMany(ProductosCarrito::class, 'cliente_id', 'id');
+        return $this->belongsToMany(Producto::class, 'productos_carritos', 'cliente_id', 'producto_id');
     }
 
     /**
