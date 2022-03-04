@@ -33,6 +33,6 @@ class Pedido extends Model
      */
     public function productos()
     {
-        return $this->hasManyThrough(ProductosPedido::class, 'productos_pedidos', 'producto_id', 'pedido_id');
+        return $this->belongsToMany(Producto::class, 'productos_pedidos', 'pedido_id', 'producto_id');
     }
 }
