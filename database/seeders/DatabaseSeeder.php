@@ -23,29 +23,40 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // Variables control seeder
+        // VARIABLES CONTROL SEEDER
+
+        /* -- CLIENTES -- */
         $clientes_min = 10;
         $clientes_max = 20;
 
+        /* -- PRODUCTOS -- */
         $productos_min = 50;
         $productos_max = 100;
-
-        $fecha_min = new DateTime('2000-01-01');
-        $fecha_max = new DateTime();
-
+        // Fecha publicación productos está configurado en ProductoFactory.php
         $categoria_probabilidad = 25;
+
+        /* -- PEDIDOS -- */
+        $fecha_min = new DateTime('2005-01-01');
+        $fecha_max = new DateTime();
 
         $pedidos_min = 20;
         $pedidos_max = 40;
-
         $pedido_probabilidad_cancelado = 10;
 
         $productos_pedido_min = 1;
         $productos_pedido_max = 8;
 
+        /* -- PEDIDOS PENDIENTES -- */
+        $pedidos_pdtes_min = 2;
+        $pedidos_pdtes_max = 4;
 
-        // Seeder
+        $productos_pedido_pdte_min = 1;
+        $productos_pedido_pdte_max = 8;
+
+        
+        // COMIENZA EL SEEDER
         $this->command->warn("Starting Seeding. ");
+
 
         // Creamos dos administradores
         $dani = User::create([
@@ -73,8 +84,17 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
 
+
         // Creamos clientes
         $clientes = User::factory(rand($clientes_min, $clientes_max))->create();
+        // Cambiamos la fecha de creación y actualización del cliente (para simular que se registraron a través de los años)
+        foreach ($clientes as $cliente) {
+            $fecha_random = Constants::randomTimestampEntreFechas($fecha_min, $fecha_max);
+            $cliente->created_at = $fecha_random;
+            $cliente->updated_at = $fecha_random;
+            $cliente->save();
+        }
+
 
         // Creamos categorías (hardcodeadas, serán categorías fijas)
         Categoria::create(['nombre' => Constants::CATEGORIAPRODUCTO_ENTRANTE]);
@@ -92,9 +112,10 @@ class DatabaseSeeder extends Seeder
         Categoria::create(['nombre' => Constants::CATEGORIAPRODUCTO_REFRESCO]);
         Categoria::create(['nombre' => Constants::CATEGORIAPRODUCTO_VINO]);
 
+
         // Creamos productos
-        $productos = Producto::factory(rand($productos_min, $productos_max))
-            ->create(['fecha_publicacion' => Constants::randomTimestampEntreFechas($fecha_min, $fecha_max)]);
+        $productos = Producto::factory(rand($productos_min, $productos_max))->create();
+
 
         // Creamos categorías productos (utilizando el pivot)
         $maxId = Categoria::all()->last()->id;
@@ -104,22 +125,24 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // Creamos pedidos
-        for ($i = 0; $i < 1; $i++) {
-            $fecha_pedido = Constants::randomTimestampEntreFechas($fecha_min, $fecha_max);
-            $productos_disponibles = Producto::where('fecha_publicacion', '<', $fecha_pedido)->get();
 
-            // TODO comprobar clientes disponibles, o registrar todos los clientes a una fecha anterior, o dejarlo así
+        // Creamos pedidos
+        for ($i = 0; $i < rand($pedidos_min, $pedidos_max); $i++) {
+            $fecha_pedido = Constants::randomTimestampEntreFechas($fecha_min, $fecha_max);
+
+            // Comprobamos que, en base a la fecha a utilizar para el pedido, ya existían productos publicados y clientes registrados
+            $productos_disponibles = Producto::where('fecha_publicacion', '<', $fecha_pedido)->get();
+            $clientes_disponibles = User::where('created_at', '<', $fecha_pedido)->where('rol', Constants::ROL_CLIENTE)->get();
 
             // Si por fecha no encuentra productos que estuvieran disponibles, repite
-            if (count($productos_disponibles) <= 0) {
+            if (count($productos_disponibles) <= 0 || count($clientes_disponibles) <= 0) {
                 $i--;
                 continue;
             }
 
             // Creamos el pedido
             $pedido = Pedido::create([
-                'cliente_id' => $clientes[rand(0, count($clientes) - 1)]->id,
+                'cliente_id' => $clientes_disponibles[rand(0, count($clientes_disponibles) - 1)]->id,
                 'estado' => rand(0, 100) > $pedido_probabilidad_cancelado ? Constants::ESTADO_ENTREGADO : Constants::ESTADO_CANCELADO,
                 'fecha_pedido' => $fecha_pedido
             ]);
@@ -129,14 +152,35 @@ class DatabaseSeeder extends Seeder
             $num_productos_pedido = rand($productos_pedido_min, $productos_pedido_max);
             for ($j = 0; $j < $num_productos_pedido; $j++) {
                 ProductosPedido::create([
+                    'producto_id' => $productos_disponibles[rand(0, count($productos_disponibles) - 1)]->id,
+                    'pedido_id' => $pedido->id
+                ]);
+            }
+
+            // Actualizamos timestamps
+            $pedido->created_at = $fecha_pedido;
+            $pedido->updated_at = $fecha_pedido;
+            $pedido->save();
+        }
+        
+        // Creamos pedidos pendientes
+        for ($i = 0; $i < rand($pedidos_pdtes_min, $pedidos_pdtes_max); $i++) {
+            // Creamos el pedido
+            $pedido = Pedido::create([
+                'cliente_id' => $clientes_disponibles[rand(0, count($clientes_disponibles) - 1)]->id,
+                'estado' => rand(0, 100) > $pedido_probabilidad_cancelado ? Constants::ESTADO_ENTREGADO : Constants::ESTADO_CANCELADO,
+                'fecha_pedido' => $fecha_pedido
+            ]);
+
+            // Asociamos productos
+            $num_productos_pedido = rand($productos_pedido_pdte_min, $productos_pedido_pdte_max);
+            for ($j = 0; $j < $num_productos_pedido; $j++) {
+                ProductosPedido::create([
                     'producto_id' => $productos[rand(0, count($productos) - 1)]->id,
                     'pedido_id' => $pedido->id
                 ]);
             }
         }
-
-        // Creamos pedidos pendientes
-        // TODO
 
     }
 }
