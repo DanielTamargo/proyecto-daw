@@ -9,7 +9,7 @@ form2.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16
 <path d="M10 12.796V3.204L4.519 8 10 12.796zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z"/>
 </svg>`;
 form2.style.cursor = 'pointer';
-form2.style.filter = 'brightness(0.8)';
+form2.style.filter = 'brightness(0.9)';
 
 form2.addEventListener('click', toggleForm);
 form2.addEventListener('mouseenter', hover);
@@ -19,15 +19,15 @@ function hover(evt) {
     evt.target.style.width = '15%';
     evt.target.style.filter = 'brightness(1)';
     if(evt.target.id=='form2') {
-        form1.style.filter = 'brightness(0.8)';
+        form1.style.filter = 'brightness(0.95)';
     } else {
-        form2.style.filter = 'brightness(0.8)';
+        form2.style.filter = 'brightness(0.95)';
     }
 }
 
 function stopHover(evt) {
     evt.target.style.width = '10%';
-    evt.target.style.filter = 'brightness(0.8)';
+    evt.target.style.filter = 'brightness(0.95)';
     if(evt.target.id=='form2') {
         form1.style.filter = 'brightness(1)';
     } else {
