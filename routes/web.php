@@ -1,11 +1,9 @@
 <?php
 
+use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\UsuarioController;
-use App\Models\Categoria;
-use App\Models\Pedido;
-use App\Models\Producto;
-use App\Models\User;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -43,17 +41,25 @@ Route::delete('/productos', [ProductoController::class, 'delete'])->name('produc
 
 /*-- USUARIOS --*/
 Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index')->middleware('auth.admin');
-// Route::get('/usuarios/{id}', [UsuarioController::class, 'show'])->name('usuarios.show');
-// Route::put('/usuarios/{id}', [UsuarioController::class, 'edit'])->name('usuarios.edit');
-// Route::delete('/usuarios', [UsuarioController::class, 'delete'])->name('usuarios.delete');
+Route::get('/usuarios/{id}', [UsuarioController::class, 'show'])->name('usuarios.show');
+Route::delete('/usuarios', [UsuarioController::class, 'delete'])->name('usuarios.delete');
+
+
+/*-- COMENTARIOS --*/
+Route::post('/productos/{id}', [ComentarioController::class, 'store'])->name('comentarios.store')->middleware('auth');
+
+
+/*-- CARRITO AÑADIR / QUITAR PRODUCTO --*/
+Route::post('/carrito/{id}', [ProductosCarrito::class, 'add'])->name('carrito.add')->middleware('auth');
+Route::delete('/carrito/{id}', [ProductosCarrito::class, 'remove'])->name('carrito.remove')->middleware('auth');
 
 
 /*-- PRUEBAS -- */
 Route::get('/pruebas/relaciones', function () {
     return view('pruebas.relaciones')
-        ->with('usuarios', User::all())
-        ->with('productos', Producto::all())
-        ->with('pedidos', Pedido::all())
-        ->with('categorias', Categoria::all())
+        ->with('usuarios', App\Models\User::all())
+        ->with('productos', App\Models\Producto::all())
+        ->with('pedidos', App\Models\Pedido::all())
+        ->with('categorias', App\Models\Categoria::all())
         ;
 });
