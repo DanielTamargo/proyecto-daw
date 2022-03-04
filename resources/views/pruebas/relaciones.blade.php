@@ -1,6 +1,34 @@
 @extends('layouts.app')
 
 @section('content')
+
+    {{-- 
+        - Utilidades:
+            + Obtener puntuación media de valoraciones de un producto:
+                $punt_media = number_format(App\Models\Comentario::where('producto_id', $producto->id)->pluck('puntuacion')->avg(), 1);
+
+        - Relaciones:
+            + Producto:
+                $producto->creador 
+                $producto->comentarios 
+                $producto->categorias
+
+            + Usuario cliente:
+                $usuario->pedidos
+                $usuario->comentarios
+                $usuario->productosCarrito
+
+            + Usuario administrador:
+                $usuario->productosCreados
+
+            + Pedido:
+                $pedido->productos
+                $pedido->cliente
+            
+            + Categorías:
+                $categoria->productos
+    --}}
+
     <div class="px-5">
         {{-- USUARIOS --}}
         <div class="card mb-4">
@@ -42,6 +70,10 @@
                     <p class="card-text m-0"><b>{{ $producto->id }}</b> | {{ $producto->nombre }}</p>
                     <p class="card-text m-0">Creado por: {{ $producto->creador->nombre }}</p>
                     <p class="card-text m-0">Número de comentarios: {{ count($producto->comentarios) }}</p>
+                    @php
+                        $punt_media = number_format(App\Models\Comentario::where('producto_id', $producto->id)->pluck('puntuacion')->avg(), 2);
+                    @endphp
+                    <p class="card-text m-0">Puntuación media: {{ $punt_media < 1 ? 'Sin puntuaciones' : $punt_media }}</p>
                     <p class="card-text m-0">Categorías: 
                         @foreach ($producto->categorias as $categoria)
                             {{ ucfirst($categoria->nombre) }} 
