@@ -1,5 +1,10 @@
 <?php
 
+use App\Models\Categoria;
+use App\Models\Pedido;
+use App\Models\Producto;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,3 +25,13 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+/*-- PRUEBAS -- */
+Route::get('/pruebas/relaciones', function () {
+    return view('pruebas.relaciones')
+        ->with('usuarios', User::all())
+        ->with('productos', Producto::all())
+        ->with('pedidos', Pedido::all())
+        ->with('categorias', Categoria::all())
+        ;
+});
