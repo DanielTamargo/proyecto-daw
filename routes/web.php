@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 /*-- AUTH --*/
 Auth::routes();
-Route::get('/register', function () { return redirect()->route('login'); })->name('usuarios.create');
+Route::get('/register', function () { return redirect()->route('login'); })->name('register');
 
 
 /*-- REDIRECCIONES INICIO / HOME --*/
