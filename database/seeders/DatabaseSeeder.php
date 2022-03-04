@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Categoria;
 use App\Models\CategoriasProducto;
+use App\Models\Comentario;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -53,10 +54,18 @@ class DatabaseSeeder extends Seeder
         $productos_pedido_pdte_min = 1;
         $productos_pedido_pdte_max = 8;
 
+        /* -- COMENTARIOS -- */
+        $comentarios_min = 0;
+        $comentarios_max = 10;
+        $probabilidad_punt_1 = 5;
+        $probabilidad_punt_2 = 15;
+        $probabilidad_punt_3 = 40;
+        $probabilidad_punt_4 = 80;
+        // El restante hasta 100 será probabilidad de ser una puntuación de 5
+
         
         // COMIENZA EL SEEDER
         $this->command->warn("Starting Seeding. ");
-
 
         // Creamos dos administradores
         User::create([
@@ -184,6 +193,41 @@ class DatabaseSeeder extends Seeder
                 ProductosPedido::create([
                     'producto_id' => $productos[rand(0, count($productos) - 1)]->id,
                     'pedido_id' => $pedido->id
+                ]);
+            }
+        }
+
+
+        // Comentarios
+        foreach ($productos as $producto) {
+            for ($i = 0; $i < rand($comentarios_min, $comentarios_max); $i++) {
+                $fecha_publicacion = Constants::randomTimestampEntreFechas($fecha_min, $fecha_max);
+
+                // Comprobamos que, en base a la fecha a utilizar para el pedido, ya existían productos publicados y clientes registrados
+                $productos_disponibles = Producto::where('fecha_publicacion', '<', $fecha_pedido)->get();
+                $clientes_disponibles = User::where('created_at', '<', $fecha_pedido)->where('rol', Constants::ROL_CLIENTE)->get();
+
+                // Si por fecha no encuentra productos que estuvieran disponibles, repite
+                if (count($productos_disponibles) <= 0 || count($clientes_disponibles) <= 0) {
+                    $i--;
+                    continue;
+                }
+
+                // Calculamos la puntuación de valoración que añadirá
+                $valoracion = 1;
+                $probabilidad = rand(0, 100);
+                if ($probabilidad < $probabilidad_punt_1) $valoracion = 1;
+                else if ($probabilidad < $probabilidad_punt_2) $valoracion = 2;
+                else if ($probabilidad < $probabilidad_punt_3) $valoracion = 3;
+                else if ($probabilidad < $probabilidad_punt_4) $valoracion = 4;
+                else $valoracion = 5;
+
+                Comentario::create([
+                    'texto' => 'Comentario de prueba',
+                    'puntuacion' => $valoracion,
+                    'fecha_publicacion' => $fecha_publicacion,
+                    'producto_id' => $productos_disponibles[rand(0, count($productos_disponibles) - 1)]->id,
+                    'cliente_id' => $clientes_disponibles[rand(0, count($clientes_disponibles) - 1)]->id
                 ]);
             }
         }
