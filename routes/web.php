@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\UsuarioController;
 use App\Models\Categoria;
 use App\Models\Pedido;
 use App\Models\Producto;
@@ -18,13 +20,33 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
+/*-- AUTH --*/
 Auth::routes();
+Route::get('/register', function () { return redirect()->route('login'); })->name('usuarios.create');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+/*-- REDIRECCIONES INICIO / HOME --*/
+Route::get('/inicio', function () { return redirect()->route('productos.index'); });
+Route::get('/home', function () { return redirect()->route('productos.index'); });
+Route::get('/', function () { return redirect()->route('productos.index'); });
+
+
+/*-- PRODUCTOS --*/
+Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
+Route::get('/productos/{id}', [ProductoController::class, 'show'])->name('productos.show');
+Route::put('/productos/{id}', [ProductoController::class, 'edit'])->name('productos.edit');
+Route::get('/productos/nuevo', [ProductoController::class, 'create'])->name('productos.create');
+Route::post('/productos/nuevo', [ProductoController::class, 'store'])->name('productos.store');
+Route::delete('/productos', [ProductoController::class, 'delete'])->name('productos.delete');
+
+
+/*-- USUARIOS --*/
+Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
+// Route::get('/usuarios/{id}', [UsuarioController::class, 'show'])->name('usuarios.show');
+// Route::put('/usuarios/{id}', [UsuarioController::class, 'edit'])->name('usuarios.edit');
+// Route::delete('/usuarios', [UsuarioController::class, 'delete'])->name('usuarios.delete');
+
 
 /*-- PRUEBAS -- */
 Route::get('/pruebas/relaciones', function () {
