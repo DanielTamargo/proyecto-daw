@@ -35,14 +35,14 @@ Route::get('/', function () { return redirect()->route('productos.index'); });
 /*-- PRODUCTOS --*/
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
 Route::get('/productos/{id}', [ProductoController::class, 'show'])->name('productos.show');
-Route::put('/productos/{id}', [ProductoController::class, 'edit'])->name('productos.edit');
-Route::get('/productos/nuevo', [ProductoController::class, 'create'])->name('productos.create');
-Route::post('/productos/nuevo', [ProductoController::class, 'store'])->name('productos.store');
-Route::delete('/productos', [ProductoController::class, 'delete'])->name('productos.delete');
+Route::put('/productos/{id}', [ProductoController::class, 'edit'])->name('productos.edit')->middleware('auth.admin');
+Route::get('/productos/nuevo', [ProductoController::class, 'create'])->name('productos.create')->middleware('auth.admin');
+Route::post('/productos/nuevo', [ProductoController::class, 'store'])->name('productos.store')->middleware('auth.admin');
+Route::delete('/productos', [ProductoController::class, 'delete'])->name('productos.delete')->middleware('auth.admin');
 
 
 /*-- USUARIOS --*/
-Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
+Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index')->middleware('auth.admin');
 // Route::get('/usuarios/{id}', [UsuarioController::class, 'show'])->name('usuarios.show');
 // Route::put('/usuarios/{id}', [UsuarioController::class, 'edit'])->name('usuarios.edit');
 // Route::delete('/usuarios', [UsuarioController::class, 'delete'])->name('usuarios.delete');
