@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('productos_pedidos', function (Blueprint $table) {
             $table->id();
-            $table->timestamps(); // created_at, updated_at
+            //$table->timestamps(); // created_at, updated_at
 
             // Referencia al pedido sobre el que se añaden los productos comprados
             $table->unsignedBigInteger('pedido_id');

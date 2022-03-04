@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('categorias_productos', function (Blueprint $table) {
             $table->id();
-            $table->timestamps(); // created_at, updated_at
+            //$table->timestamps(); // created_at, updated_at
 
             // Referencia al producto al que se le vinculará la categoría
             $table->unsignedBigInteger('producto_id');

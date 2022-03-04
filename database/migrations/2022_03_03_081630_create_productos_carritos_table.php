@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('productos_carritos', function (Blueprint $table) {
             $table->id();
-            $table->timestamps(); // created_at, updated_at
+            //$table->timestamps(); // created_at, updated_at
 
             // Referencia al producto añadido al carrito
             $table->unsignedBigInteger('producto_id');
