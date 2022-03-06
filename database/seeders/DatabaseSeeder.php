@@ -222,8 +222,8 @@ class DatabaseSeeder extends Seeder
                 else if ($probabilidad < $probabilidad_punt_4) $valoracion = 4;
                 else $valoracion = 5;
 
-                Comentario::create([
-                    'texto' => 'Comentario de prueba',
+                // Producto::factory(rand($productos_min, $productos_max))->create()
+                Comentario::factory(1)->create([
                     'puntuacion' => $valoracion,
                     'fecha_publicacion' => $fecha_publicacion,
                     'producto_id' => $productos_disponibles[rand(0, count($productos_disponibles) - 1)]->id,
