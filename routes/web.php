@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\UsuarioController;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +24,13 @@ use Illuminate\Support\Facades\Route;
 /*-- AUTH --*/
 Auth::routes();
 Route::get('/register', function () { return redirect()->route('login'); })->name('register');
+
+/*-- CERRAR SESIÓN DURANTE LAS PRUEBAS --*/
+Route::get('/logout', function () { 
+    Session::flush();
+    Auth::logout();
+    return redirect()->route('register');    
+})->name('logout.get');
 
 
 /*-- REDIRECCIONES INICIO / HOME --*/

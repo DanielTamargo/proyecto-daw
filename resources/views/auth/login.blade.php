@@ -6,6 +6,14 @@
 
 @section('content')
 <div class="contenedor">
+    @if ($errors->any()) {{-- Cambiar por un alert/toast --}}
+        @if ($errors->has('username')) {{-- Login error --}}
+            
+        @endif
+        <div class="alert alert-danger">
+            <p>{{ $errors->first('username') }}</p>
+        </div>
+    @endif
     <div class="loginCard">
         <div id="form1" class="form1">
             <h1 class="noSaltar">Iniciar Sesi&oacute;n</h1>
