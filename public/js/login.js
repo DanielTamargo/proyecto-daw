@@ -65,6 +65,9 @@ function toggleForm(evt) {
 
         form2.style.justifyContent = 'normal';
         form2.style.alignItems = 'normal';
+
+        // Añadir evento comprobarDNI
+        document.getElementById('dni').addEventListener('change', comprobarDNI);
     } else {
         form1.removeEventListener('click', toggleForm);
         form2.addEventListener('click', toggleForm);

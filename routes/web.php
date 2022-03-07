@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\ProductoController;
@@ -23,7 +24,8 @@ use Illuminate\Support\Facades\Session;
 
 /*-- AUTH --*/
 Auth::routes();
-Route::get('/register', function () { return redirect()->route('login'); })->name('register');
+Route::get('/register', function () { return redirect()->route('login')->with('registrar_usuario', 'true'); })->name('register');
+Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
 /*-- CERRAR SESIÓN DURANTE LAS PRUEBAS --*/
 Route::get('/logout', function () { 
@@ -34,7 +36,7 @@ Route::get('/logout', function () {
 
 
 /*-- REDIRECCIONES INICIO / HOME --*/
-Route::get('/inicio', function () { return redirect()->route('productos.index'); });
+Route::get('/inicio', function () { return redirect()->route('productos.index'); })->name('inicio');
 Route::get('/home', function () { return redirect()->route('productos.index'); });
 Route::get('/', function () { return redirect()->route('productos.index'); });
 

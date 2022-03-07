@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -32,42 +34,58 @@ class RegisterController extends Controller
     protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * Registra un nuevo empleado
      */
-    public function __construct()
+    protected function store(Request $request)
     {
-        $this->middleware('guest');
-    }
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        // Validamos los datos
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string|max:255|unique:users',
+            'email' => 'required|string|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'rol' => 'required|string|max:255',
+            'dni' => 'required|string|min:9|max:12|unique:users',
+            'nombre' => 'required|string|max:255',
+            'telefono' => 'required|string|max:25',
+            'direccion' => 'required|string|max:255',
         ]);
-    }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+        if ($validator->fails()) {
+            return back()
+                    ->withErrors($validator)
+                    ->with('registro', 'true')
+                    ->withInput();
+        }
+
+
+        // Creamos el nuevo usuario
+        User::create([
+            'username' => $request->username,
+            'email' => $request->email,
+            'nombre' => $request->nombre,
+            'password' => Hash::make($request->password),
+            'rol' => $request->rol,
+            'dni' => $request->dni,
+            'telefono' => $request->telefono,
+            'direccion' => $request->direccion,
         ]);
+
+
+        // Enviamos email al nuevo usuario
+        /*
+        $detalles = [
+            'asunto' => 'Usuario Registrado',
+            'rol_destinatario' => 'nuevo-empleado',
+            'nombre' => $request->nombre,
+            'usuario' => $request->email,
+            'password' => $request->password
+        ];
+        */
+
+        // TODO enviar email
+
+
+        // Redirigimos a la ventana de inicio
+        return redirect()->route('inicio', ['usuario_creado' => true]);
     }
 }
