@@ -68,6 +68,10 @@ function toggleForm(evt) {
 
         // Añadir evento comprobarDNI
         document.getElementById('dni').addEventListener('change', comprobarDNI);
+        
+        // Añadir eventos comprobarContrasenyas
+        document.getElementById('password').addEventListener('change', comprobarContrasenyas);
+        document.getElementById('password-confirm').addEventListener('change', comprobarContrasenyas);
     } else {
         form1.removeEventListener('click', toggleForm);
         form2.addEventListener('click', toggleForm);

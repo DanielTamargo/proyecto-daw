@@ -1,5 +1,17 @@
-// Variable error que controla si se hace la animación o no
-var error: boolean = false;
+// Document ready
+$.when( $.ready ).then(function() {
+    // Listener input dni
+    $("#dni").on('change', comprobarDNI);
+
+    // Listeners comprobar contraseña
+    $("#password").on('change', comprobarContrasenyas);
+    $("#password-confirm").on('change', comprobarContrasenyas);
+});
+
+
+// Variables error que controlan si se hace la animación o no
+var error_dni: boolean = false;
+var error_password: boolean = false;
 
 /**
  * Valida el DNI introducido (expresión regular y comprobación dni válida)
@@ -42,20 +54,36 @@ function comprobarDNI(): void {
     let input_dni: JQuery<HTMLElement> = $("#dni");
     let dni_valido: boolean = validarDNI(String(input_dni.val()));
     if (dni_valido) {
-        error = false;
+        error_dni = false;
         $("#registro-submit").removeAttr('disabled');
         input_dni.notify(``, { autoHideDelay: 0, showDuration: 0 }); // <- para ocultar posible notificación previa
     } else {
-        if (!error) {
-            error = true;
+        if (!error_dni) {
+            error_dni = true;
             $("#registro-submit").attr('disabled', "true");
             input_dni.notify("DNI no válido.", { autoHide: false, clickToHide: false });
         }
     }
 }
 
-// Document ready
-$.when( $.ready ).then(function() {
-    // Listener input dni
-    $("#dni").on('change', comprobarDNI);
-});
+/**
+ * Verifica que las contraseñas introducidas coinciden.
+ */
+function comprobarContrasenyas(): void {
+    let elm_password_confirmation: JQuery<HTMLElement> = $("#password-confirm");
+
+    let password: string = String($("#password").val()).trim();
+    let password_confirmation: string = String(elm_password_confirmation.val()).trim()
+
+    if (password !== password_confirmation) {
+        if (!error_password) {
+            error_password = true;
+            $("#registro-submit").attr('disabled', "true");
+            elm_password_confirmation.notify("Las contraseñas no coinciden", { autoHide: false, clickToHide: false });
+        }
+    } else {
+        error_password = false;
+        $("#registro-submit").removeAttr('disabled');
+        elm_password_confirmation.notify(``, { autoHideDelay: 0, showDuration: 0 });
+    }
+}
