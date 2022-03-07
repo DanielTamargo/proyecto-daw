@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Hosteleria') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -26,11 +26,11 @@
             <div class="nav-content-container">
                 <div class="nav-content navbar navbar-expand-lg navbar-dark">
                     <div class="container-fluid">
-                        <a class="navbar-brand" href="#">Navbar</a>
+                        <a class="navbar-brand" href="{{ route('productos.index') }}">{{ config('app.name', 'Hosteleria') }}</a>
                         <div id="derecha">
                             <div id="boton-carrito" class="d-inline-block me-5">
                                 <a href="">
-                                    <span id="indicador-carrito" class="badge rounded-pill bg-danger"><!-- Variable numero de items en el carrito (Solo si != 0) --></span>
+                                    <span id="indicador-carrito" class="badge rounded-pill bg-danger">12<!-- Variable numero de items en el carrito (Solo si != 0) --></span>
                                     <div class="carrito-svg-container">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
                                             <circle cx="176" cy="416" r="16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
@@ -52,10 +52,15 @@
                         <div class="collapse navbar-collapse" id="navbarNav">
                             <ul class="navbar-nav">
                                 <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="#">Carta</a>
+                                    <a class="nav-link active" aria-current="page" href="{{ route('productos.index') }}">Carta</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Mi perfil</a>
+                                    <a class="nav-link" @guest
+                                        href="{{ route('login') }}"
+                                    @elseguest
+                                        href="#"
+                                    @endguest
+                                    >Mi perfil</a>
                                 </li>
                             </ul>
                         </div>
