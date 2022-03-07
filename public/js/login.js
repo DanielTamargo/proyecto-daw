@@ -1,3 +1,5 @@
+let cargarRegistro = document.getElementById('cargar-registro').value;
+
 let form1 = document.querySelector('#form1');
 let form2 = document.querySelector('#form2');
 let form1Content = form1.innerHTML;
@@ -70,8 +72,8 @@ function toggleForm(evt) {
         document.getElementById('dni').addEventListener('change', comprobarDNI);
         
         // Añadir eventos comprobarContrasenyas
-        document.getElementById('password').addEventListener('change', comprobarContrasenyas);
-        document.getElementById('password-confirm').addEventListener('change', comprobarContrasenyas);
+        document.getElementById('password').addEventListener('change', comprobarContrasenya);
+        document.getElementById('password-confirm').addEventListener('change', comprobarContrasenya);
     } else {
         form1.removeEventListener('click', toggleForm);
         form2.addEventListener('click', toggleForm);

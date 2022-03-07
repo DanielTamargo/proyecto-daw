@@ -1,9 +1,13 @@
 $.when($.ready).then(function () {
     $("#dni").on('change', comprobarDNI);
-    $("#password-confirm").on('change', comprobarContrasenyas);
+    $("#password").on('change', comprobarContrasenya);
+    $("#password-confirm").on('change', comprobarContrasenya);
 });
+var longitud_deseada_contrasenya = 8;
 var error_dni = false;
-var error_password = false;
+var error_password_confirmar = false;
+var error_password_longitud = false;
+var error_password_caracteres = false;
 function validarDNI(dni) {
     if (typeof dni != "string") {
         return false;
@@ -37,21 +41,65 @@ function comprobarDNI() {
         }
     }
 }
-function comprobarContrasenyas() {
+function cotejarContrasenyas() {
     var elm_password_confirmation = $("#password-confirm");
     var password = String($("#password").val()).trim();
     var password_confirmation = String(elm_password_confirmation.val()).trim();
-    if (password !== password_confirmation) {
-        if (!error_password) {
-            error_password = true;
+    if (password_confirmation.length > 0 && password !== password_confirmation) {
+        if (!error_password_confirmar) {
+            error_password_confirmar = true;
             $("#registro-submit").attr('disabled', "true");
             elm_password_confirmation.notify("Las contraseñas no coinciden", { autoHide: false, clickToHide: false });
         }
+        return false;
     }
     else {
-        error_password = false;
+        error_password_confirmar = false;
         $("#registro-submit").removeAttr('disabled');
         elm_password_confirmation.notify("", { autoHideDelay: 0, showDuration: 0 });
     }
+    return true;
+}
+function comprobarLongitudContrasenya() {
+    var elm_password = $("#password");
+    if (String(elm_password.val()).trim().length < longitud_deseada_contrasenya) {
+        if (!error_password_longitud) {
+            error_password_longitud = true;
+            $("#registro-submit").attr('disabled', "true");
+            elm_password.notify("Contraseña demasiado corta", { autoHide: false, clickToHide: false });
+        }
+        return false;
+    }
+    else {
+        error_password_longitud = false;
+        $("#registro-submit").removeAttr('disabled');
+        elm_password.notify("", { autoHideDelay: 0, showDuration: 0 });
+    }
+    return true;
+}
+function comprobarCaracteresContrasenya() {
+    var elm_password = $("#password");
+    var contrasenya = String(elm_password.val()).trim();
+    var patron = /^([a-zA-Z0-9]*)$/;
+    if (patron.test(contrasenya)) {
+        console.log('si');
+        if (!error_password_caracteres) {
+            error_password_caracteres = true;
+            elm_password.notify("Contraseña insegura", "warn", { autoHide: false, clickToHide: false });
+        }
+        return false;
+    }
+    else {
+        console.log('no');
+        error_password_caracteres = false;
+        elm_password.notify("", { autoHideDelay: 0, showDuration: 0 });
+    }
+    return true;
+}
+function comprobarContrasenya() {
+    if (!comprobarLongitudContrasenya())
+        return;
+    comprobarCaracteresContrasenya();
+    cotejarContrasenyas();
 }
 //# sourceMappingURL=registro.js.map

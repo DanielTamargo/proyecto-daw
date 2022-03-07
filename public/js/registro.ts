@@ -4,14 +4,19 @@ $.when( $.ready ).then(function() {
     $("#dni").on('change', comprobarDNI);
 
     // Listeners comprobar contraseña
-    $("#password").on('change', comprobarContrasenyas);
-    $("#password-confirm").on('change', comprobarContrasenyas);
+    $("#password").on('change', comprobarContrasenya);
+    $("#password-confirm").on('change', comprobarContrasenya);
 });
 
 
+// Longitud de contraseña deseada
+var longitud_deseada_contrasenya: number = 8;
+
 // Variables error que controlan si se hace la animación o no
 var error_dni: boolean = false;
-var error_password: boolean = false;
+var error_password_confirmar: boolean = false;
+var error_password_longitud: boolean = false;
+var error_password_caracteres: boolean = false;
 
 /**
  * Valida el DNI introducido (expresión regular y comprobación dni válida)
@@ -69,21 +74,81 @@ function comprobarDNI(): void {
 /**
  * Verifica que las contraseñas introducidas coinciden.
  */
-function comprobarContrasenyas(): void {
+function cotejarContrasenyas(): boolean {
     let elm_password_confirmation: JQuery<HTMLElement> = $("#password-confirm");
 
     let password: string = String($("#password").val()).trim();
     let password_confirmation: string = String(elm_password_confirmation.val()).trim()
 
-    if (password !== password_confirmation) {
-        if (!error_password) {
-            error_password = true;
+    if (password_confirmation.length > 0 && password !== password_confirmation) {
+        if (!error_password_confirmar) {
+            error_password_confirmar = true;
             $("#registro-submit").attr('disabled', "true");
             elm_password_confirmation.notify("Las contraseñas no coinciden", { autoHide: false, clickToHide: false });
         }
+
+        return false;
     } else {
-        error_password = false;
+        error_password_confirmar = false;
         $("#registro-submit").removeAttr('disabled');
         elm_password_confirmation.notify(``, { autoHideDelay: 0, showDuration: 0 });
     }
+
+    return true;
+}
+
+/**
+ * Comprueba que la longitud de la contraseña es mínimo de 8 caracteres
+ */
+function comprobarLongitudContrasenya(): boolean {
+    let elm_password: JQuery<HTMLElement> = $("#password");
+    if (String(elm_password.val()).trim().length < longitud_deseada_contrasenya) {
+        if (!error_password_longitud) {
+            error_password_longitud = true;
+            $("#registro-submit").attr('disabled', "true");
+            elm_password.notify("Contraseña demasiado corta", { autoHide: false, clickToHide: false });
+        }
+
+        return false;
+    } else {
+        error_password_longitud = false;
+        $("#registro-submit").removeAttr('disabled');
+        elm_password.notify(``, { autoHideDelay: 0, showDuration: 0 });
+    }
+
+    return true;
+}
+
+/**
+ * Comprueba que la contraseña no es insegura (sólo lanza aviso)
+ */
+function comprobarCaracteresContrasenya(): boolean {
+    let elm_password: JQuery<HTMLElement> = $("#password");
+    let contrasenya: string = String(elm_password.val()).trim();
+    let patron: RegExp = /^([a-zA-Z0-9]*)$/
+
+    if (patron.test(contrasenya)) {
+        console.log('si')
+        if (!error_password_caracteres) {
+            error_password_caracteres = true;
+            elm_password.notify("Contraseña insegura", "warn", { autoHide: false, clickToHide: false });
+        }
+        return false;
+    } else {
+        console.log('no')
+        error_password_caracteres = false;
+        elm_password.notify(``, { autoHideDelay: 0, showDuration: 0 });
+    }
+
+    return true;
+}
+
+/**
+ * Comprueba la contraseña y la coteja con la confirmación
+ */
+function comprobarContrasenya(): void {
+    if (!comprobarLongitudContrasenya()) return;
+
+    comprobarCaracteresContrasenya();
+    cotejarContrasenyas();
 }

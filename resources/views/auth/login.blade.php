@@ -6,12 +6,18 @@
 
 @section('content')
 <div class="contenedor">
+    @if (isset($registro))
+        <input type="hidden" name="cargar-registro" id="cargar-registro" value="true">
+    @else
+        <input type="hidden" name="cargar-registro" id="cargar-registro" value="">
+    @endif
+
     @if ($errors->any()) {{-- Cambiar por un alert/toast --}}
         @if ($errors->has('username')) {{-- Login error --}}
             
         @endif
         <div class="alert alert-danger">
-            <p>{{ $errors->first('username') }}</p>
+            <p>{{ $errors }}</p>
         </div>
     @endif
     <div class="loginCard">
