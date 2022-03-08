@@ -74,6 +74,18 @@ function toggleForm(evt) {
         // Añadir eventos comprobarContrasenyas
         document.getElementById('password').addEventListener('change', comprobarContrasenya);
         document.getElementById('password-confirm').addEventListener('change', comprobarContrasenya);
+
+        // Añadir eventos peticiones API
+        document.getElementById('username').addEventListener('change', comprobarUsernameUnico);
+        document.getElementById('email').addEventListener('change', comprobarEmailUnico);
+
+        // Resetear variables de errores
+        error_dni = false;
+        error_password_confirmar = false;
+        error_password_longitud = false;
+        error_password_caracteres = false;
+        error_email_unico = false;
+        error_username_unico = false;
     } else {
         form1.removeEventListener('click', toggleForm);
         form2.addEventListener('click', toggleForm);

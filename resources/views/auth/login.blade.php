@@ -8,11 +8,7 @@
 <div class="contenedor">
 
     {{-- Hidden para cargar directamente el formulario de registro si es necesario --}}
-    @if (isset($registrar_usuario))
-        <input type="hidden" name="cargar-registro" id="cargar-registro" value="true">
-    @else
-        <input type="hidden" name="cargar-registro" id="cargar-registro" value="false">
-    @endif
+    <input type="hidden" name="cargar-registro" id="cargar-registro" value="{{ (isset($registrar_usuario) || session('registrar_usuario')) ? 'true' : 'false' }}">
 
     {{-- Hidden para controlar si es un administrador registrando a otro administrador --}}
     @if (Auth::user() && Auth::user()->rol == \App\Models\Constants::ROL_ADMINISTRADOR)
@@ -94,7 +90,7 @@
     <script src="{{ asset('js/lib/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('js/lib/notify.min.js') }}"></script>
 
-    {{-- Scripts login + registro --}}
-    <script src="{{ asset('js/login.js') }}"></script>
+    {{-- Scripts login + registro, importante registro primero --}}
     <script src="{{ asset('js/registro.js') }}"></script>
+    <script src="{{ asset('js/login.js') }}"></script>
 @endsection

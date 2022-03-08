@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Constants;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -51,8 +52,8 @@ class RegisterController extends Controller
 
         if ($validator->fails()) {
             return back()
+                    ->with('registrar_usuario', 'true')
                     ->withErrors($validator)
-                    ->with('registro', 'true')
                     ->withInput();
         }
 
@@ -86,5 +87,16 @@ class RegisterController extends Controller
 
         // Redirigimos a la ventana de inicio
         return redirect()->route('inicio', ['usuario_creado' => true]);
+    }
+
+    /**
+     * Carga la vista login/registro deslizando directamente al formulario registro
+     */
+    public function load() 
+    {
+        // Si es un usuario loggeado que no es administrador, no podrá registrarse/loggearse sin hacer logout primero
+        if (Auth::user() && Auth::user()->rol != Constants::ROL_ADMINISTRADOR) return redirect()->route('inicio');
+
+        return view('auth.login')->with('registrar_usuario', 'true'); 
     }
 }

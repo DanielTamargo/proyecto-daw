@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\ComentarioController;
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\Session;
 
 /*-- AUTH --*/
 Auth::routes();
-Route::get('/register', function () { return view('auth.login')->with('registrar_usuario', 'true'); })->name('register');
+Route::get('/register', [RegisterController::class, 'load'])->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
 /*-- CERRAR SESIÓN DURANTE LAS PRUEBAS --*/
@@ -35,14 +36,17 @@ Route::get('/logout', function () {
 })->name('logout.get');
 
 
+/*-- RUTAS API --*/
+Route::get('/api/usuario/comprobar-campo-unico', [ApiController::class, 'comprobarUsuarioCampoUnico']);
+
 /*-- REDIRECCIONES INICIO / HOME --*/
-Route::get('/inicio', function () { return redirect()->route('productos.index'); })->name('inicio');
-Route::get('/home', function () { return redirect()->route('productos.index'); });
-Route::get('/', function () { return redirect()->route('productos.index'); });
+Route::get('/inicio', function () { return redirect()->route('inicio'); });
+Route::get('/home', function () { return redirect()->route('inicio'); });
+Route::get('/', function () { return redirect()->route('inicio'); });
 
 
 /*-- PRODUCTOS --*/
-Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
+Route::get('/productos', [ProductoController::class, 'index'])->name('inicio'); // productos.index
 Route::get('/productos/{id}', [ProductoController::class, 'show'])->name('productos.show');
 Route::put('/productos/editar', [ProductoController::class, 'edit'])->name('productos.edit')->middleware('auth.admin');
 Route::get('/productos/nuevo', [ProductoController::class, 'create'])->name('productos.create')->middleware('auth.admin');

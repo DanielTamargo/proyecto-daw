@@ -2,13 +2,6 @@
 
 // Document ready
 $.when( $.ready ).then(function() {
-    // Listener input dni
-    $("#dni").on('change', comprobarDNI);
-
-    // Listeners comprobar contraseña
-    $("#password").on('change', comprobarContrasenya);
-    $("#password-confirm").on('change', comprobarContrasenya);
-
     // Comprobar si se ha cargado la ventana con la intención de registrar
     if ($("#cargar-registro").val() === "true") {
         // Si es usuario administrador, NO podrá deslizar al login
@@ -16,8 +9,20 @@ $.when( $.ready ).then(function() {
             cargarSoloRegistro();
         else 
             $("#form2").trigger('click');
-
     }
+
+    // Listener input dni
+    $("#dni").on('change', comprobarDNI);
+    // Listeners comprobar contraseña
+    $("#password").on('change', comprobarContrasenya);
+    $("#password-confirm").on('change', comprobarContrasenya);
+
+
+    // Listeners peticiones API
+    // Username (comprobar que el username es único)
+    $("#username").on('change', comprobarUsernameUnico);
+    // Email (comprobar que el email es único)
+    $("#email").on('change', comprobarEmailUnico);
 });
 
 
@@ -29,6 +34,8 @@ var error_dni: boolean = false;
 var error_password_confirmar: boolean = false;
 var error_password_longitud: boolean = false;
 var error_password_caracteres: boolean = false;
+var error_email_unico: boolean = false;
+var error_username_unico: boolean = false;
 
 /**
  * Valida el DNI introducido (expresión regular y comprobación dni válida)
@@ -72,7 +79,7 @@ function comprobarDNI(): void {
     let dni_valido: boolean = validarDNI(String(input_dni.val()));
     if (dni_valido) {
         error_dni = false;
-        $("#registro-submit").removeAttr('disabled');
+        rehabilitarBoton();
         input_dni.notify(``, { autoHideDelay: 0, showDuration: 0 }); // <- para ocultar posible notificación previa
     } else {
         if (!error_dni) {
@@ -102,7 +109,7 @@ function cotejarContrasenyas(): boolean {
         return false;
     } else {
         error_password_confirmar = false;
-        $("#registro-submit").removeAttr('disabled');
+        rehabilitarBoton();
         elm_password_confirmation.notify(``, { autoHideDelay: 0, showDuration: 0 });
     }
 
@@ -124,7 +131,7 @@ function comprobarLongitudContrasenya(): boolean {
         return false;
     } else {
         error_password_longitud = false;
-        $("#registro-submit").removeAttr('disabled');
+        rehabilitarBoton();
         elm_password.notify(``, { autoHideDelay: 0, showDuration: 0 });
     }
 
@@ -140,14 +147,12 @@ function comprobarCaracteresContrasenya(): boolean {
     let patron: RegExp = /^([a-zA-Z0-9]*)$/
 
     if (patron.test(contrasenya)) {
-        console.log('si')
         if (!error_password_caracteres) {
             error_password_caracteres = true;
             elm_password.notify("Contraseña insegura", "warn", { autoHide: false, clickToHide: false });
         }
         return false;
     } else {
-        console.log('no')
         error_password_caracteres = false;
         elm_password.notify(``, { autoHideDelay: 0, showDuration: 0 });
     }
@@ -163,4 +168,120 @@ function comprobarContrasenya(): void {
 
     comprobarCaracteresContrasenya();
     cotejarContrasenyas();
+}
+
+/**
+ * Comprueba que el username es único, si no lo es avisa y deshabilita el botón registrarse
+ */
+async function comprobarUsernameUnico(): void {
+    let elm_username: JQuery<HTMLElement> = $("#username");
+
+    try {
+        const result = await peticionAPIcomprobarUnico('username', String(elm_username.val()).trim());
+        
+        // Si la petición ha ido bien y el valor es único eliminamos el error por si existiese y rehabilitamos botón
+        if (result.ok && result.valor_unico) {
+            error_username_unico = false;
+            elm_username.notify(``, { autoHideDelay: 0, showDuration: 0 });
+            rehabilitarBoton();
+        } else {
+            // Si el resultado no es único, mostramos el error y deshabilitamos el botón
+            if (!result.valor_unico) {
+                error_username_unico = true;
+                elm_username.notify("Nombre usuario en uso", { autoHide: false, clickToHide: false });
+                $("#registro-submit").attr('disabled', "true");
+            } else {
+                // Si el error se debe a que la petición no es OK, lanzamos error
+                throw Error(result.mensaje);
+            }
+        }
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+
+/**
+ * Comprueba que el email es único, si no lo es avisa y deshabilita el botón registrarse
+ */
+async function comprobarEmailUnico() {
+    let elm_email: JQuery<HTMLElement> = $("#email");
+
+    try {
+        const result = await peticionAPIcomprobarUnico('email', String(elm_email.val()).trim());
+        
+        // Si la petición ha ido bien y el valor es único eliminamos el error por si existiese y rehabilitamos botón
+        if (result.ok && result.valor_unico) {
+            error_email_unico = false;
+            elm_email.notify(``, { autoHideDelay: 0, showDuration: 0 });
+            rehabilitarBoton();
+        } else {
+            // Si el resultado no es único, mostramos el error y deshabilitamos el botón
+            if (!result.valor_unico) {
+                error_email_unico = true;
+                elm_email.notify("Email ya registrado", { autoHide: false, clickToHide: false });
+                $("#registro-submit").attr('disabled', "true");
+            } else {
+                // Si el error se debe a que la petición no es OK, lanzamos error
+                throw Error(result.mensaje);
+            }
+        }
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+/**
+ * Función que recibe una clave y valor y realiza una petición a la API para comprobar si existe un usuario con dicha clave y valor
+ * @param clave nombre de la clave a comprobar
+ * @param valor valor a cotejar
+ * 
+ * @returns devuelve una PROMESA con la respuesta de la api
+ */
+function peticionAPIcomprobarUnico(clave: string, valor: string): Promise<PeticionAPIUsuarioComprobarCampo> {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: '/api/usuario/comprobar-campo-unico',
+            type: 'GET',
+            data: {
+                'clave' : clave,
+                'valor' : valor
+            },
+        }).then(response => {
+            resolve(response);
+        }).catch(err => {
+            reject(err);
+        })
+    });
+}
+
+/**
+ * Realiza la petición 
+ */
+
+/**
+ * Rehabilita el botón de submit del formulario registro si se han quitado todos los errores
+ */
+function rehabilitarBoton(): void {
+    if (!error_dni && !error_password_confirmar 
+        && !error_password_longitud && !error_password_caracteres 
+        && !error_email_unico && !error_username_unico) {
+        $("#registro-submit").removeAttr('disabled');
+    }
+}
+
+
+/**
+ * Definimos en una clase los campos que esperamos recibir en la respuesta de la api
+ */
+class PeticionAPIUsuarioComprobarCampo {
+    ok: boolean;
+    mensaje: string;
+    valor_unico: boolean;
+
+    constructor(ok: boolean, mensaje: string, valor_unico: boolean) {
+        this.ok = ok;
+        this.mensaje = mensaje;
+        this.valor_unico = valor_unico;
+    }
 }
