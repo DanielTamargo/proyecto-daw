@@ -29,7 +29,7 @@
     @endif
     <div class="loginCard">
         <div id="form1" class="form1">
-            <h1 class="noSaltar">Iniciar Sesi&oacute;n</h1>
+            <h1 class="noSaltar user-select-none">Iniciar Sesi&oacute;n</h1>
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <input class="form-control" id="username" type="text" placeholder="Nombre de usuario" name="username" value="{{ old('username') }}" required>
@@ -37,7 +37,7 @@
                 <div class="form-check noSaltar">
                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
-                    <label class="form-check-label" for="remember">
+                    <label class="form-check-label user-select-none" for="remember">
                         {{ __('Recordarme') }}
                     </label>
                 </div>
@@ -62,7 +62,7 @@
                 else $rol = \App\Models\Constants::ROL_CLIENTE;
             @endphp
 
-            <h1>{{ ($rol == \App\Models\Constants::ROL_CLIENTE) ? 'Registrarse' : 'Registrar un administrador'}}</h1>
+            <h1 class="user-select-none">{{ ($rol == \App\Models\Constants::ROL_CLIENTE) ? 'Registrarse' : 'Registrar un administrador'}}</h1>
             <form method="POST" action="{{ route('register.store', ['rol' => $rol]) }}">
                 @csrf
                 <input id="nombre" type="text" class="form-control" name="nombre" value="{{ old('nombre') }}" placeholder="Nombre completo" required>
