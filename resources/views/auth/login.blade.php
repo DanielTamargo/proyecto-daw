@@ -6,10 +6,17 @@
 
 @section('content')
 <div class="contenedor">
-    @if (isset($registro))
+
+    {{-- Hidden para cargar directamente el formulario de registro si es necesario --}}
+    @if (isset($registrar_usuario))
         <input type="hidden" name="cargar-registro" id="cargar-registro" value="true">
     @else
-        <input type="hidden" name="cargar-registro" id="cargar-registro" value="">
+        <input type="hidden" name="cargar-registro" id="cargar-registro" value="false">
+    @endif
+
+    {{-- Hidden para controlar si es un administrador registrando a otro administrador --}}
+    @if (Auth::user() && Auth::user()->rol == \App\Models\Constants::ROL_ADMINISTRADOR)
+        <input type="hidden" name="nuevo-administrador" id="nuevo-administrador" value="true">
     @endif
 
     @if ($errors->any()) {{-- Cambiar por un alert/toast --}}
@@ -51,11 +58,11 @@
         <div id="form2" class="form2 inactiveForm">
             @php
                 // Un usuario se registrará como cliente, un admin registrará otros admins
-                if (!Auth::user()) $rol = \App\Models\Constants::ROL_CLIENTE;
-                else $rol = \App\Models\Constants::ROL_ADMINISTRADOR;
+                if (Auth::user() && Auth::user()->rol == \App\Models\Constants::ROL_ADMINISTRADOR) $rol = \App\Models\Constants::ROL_ADMINISTRADOR;
+                else $rol = \App\Models\Constants::ROL_CLIENTE;
             @endphp
 
-            <h1>Registrarse</h1>
+            <h1>{{ ($rol == \App\Models\Constants::ROL_CLIENTE) ? 'Registrarse' : 'Registrar un administrador'}}</h1>
             <form method="POST" action="{{ route('register.store', ['rol' => $rol]) }}">
                 @csrf
                 <input id="nombre" type="text" class="form-control" name="nombre" value="{{ old('nombre') }}" placeholder="Nombre completo" required>
@@ -88,6 +95,6 @@
     <script src="{{ asset('js/lib/notify.min.js') }}"></script>
 
     {{-- Scripts login + registro --}}
-    <script src="{{ asset('js/registro.js') }}"></script>
     <script src="{{ asset('js/login.js') }}"></script>
+    <script src="{{ asset('js/registro.js') }}"></script>
 @endsection

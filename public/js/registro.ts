@@ -1,3 +1,5 @@
+/// <reference path="./login.js" />
+
 // Document ready
 $.when( $.ready ).then(function() {
     // Listener input dni
@@ -6,6 +8,16 @@ $.when( $.ready ).then(function() {
     // Listeners comprobar contraseña
     $("#password").on('change', comprobarContrasenya);
     $("#password-confirm").on('change', comprobarContrasenya);
+
+    // Comprobar si se ha cargado la ventana con la intención de registrar
+    if ($("#cargar-registro").val() === "true") {
+        // Si es usuario administrador, NO podrá deslizar al login
+        if ($("#nuevo-administrador").val())
+            cargarSoloRegistro();
+        else 
+            $("#form2").trigger('click');
+
+    }
 });
 
 

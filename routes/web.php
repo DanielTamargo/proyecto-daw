@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Session;
 
 /*-- AUTH --*/
 Auth::routes();
-Route::get('/register', function () { return redirect()->route('login')->with('registrar_usuario', 'true'); })->name('register');
+Route::get('/register', function () { return view('auth.login')->with('registrar_usuario', 'true'); })->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
 /*-- CERRAR SESIÓN DURANTE LAS PRUEBAS --*/

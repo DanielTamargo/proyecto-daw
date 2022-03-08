@@ -5,5 +5,12 @@
         "preserveConstEnums": true,
         "sourceMap": true
     },
-    "include": ["./public/**/*.ts", "./public/js/lib/**/*.js"],
+    "include": [
+        "public/js/*.ts", 
+        "public/js/login.js", 
+        "public/js/lib/*.js"
+    ],
+    "exclude": [
+        "node_modules",
+    ],
 }

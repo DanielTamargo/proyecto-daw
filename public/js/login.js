@@ -100,3 +100,30 @@ function toggleForm(evt) {
         form2.style.alignItems = 'center';
     }
 }
+
+// Cargar formulario registro sin posibilidad de deslizar al login
+function cargarSoloRegistro() {
+    form1.classList.toggle('inactiveForm');
+    form2.classList.toggle('inactiveForm');
+
+    form2.removeEventListener('click', toggleForm);
+    form2.removeEventListener('mouseenter', hover);
+    form2.removeEventListener('mouseleave', stopHover);
+
+    form2.style.cursor = null;
+    form1.style.filter = 'brightness(0.8)';
+    form2.style.width = '90%';
+    form1.style.width = '10%';
+    form1.innerHTML = ``;
+    form2.innerHTML = form2Content;
+
+    form2.style.justifyContent = 'normal';
+    form2.style.alignItems = 'normal';
+
+    // Añadir evento comprobarDNI
+    document.getElementById('dni').addEventListener('change', comprobarDNI);
+    
+    // Añadir eventos comprobarContrasenyas
+    document.getElementById('password').addEventListener('change', comprobarContrasenya);
+    document.getElementById('password-confirm').addEventListener('change', comprobarContrasenya);
+}

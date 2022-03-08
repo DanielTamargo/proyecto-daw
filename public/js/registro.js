@@ -2,6 +2,12 @@ $.when($.ready).then(function () {
     $("#dni").on('change', comprobarDNI);
     $("#password").on('change', comprobarContrasenya);
     $("#password-confirm").on('change', comprobarContrasenya);
+    if ($("#cargar-registro").val() === "true") {
+        if ($("#nuevo-administrador").val())
+            cargarSoloRegistro();
+        else
+            $("#form2").trigger('click');
+    }
 });
 var longitud_deseada_contrasenya = 8;
 var error_dni = false;
