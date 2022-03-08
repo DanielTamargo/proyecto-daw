@@ -138,4 +138,8 @@ function cargarSoloRegistro() {
     // Añadir eventos comprobarContrasenyas
     document.getElementById('password').addEventListener('change', comprobarContrasenya);
     document.getElementById('password-confirm').addEventListener('change', comprobarContrasenya);
+
+    // Añadir eventos peticiones API
+    document.getElementById('username').addEventListener('change', comprobarUsernameUnico);
+    document.getElementById('email').addEventListener('change', comprobarEmailUnico);
 }

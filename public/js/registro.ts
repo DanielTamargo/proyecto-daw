@@ -10,19 +10,6 @@ $.when( $.ready ).then(function() {
         else 
             $("#form2").trigger('click');
     }
-
-    // Listener input dni
-    $("#dni").on('change', comprobarDNI);
-    // Listeners comprobar contraseña
-    $("#password").on('change', comprobarContrasenya);
-    $("#password-confirm").on('change', comprobarContrasenya);
-
-
-    // Listeners peticiones API
-    // Username (comprobar que el username es único)
-    $("#username").on('change', comprobarUsernameUnico);
-    // Email (comprobar que el email es único)
-    $("#email").on('change', comprobarEmailUnico);
 });
 
 

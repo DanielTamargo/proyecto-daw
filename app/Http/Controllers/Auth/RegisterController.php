@@ -52,20 +52,20 @@ class RegisterController extends Controller
 
         if ($validator->fails()) {
             return back()
-                    ->with('registrar_usuario', 'true')
+                ->with('registrar_usuario', 'true')
                     ->withErrors($validator)
                     ->withInput();
         }
 
 
         // Creamos el nuevo usuario
-        User::create([
+        $user = User::create([
             'username' => $request->username,
             'email' => $request->email,
             'nombre' => $request->nombre,
             'password' => Hash::make($request->password),
             'rol' => $request->rol,
-            'dni' => $request->dni,
+            'dni' => strtoupper($request->dni),
             'telefono' => $request->telefono,
             'direccion' => $request->direccion,
         ]);
@@ -84,6 +84,8 @@ class RegisterController extends Controller
 
         // TODO enviar email
 
+
+        Auth::login($user);
 
         // Redirigimos a la ventana de inicio
         return redirect()->route('inicio', ['usuario_creado' => true]);

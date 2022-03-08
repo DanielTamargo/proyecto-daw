@@ -32,7 +32,7 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 Route::get('/logout', function () { 
     Session::flush();
     Auth::logout();
-    return redirect()->route('register');    
+    return redirect()->route('login');    
 })->name('logout.get');
 
 
@@ -56,7 +56,8 @@ Route::delete('/productos/eliminar', [ProductoController::class, 'delete'])->nam
 
 /*-- USUARIOS --*/
 Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index')->middleware('auth.admin');
-Route::get('/usuarios/{id}', [UsuarioController::class, 'show'])->name('usuarios.show')->middleware('auth');
+Route::get('/usuarios/{id}', [UsuarioController::class, 'show'])->name('usuarios.show')->middleware('auth.admin');
+Route::get('/perfil', [UsuarioController::class, 'profile'])->name('usuarios.profile')->middleware('auth');
 Route::delete('/usuarios', [UsuarioController::class, 'delete'])->name('usuarios.delete')->middleware('auth.admin');
 
 

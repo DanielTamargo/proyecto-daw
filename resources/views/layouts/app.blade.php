@@ -55,7 +55,7 @@
                                     <a class="nav-link active" aria-current="page" href="#">Carta</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Mi perfil</a>
+                                    <a class="nav-link" href="{{ route('usuarios.profile') }}">Mi perfil</a>
                                 </li>
                             </ul>
                         </div>

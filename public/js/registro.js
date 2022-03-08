@@ -41,11 +41,6 @@ $.when($.ready).then(function () {
         else
             $("#form2").trigger('click');
     }
-    $("#dni").on('change', comprobarDNI);
-    $("#password").on('change', comprobarContrasenya);
-    $("#password-confirm").on('change', comprobarContrasenya);
-    $("#username").on('change', comprobarUsernameUnico);
-    $("#email").on('change', comprobarEmailUnico);
 });
 var longitud_deseada_contrasenya = 8;
 var error_dni = false;

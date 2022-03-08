@@ -18,8 +18,10 @@ class User extends Authenticatable
         'username',
         'password',
         'rol',
+        'dni',
         'nombre',
         'direccion',
+        'telefono',
     ];
 
     // Atributos que deberían ser ocultos en la serialización

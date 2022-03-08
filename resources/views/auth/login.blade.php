@@ -68,8 +68,8 @@
                     <input class="form-control" id="dni" type="text" placeholder="DNI" name="dni" value="{{ old('dni') }}" required>
                 </div>
                 <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" placeholder="Email" required>
-                <input type="text" id="direccion" class="form-control" name="direccion" value="{{ old('direccion') }}" placeholder="Direcci&oacute;n">
-                <input class="form-control" type="text" name="telefono" id="telefono" value="{{ old('telefono') }}" placeholder="N&uacute;mero de tel&eacute;fono">
+                <input type="text" id="direccion" class="form-control" name="direccion" value="{{ old('direccion') }}" placeholder="Direcci&oacute;n" required>
+                <input class="form-control" type="text" name="telefono" id="telefono" value="{{ old('telefono') }}" placeholder="N&uacute;mero de tel&eacute;fono" required>
                 <div class="input-group">
                     <input class="form-control" id="password" type="password" placeholder="Contrase&ntilde;a" name="password" required>
                     <span class="input-group-text" id="basic-addon1"></span>
