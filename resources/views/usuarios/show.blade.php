@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<div class="container my-5">
+<div class="container my-1">
 
     {{-- Datos del usuario --}}
     <div class="card">
