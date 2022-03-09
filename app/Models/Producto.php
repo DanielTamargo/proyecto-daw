@@ -52,9 +52,15 @@ class Producto extends Model
 
     /**
      * Devuelve cuántas veces está añadido el producto en el carrito del cliente
+     * 
+     * Recibe el cliente loggeado, si es null devolverá un 0
+     * Devuelve un número entero con el resultado
      */
     public function cantidadEnCarrito($cliente)
     {
-        return count(ProductosCarrito::where('producto_id', $this->id)->where('cliente_id', $cliente->id)->get());
+        if ($cliente) 
+            return count(ProductosCarrito::where('producto_id', $this->id)->where('cliente_id', $cliente->id)->get());
+        else 
+            return 0;
     }
 }

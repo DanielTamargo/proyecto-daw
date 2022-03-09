@@ -273,7 +273,7 @@ function peticionAPIcomprobarUnico(clave: string, valor: string): Promise<Petici
  */
 function rehabilitarBoton(): void {
     if (!error_dni && !error_password_confirmar 
-        && !error_password_longitud && !error_password_caracteres 
+        && !error_password_longitud 
         && !error_email_unico && !error_username_unico) {
         $("#registro-submit").removeAttr('disabled');
     }

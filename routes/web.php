@@ -38,6 +38,8 @@ Route::get('/logout', function () {
 
 /*-- RUTAS API --*/
 Route::get('/api/usuario/comprobar-campo-unico', [ApiController::class, 'comprobarUsuarioCampoUnico']);
+Route::get('/api/carrito/producto-carrito', [ApiController::class, 'actualizarProductoCarrito'])->middleware('auth');
+Route::get('/api/producto/modificar-estado', [ApiController::class, 'modificarEstadoPedido'])->middleware('auth.admin');
 
 /*-- REDIRECCIONES INICIO / HOME --*/
 Route::get('/inicio', function () { return redirect()->route('inicio'); });
