@@ -128,6 +128,7 @@ function cargarSoloRegistro() {
     form1.style.width = '10%';
     form1.innerHTML = ``;
     form2.innerHTML = form2Content;
+    form2.style.filter = 'brightness(1)';
 
     form2.style.justifyContent = 'normal';
     form2.style.alignItems = 'normal';
