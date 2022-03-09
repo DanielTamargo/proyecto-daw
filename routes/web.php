@@ -51,14 +51,14 @@ Route::get('/productos/{id}', [ProductoController::class, 'show'])->name('produc
 Route::put('/productos/editar', [ProductoController::class, 'edit'])->name('productos.edit')->middleware('auth.admin');
 Route::get('/productos/nuevo', [ProductoController::class, 'create'])->name('productos.create')->middleware('auth.admin');
 Route::post('/productos/nuevo', [ProductoController::class, 'store'])->name('productos.store')->middleware('auth.admin');
-Route::delete('/productos/eliminar', [ProductoController::class, 'delete'])->name('productos.delete')->middleware('auth.admin');
+Route::delete('/productos/eliminar', [ProductoController::class, 'destroy'])->name('productos.destroy')->middleware('auth.admin');
 
 
 /*-- USUARIOS --*/
 Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index')->middleware('auth.admin');
 Route::get('/usuarios/{id}', [UsuarioController::class, 'show'])->name('usuarios.show')->middleware('auth.admin');
 Route::get('/perfil', [UsuarioController::class, 'profile'])->name('usuarios.profile')->middleware('auth');
-Route::delete('/usuarios', [UsuarioController::class, 'delete'])->name('usuarios.delete')->middleware('auth.admin');
+Route::delete('/usuarios/eliminar', [UsuarioController::class, 'destroy'])->name('usuarios.destroy')->middleware('auth.admin');
 
 
 /*-- COMENTARIOS --*/

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class UsuarioController extends Controller
 {
@@ -83,11 +84,24 @@ class UsuarioController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Usuario  $usuario
+     * @param  \App\Models\User  $usuario
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $usuario)
+    public function destroy(Request $request)
     {
-        //
+        $usuario = User::find($request->user_id);
+        
+        // Eliminamos el usuario
+        $usuario->delete();
+
+        // Si un usuario elimina su propia cuenta, cerramos la sesión y redirigimos
+        if ($usuario->id == Auth::user()->id) {
+            Session::flush();
+            Auth::logout();
+            return redirect()->route('login'); 
+        }
+
+        // Volvemos a la vista
+        return back()->with('usuario_eliminado', 'true');
     }
 }

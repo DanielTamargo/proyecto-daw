@@ -103,7 +103,14 @@
                                     <th scope="row">{{ ucwords(strtolower($usuario->nombre)) }}</th>
                                     <td>{{ $usuario->created_at->format('d-m-Y H:i:s') }}</td>
                                     <td>{{ ucfirst($usuario->rol) }}</td>
-                                    <td>W.I.P</td>
+                                    <td>
+                                        <form method="post" action="{{route('usuarios.destroy')}}">
+                                            @method('delete')
+                                            @csrf
+                                            <input type="hidden" name="user_id" value="{{ $usuario->id }}">
+                                            <button type="submit" class="btn btn-danger btn-sm {{ ($usuario->id == $user->id) ? 'disabled' : ''}}">Eliminar</button>
+                                        </form>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
