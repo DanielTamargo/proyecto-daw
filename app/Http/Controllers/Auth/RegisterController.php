@@ -53,8 +53,8 @@ class RegisterController extends Controller
         if ($validator->fails()) {
             return back()
                 ->with('registrar_usuario', 'true')
-                    ->withErrors($validator)
-                    ->withInput();
+                ->withErrors($validator)
+                ->withInput();
         }
 
 

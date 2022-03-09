@@ -34,6 +34,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var PeticionAPIUsuarioComprobarCampo = (function () {
+    function PeticionAPIUsuarioComprobarCampo(ok, mensaje, valor_unico) {
+        this.ok = ok;
+        this.mensaje = mensaje;
+        this.valor_unico = valor_unico;
+    }
+    return PeticionAPIUsuarioComprobarCampo;
+}());
 $.when($.ready).then(function () {
     if ($("#cargar-registro").val() === "true") {
         if ($("#nuevo-administrador").val())
@@ -160,7 +168,7 @@ function comprobarUsernameUnico() {
                         rehabilitarBoton();
                     }
                     else {
-                        if (!result.valor_unico) {
+                        if (result.ok && !result.valor_unico) {
                             error_username_unico = true;
                             elm_username.notify("Nombre usuario en uso", { autoHide: false, clickToHide: false });
                             $("#registro-submit").attr('disabled', "true");
@@ -198,7 +206,7 @@ function comprobarEmailUnico() {
                         rehabilitarBoton();
                     }
                     else {
-                        if (!result.valor_unico) {
+                        if (result.ok && !result.valor_unico) {
                             error_email_unico = true;
                             elm_email.notify("Email ya registrado", { autoHide: false, clickToHide: false });
                             $("#registro-submit").attr('disabled', "true");
@@ -240,12 +248,4 @@ function rehabilitarBoton() {
         $("#registro-submit").removeAttr('disabled');
     }
 }
-var PeticionAPIUsuarioComprobarCampo = (function () {
-    function PeticionAPIUsuarioComprobarCampo(ok, mensaje, valor_unico) {
-        this.ok = ok;
-        this.mensaje = mensaje;
-        this.valor_unico = valor_unico;
-    }
-    return PeticionAPIUsuarioComprobarCampo;
-}());
 //# sourceMappingURL=registro.js.map

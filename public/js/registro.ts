@@ -1,5 +1,31 @@
 /// <reference path="./login.js" />
 
+/**
+ * Implementamos la interfaz JQuery para el método notify, ya que la librería notify.js añade un método
+ * capaz de mostrar notificaciones y TS no lo reconoce, añadiendo esta interfaz eliminamos el error
+ */
+interface JQuery {
+    notify(name: string, options: object): void;
+    notify(name: string, type: string, options: object): void;
+}
+
+
+/**
+ * Definimos en una clase los campos que esperamos recibir en la respuesta de la api
+ */
+ class PeticionAPIUsuarioComprobarCampo {
+    ok: boolean;
+    mensaje: string;
+    valor_unico: boolean;
+
+    constructor(ok: boolean, mensaje: string, valor_unico: boolean) {
+        this.ok = ok;
+        this.mensaje = mensaje;
+        this.valor_unico = valor_unico;
+    }
+}
+
+
 // Document ready
 $.when( $.ready ).then(function() {
     // Comprobar si se ha cargado la ventana con la intención de registrar
@@ -23,6 +49,7 @@ var error_password_longitud: boolean = false;
 var error_password_caracteres: boolean = false;
 var error_email_unico: boolean = false;
 var error_username_unico: boolean = false;
+
 
 /**
  * Valida el DNI introducido (expresión regular y comprobación dni válida)
@@ -160,7 +187,7 @@ function comprobarContrasenya(): void {
 /**
  * Comprueba que el username es único, si no lo es avisa y deshabilita el botón registrarse
  */
-async function comprobarUsernameUnico(): void {
+async function comprobarUsernameUnico() {
     let elm_username: JQuery<HTMLElement> = $("#username");
 
     try {
@@ -169,11 +196,11 @@ async function comprobarUsernameUnico(): void {
         // Si la petición ha ido bien y el valor es único eliminamos el error por si existiese y rehabilitamos botón
         if (result.ok && result.valor_unico) {
             error_username_unico = false;
-            elm_username.notify(``, { autoHideDelay: 0, showDuration: 0 });
+            (<any>elm_username).notify(``, { autoHideDelay: 0, showDuration: 0 });
             rehabilitarBoton();
         } else {
             // Si el resultado no es único, mostramos el error y deshabilitamos el botón
-            if (!result.valor_unico) {
+            if (result.ok && !result.valor_unico) {
                 error_username_unico = true;
                 elm_username.notify("Nombre usuario en uso", { autoHide: false, clickToHide: false });
                 $("#registro-submit").attr('disabled', "true");
@@ -186,7 +213,6 @@ async function comprobarUsernameUnico(): void {
         console.log(err)
     }
 }
-
 
 /**
  * Comprueba que el email es único, si no lo es avisa y deshabilita el botón registrarse
@@ -204,7 +230,7 @@ async function comprobarEmailUnico() {
             rehabilitarBoton();
         } else {
             // Si el resultado no es único, mostramos el error y deshabilitamos el botón
-            if (!result.valor_unico) {
+            if (result.ok && !result.valor_unico) {
                 error_email_unico = true;
                 elm_email.notify("Email ya registrado", { autoHide: false, clickToHide: false });
                 $("#registro-submit").attr('disabled', "true");
@@ -243,10 +269,6 @@ function peticionAPIcomprobarUnico(clave: string, valor: string): Promise<Petici
 }
 
 /**
- * Realiza la petición 
- */
-
-/**
  * Rehabilita el botón de submit del formulario registro si se han quitado todos los errores
  */
 function rehabilitarBoton(): void {
@@ -258,17 +280,3 @@ function rehabilitarBoton(): void {
 }
 
 
-/**
- * Definimos en una clase los campos que esperamos recibir en la respuesta de la api
- */
-class PeticionAPIUsuarioComprobarCampo {
-    ok: boolean;
-    mensaje: string;
-    valor_unico: boolean;
-
-    constructor(ok: boolean, mensaje: string, valor_unico: boolean) {
-        this.ok = ok;
-        this.mensaje = mensaje;
-        this.valor_unico = valor_unico;
-    }
-}
