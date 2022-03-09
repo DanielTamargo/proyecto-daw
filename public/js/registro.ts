@@ -13,7 +13,7 @@ interface JQuery {
 /**
  * Definimos en una clase los campos que esperamos recibir en la respuesta de la api
  */
- class PeticionAPIUsuarioComprobarCampo {
+class PeticionAPIUsuarioComprobarCampo {
     ok: boolean;
     mensaje: string;
     valor_unico: boolean;
@@ -249,7 +249,7 @@ async function comprobarEmailUnico() {
  * @param clave nombre de la clave a comprobar
  * @param valor valor a cotejar
  * 
- * @returns devuelve una PROMESA con la respuesta de la api
+ * @returns devuelve una PROMESA con la respuesta de la API
  */
 function peticionAPIcomprobarUnico(clave: string, valor: string): Promise<PeticionAPIUsuarioComprobarCampo> {
     return new Promise((resolve, reject) => {
@@ -264,7 +264,7 @@ function peticionAPIcomprobarUnico(clave: string, valor: string): Promise<Petici
             resolve(response);
         }).catch(err => {
             reject(err);
-        })
+        });
     });
 }
 
@@ -272,8 +272,7 @@ function peticionAPIcomprobarUnico(clave: string, valor: string): Promise<Petici
  * Rehabilita el botón de submit del formulario registro si se han quitado todos los errores
  */
 function rehabilitarBoton(): void {
-    if (!error_dni && !error_password_confirmar 
-        && !error_password_longitud 
+    if (!error_dni && !error_password_confirmar && !error_password_longitud 
         && !error_email_unico && !error_username_unico) {
         $("#registro-submit").removeAttr('disabled');
     }
