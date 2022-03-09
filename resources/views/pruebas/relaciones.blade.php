@@ -12,6 +12,7 @@
                 $producto->creador 
                 $producto->comentarios 
                 $producto->categorias
+                $producto->cantidadEnCarrito($user)
 
             + Usuario cliente:
                 $usuario->pedidos
@@ -29,7 +30,35 @@
                 $categoria->productos
     --}}
 
-    <div class="px-5">
+    <div class="mt-5 px-5">
+        {{-- PRUEBAS CARRITO --}}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h1 class="card-title">Pruebas carrito</h1>
+                <br>
+                
+                @php
+                    $producto = \App\Models\Producto::where('id', 1)->first();
+                    $usuario = \App\Models\User::where('id', 21)->first();
+                @endphp
+                    <p class="card-text m-0">Producto: {{ $producto->nombre }}</p>
+                    <p class="card-text m-0">Usuario: {{ $usuario->nombre }}</p>
+                    <p class="card-text m-0">Veces en carrito: {{ $producto->cantidadEnCarrito($usuario) }}</p>
+                
+                <hr>
+
+                @php
+                    $producto = \App\Models\Producto::where('id', 2)->first();
+                    $usuario = \App\Models\User::where('id', 21)->first();
+                @endphp
+                    <p class="card-text m-0">Producto: {{ $producto->nombre }}</p>
+                    <p class="card-text m-0">Usuario: {{ $usuario->nombre }}</p>
+                    <p class="card-text m-0">Veces en carrito: {{ $producto->cantidadEnCarrito($usuario) }}</p>
+
+            </div>
+        </div>
+
+        <!--
         {{-- USUARIOS --}}
         <div class="card mb-4">
             <div class="card-body">
@@ -134,5 +163,6 @@
               @endif
             </div>
         </div>
+        -->
     </div>
 @endsection

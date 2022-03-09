@@ -50,4 +50,11 @@ class Producto extends Model
         return $this->hasMany(Comentario::class);
     }
 
+    /**
+     * Devuelve cuántas veces está añadido el producto en el carrito del cliente
+     */
+    public function cantidadEnCarrito($cliente)
+    {
+        return count(ProductosCarrito::where('producto_id', $this->id)->where('cliente_id', $cliente->id)->get());
+    }
 }
