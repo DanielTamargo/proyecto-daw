@@ -19,15 +19,23 @@
                 <i class="bi bi-telephone-fill me-1"></i> {{ $user->telefono ? $user->telefono : 'Sin registrar' }}
             </p>
             <p class="card-text">
-                Número de pedidos: {{ count($user->pedidos) }} <br>
-                Número de comentarios: {{ count($user->comentarios) }}
+                Registrado el: {{ $user->created_at->format('d-m-Y H:i:s') }}
+                @if ($user->rol == \App\Models\Constants::ROL_CLIENTE)
+                    Número de pedidos: {{ count($user->pedidos) }} <br>
+                    Número de comentarios: {{ count($user->comentarios) }}
+                @elseif ($user->rol == \App\Models\Constants::ROL_ADMINISTRADOR)
+                    Productos registrados: {{ count($user->productosCreados) }} <br>
+                @endif
             </p>
-            <a href="{{ route('logout.get') }}" class="btn btn-outline-danger">Cerrar sesión</a>
+            <form action="{{ route('logout') }}" method="post">
+                @csrf
+                <button class="align-self-start btn btn-outline-danger">Cerrar sesión</button>
+            </form>
         </div>
     </div>
     
-    {{-- Historial de pedidos --}}
     @if ($user->rol == \App\Models\Constants::ROL_CLIENTE)
+        {{-- Historial de pedidos --}}
         <div class="card my-3">
             <div class="card-header">
                 Historial de pedidos
@@ -43,11 +51,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($user->pedidos as $pedido)
+                            @foreach (array_reverse($user->pedidos->sortBy('id')->all()) as $pedido)
                                 <tr>
                                     <th scope="row">{{ $pedido->id }}</th>
-                                    <td>{{ $pedido->fecha_pedido }}</td>
-                                    <td>{{ $pedido->estado }}</td>
+                                    <td>{{ date('d-m-Y H:i:s', strtotime($pedido->fecha_pedido)) }}</td>
+                                    <td>
+                                        @switch($pedido->estado)
+                                            @case(\App\Models\Constants::ESTADO_ENPROCESO)
+                                                En proceso
+                                                @break
+                                            @default
+                                                {{ ucfirst($pedido->estado) }}
+                                        @endswitch
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -55,6 +71,48 @@
                 @else
                     <p class="card-text">
                         Sin pedidos registrados ＞﹏＜
+                    </p>
+                @endif
+            </div>
+        </div>
+    @elseif ($user->rol == \App\Models\Constants::ROL_ADMINISTRADOR)
+        {{-- Lista de usuarios --}}
+        <div class="card my-3">
+            <div class="card-header">
+                Usuarios registrados
+            </div>
+            <div class="card-body">
+                <a href="{{ route('register', ['registrar_usuario' => 'true']) }}" class="btn btn-outline-primary mb-2">Registrar nuevo administrador</a>
+
+                @php
+                    $usuarios = \App\Models\User::all();
+                @endphp
+                @if (count($usuarios) > 0)
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Fecha Registro</th>
+                                <th scope="col">Rol</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($usuarios as $usuario)
+                                <tr>
+                                    <th scope="row">{{ ucwords(strtolower($usuario->nombre)) }}</th>
+                                    <td>{{ $usuario->created_at->format('d-m-Y H:i:s') }}</td>
+                                    <td>{{ ucfirst($usuario->rol) }}</td>
+                                    <td>W.I.P</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @else
+                    <p class="card-text">
+                        Sin usuarios registrados ＞﹏＜ 
+                        (no debería pasar nunca, es decir, para ver esto tienes que estar loggeado, 
+                        por lo que mínimo 1 usuario existe...)
                     </p>
                 @endif
             </div>

@@ -85,8 +85,10 @@ class RegisterController extends Controller
         // TODO enviar email
 
 
-        Auth::login($user);
+        // Loggeamos al nuevo usuario si no es un administrador que crea otro administrador
+        if (!Auth::user()) Auth::login($user);
 
+        
         // Redirigimos a la ventana de inicio
         return redirect()->route('inicio', ['usuario_creado' => true]);
     }
