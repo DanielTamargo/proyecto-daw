@@ -19,10 +19,10 @@
                 <i class="bi bi-telephone-fill me-1"></i> {{ $user->telefono ? $user->telefono : 'Sin registrar' }}
             </p>
             <p class="card-text">
-                Registrado el: {{ $user->created_at->format('d-m-Y H:i:s') }}
+                Registrado el: {{ $user->created_at->format('d-m-Y H:i:s') }} <br>
                 @if ($user->rol == \App\Models\Constants::ROL_CLIENTE)
                     Número de pedidos: {{ count($user->pedidos) }} <br>
-                    Número de comentarios: {{ count($user->comentarios) }}
+                    Número de comentarios: {{ count($user->comentarios) }} <br>
                 @elseif ($user->rol == \App\Models\Constants::ROL_ADMINISTRADOR)
                     Productos registrados: {{ count($user->productosCreados) }} <br>
                 @endif
