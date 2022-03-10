@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -88,6 +88,20 @@ class User extends Authenticatable
         }
 
         return $cantidad;
+    }
+
+    /**
+     * Recibe un id de producto y devuelve true si en algún momento lo ha comprado
+     */
+    public function compraVerificada($producto_id) {
+        $result = DB::table('productos_pedidos')
+            ->join('pedidos', 'productos_pedidos.pedido_id', '=', 'pedidos.id')
+            ->join('users', 'pedidos.cliente_id', '=', 'users.id')
+            ->where('productos_pedidos.producto_id', $producto_id)
+            ->where('pedidos.cliente_id', $this->id)
+            ->select('productos_pedidos.id')
+            ->count();
+        return $result > 0;
     }
 
 }

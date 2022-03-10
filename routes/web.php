@@ -86,3 +86,6 @@ Route::get('/pruebas/relaciones', function () {
         ->with('categorias', App\Models\Categoria::all())
         ;
 });
+Route::get('/pruebas/metodos/compra-verificada', function () {
+    return view('pruebas.compraverificada');
+});

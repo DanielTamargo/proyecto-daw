@@ -2,8 +2,9 @@
 
 @section('styleScripts')
   <style>
-        .comentario {
-            width: 100%;    
+        .comentarios {
+            width: 100%;
+            padding: 0 2em; 
         }
         hr.separadorComentarios {
             border: 0;
@@ -103,7 +104,7 @@
             </div>
 
             {{-- Lista de comentarios del producto --}}
-            <div class="comentarios py-3">
+            <div class="comentarios py-5">
                 {{--  
                     Badges
                     <span class="badge bg-secondary">Admin</span> 
@@ -111,23 +112,40 @@
                 --}}
                 @php
                     $i = 0;
+                    $usuario = Auth::user();
                 @endphp
-                @forelse ($producto->comentarios as $comentario)
+                @if (count($producto->comentarios) <= 0)
+                    <div class="sin-comentarios">
+                        <h2 class="text-muted text-center">El producto no tiene comentarios</h2>
+                        @if ($usuario && $usuario->rol == \App\Models\Constants::ROL_CLIENTE)
+                            <h3 class="text-muted text-center">¡Sé el primero en comentar!</h3>
+                        @endif
+                    </div>
+                @endif
+
+                <div class="nuevo-comentario">
+
+                </div>
+
+                @foreach ($producto->comentarios as $comentario)
                     @php
                         $i++;
                     @endphp
-                    <div class="comentario">
-                        <h5>asdfsadf <span class="badge bg-secondary">Admin</span></h5>
-                        <p>asdfasdf</p>
+                    <div class="comentario mb-5">
+                        <h5>{{ ucwords(strtolower($comentario->cliente->nombre)) }}  
+                            @if ($usuario->rol ==  \App\Models\Constants::ROL_ADMINISTRADOR)
+                                <span class="badge bg-secondary">Administrador</span> 
+                            @elseif ($comentario->cliente->compraVerificada($producto->id))
+                                <span class="badge bg-secondary">Compra verificada</span>  
+                            @endif
+                        </h5>
+
+                        <p>{{ $comentario->texto }}</p>
                         @if ($i < count($producto->comentarios))
                             <hr class="separadorComentarios">
                         @endif
                     </div>
-                @empty
-                    <div class="sin-comentarios">
-                        <h3 class="text-muted">El producto no tiene comentarios</h3>
-                    </div>
-                @endforelse
+                @endforeach
             </div>
         </div>
     </div>
