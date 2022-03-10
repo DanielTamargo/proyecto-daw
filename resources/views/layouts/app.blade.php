@@ -30,7 +30,7 @@
                         <div id="derecha">
                             <div id="boton-carrito" class="d-inline-block me-5">
                                 @auth
-                                    <a href="">
+                                    <a href="{{ route('carrito.show') }}">
                                         @php
                                             $cantidadProductosCarrito = 0;
                                             if (Auth::user()) $cantidadProductosCarrito = App\Models\User::find(Auth::user()->id)->cantidadProductosEnCarrito();

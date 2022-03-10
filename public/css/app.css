@@ -12242,6 +12242,13 @@ form {
   transition: opacity 299ms ease;
 }
 
+.table tr:hover {
+  cursor: pointer;
+}
+.table img {
+  max-height: 75px;
+}
+
 @media screen and (max-width: 1000px) {
   .contenedor-productos {
     padding: 0 10px;
