@@ -731,7 +731,6 @@ form {
                 &>p {
                     margin: 0;
                 }
-
                 #twitter {
                     height: 40px;
                     &:visited {
@@ -759,7 +758,8 @@ form {
     }
 
     &.contenedor-2 {
-        background-color: white;
+        background: white;
+        top: 0 !important;
     }
     .contenedor {
         justify-content: flex-start;
@@ -770,7 +770,7 @@ form {
         svg {
             position: relative;
             top: -100px;
-            max-height: 100px;
+            height: 100px;
             min-width: 100%;
             max-width: none;
         }
@@ -810,7 +810,13 @@ form {
     }
 }
 
-
+.show-container {
+    position: absolute;
+    top: -50px;
+    overflow: hidden;
+    width: 100%;
+    background-color: $indigo-300;
+}
 
 
 
@@ -1020,6 +1026,31 @@ form {
     .contenedor-productos {
         padding: 0 10px;
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .contenedor-show {
+        &.contenedor-1 {
+            padding-top: 71px;
+            .contenedor {
+                flex-flow: column;
+                justify-content: center;
+                align-items: center;
+                .imagen {
+                    width: 90%;
+                    img {
+                        min-width: 80%;
+                        max-width: 100%;
+                    }
+                }
+    
+                .detalles {
+                    width: 90%;
+                    color: white;
+                }
+            }
+        }
     }
 }
 
