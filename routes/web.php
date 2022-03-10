@@ -38,7 +38,8 @@ Route::get('/logout', function () {
 
 /*-- RUTAS API --*/
 Route::get('/api/usuario/comprobar-campo-unico', [ApiController::class, 'comprobarUsuarioCampoUnico']);
-Route::get('/api/carrito/producto-carrito', [ApiController::class, 'actualizarProductoCarrito'])->middleware('auth');
+Route::post('/api/carrito/producto-carrito', [ApiController::class, 'actualizarProductoCarrito'])->name('api.carrito.actualizarproducto')->middleware('auth');
+Route::get('/api/carrito/obtener-productos', [ApiController::class, 'obtenerProductosCarrito'])->name('api.carrito.obtenerproductos');
 Route::get('/api/producto/modificar-estado', [ApiController::class, 'modificarEstadoPedido'])->middleware('auth.admin');
 
 /*-- REDIRECCIONES INICIO / HOME --*/

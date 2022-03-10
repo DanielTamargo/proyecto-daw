@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Producto;
 use App\Models\ProductosCarrito;
 use App\Models\User;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ApiController extends Controller
@@ -37,7 +37,7 @@ class ApiController extends Controller
     }
 
     /**
-     * API que recibirá el id del producto y la cantidad en el carrito
+     * API que recibirá el id del producto, cantidad del producto en el carrito y cliente que lo está añadiendo / quitando
      * 
      * Borrará del carrito todas las veces que exista el producto en la lista del carrito y luego los añadirá tantas veces como
      * cantidad haya sido indicado
@@ -48,15 +48,23 @@ class ApiController extends Controller
      * a otras funcionalidades
      * Aunque de esta manera podremos emplear esta petición tanto para añadir, eliminar, aumentar cantidad y disminuir cantidad
      * 
-     * Devuelve el número de productos totales en el carrito
      */
     public function actualizarProductoCarrito(Request $request) {
+
+        // return response()->json([
+        //     'ok' => true,
+        //     'mensaje' => 'Petición válida',
+        //     'producto_id' => $request->producto_id,
+        //     'producto_cantidad' => $request->producto_cantidad,
+        //     'cliente_id' => Auth::user()->id
+        // ], 200);
+
         // Borramos para actualizar
         $cliente = Auth::user();
         ProductosCarrito::where('producto_id', $request->producto_id)->where('cliente_id', $cliente->id)->delete();
 
         // Añadimos tantas veces como exista
-        for ($i = 0; $i < $request->cantidad_producto; $i++) {
+        for ($i = 0; $i < $request->producto_cantidad; $i++) {
             ProductosCarrito::create(['producto_id' => $request->producto_id, 'cliente_id' => $cliente->id]);
         }
 
@@ -67,7 +75,6 @@ class ApiController extends Controller
         return response()->json([
             'ok' => true,
             'mensaje' => 'Petición válida',
-            'num_productos_carrito' => $count_carrito, 
         ], 200);
     }
 
@@ -90,5 +97,10 @@ class ApiController extends Controller
             'ok' => true,
             'mensaje' => 'Petición válida',
         ], 200);
+    }
+
+
+    public function obtenerProductosCarrito() {
+
     }
 }
