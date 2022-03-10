@@ -4,6 +4,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 @endsection
 
+
+@section('navActiva')
+    @php
+    // si es el admin que está mirando a otro usuario no marcamos como activa la ruta en la navbar
+    if(!(Auth::user() && isset($user->id) && Auth::user()->id != $user->id))
+        $nav_activa_perfil = true;
+    @endphp
+@endsection
+
+
 @section('content')
 <div class="container my-1">
 
@@ -101,15 +111,26 @@
                             @foreach ($usuarios as $usuario)
                                 <tr>
                                     <th scope="row">{{ ucwords(strtolower($usuario->nombre)) }}</th>
-                                    <td>{{ $usuario->created_at->format('d-m-Y H:i:s') }}</td>
-                                    <td>{{ ucfirst($usuario->rol) }}</td>
+                                    <td>{{ $usuario->created_at->format('d-m-Y') }}</td>
                                     <td>
-                                        <form method="post" action="{{route('usuarios.destroy')}}">
-                                            @method('delete')
-                                            @csrf
-                                            <input type="hidden" name="user_id" value="{{ $usuario->id }}">
-                                            <button type="submit" class="btn btn-danger btn-sm {{ ($usuario->id == $user->id) ? 'disabled' : ''}}">Eliminar</button>
-                                        </form>
+                                        @switch($usuario->rol)
+                                            @case(\App\Models\Constants::ROL_ADMINISTRADOR)
+                                                Admin
+                                                @break
+                                            @default
+                                                Cliente
+                                        @endswitch
+                                    </td>
+                                    <td>
+                                        @if (Auth::user() && Auth::user()->id != $usuario->id)
+                                            <a class="btn btn-primary btn-sm" href="{{ route('usuarios.show', ['id' => $usuario->id]) }}">Ver perfil</a>
+                                            <form method="post" action="{{route('usuarios.destroy')}}" style="display:inline-block">
+                                                @method('delete')
+                                                @csrf
+                                                <input type="hidden" name="user_id" value="{{ $usuario->id }}">
+                                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

@@ -5,6 +5,13 @@
 @endsection
 
 
+@section('navActiva')
+    @php
+        $nav_activa_carta = true;
+    @endphp
+@endsection
+
+
 @section('content')
     <div class="contenedor justify-content-start">
         <div class="contenedor-categorias col-12"></div>
@@ -16,7 +23,7 @@
         @php
             $i++;
         @endphp
-            <div numero="{{ $i }}" id="producto-{{ $i }}" tipo="tarjeta-producto">
+            <div numero="{{ $i }}" id="producto-{{ $producto->id }}" tipo="tarjeta-producto">
                 <div class="contenedor-imagen">
                     <img src="{{ asset('img/'.$producto->foto) }}" alt="foto">
                 </div>

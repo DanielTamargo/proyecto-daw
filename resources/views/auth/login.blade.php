@@ -4,6 +4,13 @@
 <link href="{{ asset('css/login.css') }}" rel="stylesheet">
 @endsection
 
+@section('navActiva')
+    @php
+        $nav_activa_login = true;
+    @endphp
+@endsection
+
+
 @section('content')
 <div class="contenedor">
 

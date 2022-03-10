@@ -46,9 +46,12 @@ class UsuarioController extends Controller
      * @param  \App\Models\Usuario  $usuario
      * @return \Illuminate\Http\Response
      */
-    public function show(User $usuario)
+    public function show(Request $request)
     {
-        //
+        $usuario = User::find($request->id);
+        if (!$usuario) return view('errors.404');
+
+        return view('usuarios.show')->with('user', $usuario);
     }
 
     /**

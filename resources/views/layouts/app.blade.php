@@ -57,15 +57,19 @@
                         </div>
                         <div class="collapse navbar-collapse" id="navbarNav">
                             <ul class="navbar-nav">
+                                @yield('navActiva')
                                 <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="{{ route('inicio') }}">Carta</a>
+                                    <a class="nav-link @isset($nav_activa_carta) active @endisset" aria-current="page" href="{{ route('inicio') }}">Carta</a>
                                 </li>
                                 <li class="nav-item">
                                     @guest
-                                        <a class="nav-link" href="{{ route('login') }}">Iniciar sesión</a>                                        
+                                        <a class="nav-link @if(isset($nav_activa_login) || isset($nav_activa_register)) active @endif" href="{{ route('login') }}">Iniciar sesión</a>                                        
                                     @endguest
                                     @auth
-                                        <a class="nav-link" href="{{ route('usuarios.profile') }}">Mi perfil</a>
+                                        <a class="nav-link @isset($nav_activa_perfil) active @endisset" href="{{ route('usuarios.profile') }}">Mi perfil</a>
+                                        @if(Auth::user()->rol == App\Models\Constants::ROL_ADMINISTRADOR)
+                                            <a class="nav-link" href="#">Pedidos</a>
+                                        @endif
                                     @endauth
                                 </li>
                             </ul>

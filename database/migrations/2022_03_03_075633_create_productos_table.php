@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('descripcion');
             $table->float('precio');
-            $table->string('foto');//->default('placeholder_' . rand(1, 6) . '.png');
+            $table->string('foto')->default('placeholder_1.png');//->default('placeholder_' . rand(1, 6) . '.png');
             $table->timestamp('fecha_publicacion')->useCurrent();
 
             // Referencia al administrador que lo ha creado

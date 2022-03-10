@@ -133,7 +133,7 @@
                     @endphp
                     <div class="comentario mb-5">
                         <h5>{{ ucwords(strtolower($comentario->cliente->nombre)) }}  
-                            @if ($usuario->rol ==  \App\Models\Constants::ROL_ADMINISTRADOR)
+                            @if ($comentario->cliente->rol ==  \App\Models\Constants::ROL_ADMINISTRADOR)
                                 <span class="badge bg-secondary">Administrador</span> 
                             @elseif ($comentario->cliente->compraVerificada($producto->id))
                                 <span class="badge bg-secondary">Compra verificada</span>  

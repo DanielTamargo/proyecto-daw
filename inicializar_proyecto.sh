@@ -4,7 +4,7 @@ mysql -e "DROP USER IF EXISTS 'dev'@'localhost'";
 mysql -e "FLUSH PRIVILEGES";
 # Crear BBDD si no existe (creamos BD proyecto y hosteleria por si se indica una u otra en el .env)
 mysql -e "CREATE DATABASE IF NOT EXISTS proyecto";
-mysql -e "CREATE DATABASE IF NOT EXISTS proyecto";
+mysql -e "CREATE DATABASE IF NOT EXISTS hosteleria";
 # Creamos usuario dev para el desarrollo en local
 mysql -e "CREATE USER 'dev'@'localhost' IDENTIFIED BY '12345Abcde'";
 mysql -e "GRANT ALL PRIVILEGES ON proyecto.* TO 'dev'@'localhost'";
