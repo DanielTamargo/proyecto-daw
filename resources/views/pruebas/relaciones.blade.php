@@ -38,8 +38,8 @@
                 <br>
                 
                 @php
-                    $producto = \App\Models\Producto::where('id', 1)->first();
-                    $usuario = \App\Models\User::where('id', 21)->first();
+                    $producto = \App\Models\Producto::find(1);
+                    $usuario = \App\Models\User::find(13);
                 @endphp
                     <p class="card-text m-0">Producto: {{ $producto->nombre }}</p>
                     <p class="card-text m-0">Usuario: {{ $usuario->nombre }}</p>
@@ -48,8 +48,8 @@
                 <hr>
 
                 @php
-                    $producto = \App\Models\Producto::where('id', 2)->first();
-                    $usuario = \App\Models\User::where('id', 21)->first();
+                    $producto = \App\Models\Producto::find(2);
+                    $usuario = \App\Models\User::find(13);
                 @endphp
                     <p class="card-text m-0">Producto: {{ $producto->nombre }}</p>
                     <p class="card-text m-0">Usuario: {{ $usuario->nombre }}</p>

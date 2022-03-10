@@ -31,7 +31,11 @@
                             <div id="boton-carrito" class="d-inline-block me-5">
                                 @auth
                                     <a href="">
-                                        <span id="indicador-carrito" class="badge rounded-pill bg-danger">{{ (Auth::user() && count(Auth::user()->productosCarrito) > 0) ? count(Auth::user()->productosCarrito) : '' }}</span>
+                                        @php
+                                            $cantidadProductosCarrito = 0;
+                                            if (Auth::user()) $cantidadProductosCarrito = App\Models\User::find(Auth::user()->id)->cantidadProductosEnCarrito();
+                                        @endphp
+                                        <span id="indicador-carrito" class="badge rounded-pill bg-danger">{{ ($cantidadProductosCarrito > 0) ? $cantidadProductosCarrito : '' }}</span>
                                         <div class="carrito-svg-container">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
                                                 <circle cx="176" cy="416" r="16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>

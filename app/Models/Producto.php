@@ -58,9 +58,10 @@ class Producto extends Model
      */
     public function cantidadEnCarrito($cliente)
     {
-        if ($cliente) 
-            return count(ProductosCarrito::where('producto_id', $this->id)->where('cliente_id', $cliente->id)->get());
-        else 
-            return 0;
+        if(!$cliente) return 0;
+        $productoCarrito = ProductosCarrito::where('producto_id', $this->id)->where('cliente_id', $cliente->id)->first();
+
+        if ($productoCarrito) 
+            return $productoCarrito->cantidad;
     }
 }

@@ -75,4 +75,19 @@ class User extends Authenticatable
         return $this->hasMany(Producto::class, 'creado_por', 'id');
     }
 
+    /**
+     * Devuelve el número de productos que tiene en el carrito
+     */
+    public function cantidadProductosEnCarrito() 
+    {
+        $cantidad = 0;
+        $productosCarrito = ProductosCarrito::where('cliente_id', $this->id)->get();
+        
+        foreach ($productosCarrito as $productoCarrito) {
+            $cantidad += $productoCarrito->cantidad;
+        }
+
+        return $cantidad;
+    }
+
 }
