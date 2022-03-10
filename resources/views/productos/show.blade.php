@@ -16,6 +16,7 @@
 
 
 @section('content')
+<div class="show-container">
     <div class="contenedor-show contenedor-1">
         <div class="contenedor">
             <div class="imagen">
@@ -36,8 +37,8 @@
                     </span>
                 </p>
                 <p id="descripcion">{{ $producto->descripcion }}</p>
-                <div class="botonera d-flex justify-content-between">
-                <div class="boton-confirmar">
+                <div class="botonera d-flex flex-column justify-content-center align-items-center p-3">
+                <div class="boton-confirmar mb-3">
                     <div class='container-btn'>
                         <div class='el-wrap'>
                             <div class='slider'>
@@ -130,6 +131,7 @@
             </div>
         </div>
     </div>
+</div>
 @endsection
 
 
