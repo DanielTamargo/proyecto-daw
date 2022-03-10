@@ -292,9 +292,9 @@ form {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 25px;
-    align-items: start;
+    align-items: stretch;
 
-    div {
+    &>div {
         position: relative;
         color: white;
         display: flex;
@@ -327,13 +327,18 @@ form {
             }
             
             img {
-                width: 100%;
-                height: auto;
+                user-drag: none;
+                -webkit-user-drag: none;
                 object-fit:cover;
+                width: 100%;
             }
         }
         
         .contenedor-info {
+            flex-grow: 1;
+            display: flex;
+            flex-flow: column nowrap;
+            align-items: center;
             box-shadow: none;
             border-radius: 0;
             background-color: $indigo-400;
@@ -344,7 +349,11 @@ form {
         &:hover {
             .contenedor-imagen {
                 height: 300px;
-
+                img {
+                    min-width: 100%;
+                    min-height: 100%;
+                    object-fit: cover;
+                }
                 &:after {
                     transform: rotate(5deg);
                 }
@@ -692,20 +701,14 @@ form {
 @media screen and (max-width: 1000px) {
     .contenedor-productos {
         padding: 0 10px;
-        display: grid;
         grid-template-columns: repeat(2, 1fr);
-        grid-gap: 25px;
-        align-items: start;
     }
 }
 
 @media screen and (max-width: 660px) {
     .contenedor-productos {
         padding: 0 10px;
-        display: grid;
         grid-template-columns: repeat(1, 1fr);
-        grid-gap: 25px;
-        align-items: start;
     }
 }
 
