@@ -8,8 +8,35 @@ const urlAPI = document.getElementById('url_api').value;
 const token_cliente = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 const cliente_loggeado = document.getElementById('nyb_cl').value;
 
-// TODO si el cliente NO está loggeado
+//https://attacomsian.com/blog/javascript-detect-mobile-device#:~:text=To%20detect%20if%20the%20user,and%20platform%20of%20the%20browser.
+const tipoDispositivo = () => {
+    const ua = navigator.userAgent;
+    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+        return "tablet";
+    }
+    else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+        return "mobile";
+    }
+    return "desktop";
+};
 
+// Listeners de la tarjetas de cada producto, que nos llevará a ver el producto
+//   a través de la delegación de eventos actuará en toda la tarjeta excepto en los botones añadir al carrito, sumar o restar
+document.querySelectorAll('div[tipo="tarjeta-producto"]').forEach(tarjeta => {
+    tarjeta.addEventListener('click', evt => {
+        if (tipoDispositivo() == 'desktop') {
+            if (!elementoTieneOCualquierPadreTieneClase(evt.target, 'annadir-carrito')) {
+                window.location.href += '/' + tarjeta.id.split('-')[1];
+            }
+        }
+    }, true)
+});
+
+// Función recursiva: devuelve true si el elemento o uno de sus padres tiene la clase indicada
+function elementoTieneOCualquierPadreTieneClase(elemento, clase) {
+    if (elemento.className && elemento.className.split(' ').indexOf(clase)>=0) return true;
+    return elemento.parentNode && elementoTieneOCualquierPadreTieneClase(elemento.parentNode, clase);
+}
 
 // Función que actualiza la cantidad total del carrito
 function actualizarCantidadCarrito(accion) {
@@ -30,6 +57,9 @@ function actualizarCantidadCarrito(accion) {
 
 // Petición API que actualiza en la BBDD el carrito del usuario
 function peticionAPIActualizarCarrito(producto_id, producto_cantidad) {
+    // TODO opcional: api con timeout
+    //    estaría interesante que por producto se ejecutase con timeout 
+    //    por si añade 5 seguidos que no se ejecute la api 5 veces innecesariamente
     fetch(urlAPI, {
         method: 'POST',
         body: JSON.stringify({
@@ -43,8 +73,6 @@ function peticionAPIActualizarCarrito(producto_id, producto_cantidad) {
       }).then(res => res.json())
       .then(response => console.log('Success:', response))
       .catch(error => console.error('Error:', error));
-
-    // TODO buscar la manera de no ejecutarlo cada vez que le da al botón (timeout(?))
 }
 
 // Función que suma uno a la cifra del producto y se lo manda a la API

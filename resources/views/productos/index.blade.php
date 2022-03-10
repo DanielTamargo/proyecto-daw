@@ -16,7 +16,7 @@
         @php
             $i++;
         @endphp
-            <div numero="{{ $i }}" id="producto-{{ $i }}">
+            <div numero="{{ $i }}" id="producto-{{ $i }}" tipo="tarjeta-producto">
                 <div class="contenedor-imagen">
                     <img src="{{ asset('img/'.$producto->foto) }}" alt="foto">
                 </div>
@@ -55,11 +55,11 @@
     <input type="hidden" id="nyb_cl" value="{{ Auth::user() ? 'true' : '' }}">
     <input type="hidden" id="url_api" value="{{ route('api.carrito.actualizarproducto') }}">
     <input type="hidden" id="url_login" value="{{ route('login') }}">
+    {{-- <input type="hidden" id="url_producto_show" value="{{ route('productos.show') }}"> --}}
     
 @endsection
 
 
 @section('scripts')
-<script src="{{ asset('js/lib/jquery-3.6.0.min.js') }}"></script>
 <script src="{{ asset('js/carta.js') }}"></script>
 @endsection
