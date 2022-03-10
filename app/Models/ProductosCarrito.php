@@ -16,5 +16,6 @@ class ProductosCarrito extends Model
     protected $fillable = [
         'cliente_id', 
         'producto_id', 
+        'cantidad', 
     ];
 }

@@ -38,6 +38,9 @@ Route::get('/logout', function () {
 
 /*-- RUTAS API --*/
 Route::get('/api/usuario/comprobar-campo-unico', [ApiController::class, 'comprobarUsuarioCampoUnico']);
+Route::post('/api/carrito/producto-carrito', [ApiController::class, 'actualizarProductoCarrito'])->name('api.carrito.actualizarproducto')->middleware('auth');
+Route::get('/api/carrito/obtener-productos', [ApiController::class, 'obtenerProductosCarrito'])->name('api.carrito.obtenerproductos');
+Route::get('/api/producto/modificar-estado', [ApiController::class, 'modificarEstadoPedido'])->middleware('auth.admin');
 
 /*-- REDIRECCIONES INICIO / HOME --*/
 Route::get('/inicio', function () { return redirect()->route('inicio'); });
@@ -46,10 +49,11 @@ Route::get('/', function () { return redirect()->route('inicio'); });
 
 
 /*-- PRODUCTOS --*/
-Route::get('/productos', [ProductoController::class, 'index'])->name('inicio'); // productos.index
-Route::get('/productos/{id}', [ProductoController::class, 'show'])->name('productos.show');
-Route::put('/productos/editar', [ProductoController::class, 'edit'])->name('productos.edit')->middleware('auth.admin');
-Route::get('/productos/nuevo', [ProductoController::class, 'create'])->name('productos.create')->middleware('auth.admin');
+Route::get('/carta', [ProductoController::class, 'index'])->name('inicio'); // productos.index
+Route::get('/productos/crear', [ProductoController::class, 'create'])->name('productos.create')->middleware('auth.admin');
+Route::get('/carta/{id}', [ProductoController::class, 'show'])->name('productos.show');
+Route::get('/productos/editar', [ProductoController::class, 'edit'])->name('productos.edit')->middleware('auth.admin');
+Route::put('/productos/editar', [ProductoController::class, 'update'])->name('productos.update')->middleware('auth.admin');
 Route::post('/productos/nuevo', [ProductoController::class, 'store'])->name('productos.store')->middleware('auth.admin');
 Route::delete('/productos/eliminar', [ProductoController::class, 'destroy'])->name('productos.destroy')->middleware('auth.admin');
 

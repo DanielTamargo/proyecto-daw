@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             //$table->timestamps(); // created_at, updated_at
 
+            $table->integer('cantidad')->default(0);
             // Referencia al producto añadido al carrito
             $table->unsignedBigInteger('producto_id');
             $table->foreign('producto_id')

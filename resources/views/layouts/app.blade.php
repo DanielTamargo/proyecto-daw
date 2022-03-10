@@ -29,17 +29,23 @@
                         <a class="navbar-brand" href="{{ route('inicio') }}">{{ config('app.name', 'Hosteleria') }}</a>
                         <div id="derecha">
                             <div id="boton-carrito" class="d-inline-block me-5">
-                                <a href="">
-                                    <span id="indicador-carrito" class="badge rounded-pill bg-danger">12<!-- Variable numero de items en el carrito (Solo si != 0) --></span>
-                                    <div class="carrito-svg-container">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
-                                            <circle cx="176" cy="416" r="16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
-                                            <circle cx="400" cy="416" r="16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
-                                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M48 80h64l48 272h256"/>
-                                            <path d="M160 288h249.44a8 8 0 007.85-6.43l28.8-144a8 8 0 00-7.85-9.57H128" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
-                                        </svg>
-                                    </div>
-                                </a>
+                                @auth
+                                    <a href="">
+                                        @php
+                                            $cantidadProductosCarrito = 0;
+                                            if (Auth::user()) $cantidadProductosCarrito = App\Models\User::find(Auth::user()->id)->cantidadProductosEnCarrito();
+                                        @endphp
+                                        <span id="indicador-carrito" class="badge rounded-pill bg-danger">{{ ($cantidadProductosCarrito > 0) ? $cantidadProductosCarrito : '' }}</span>
+                                        <div class="carrito-svg-container">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
+                                                <circle cx="176" cy="416" r="16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                                                <circle cx="400" cy="416" r="16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M48 80h64l48 272h256"/>
+                                                <path d="M160 288h249.44a8 8 0 007.85-6.43l28.8-144a8 8 0 00-7.85-9.57H128" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                                            </svg>
+                                        </div>
+                                    </a>
+                                @endauth
                             </div>
                             <button class="menu navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                                 <svg viewBox="0 0 64 48">

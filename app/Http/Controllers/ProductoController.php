@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductoController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -20,12 +19,11 @@ class ProductoController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        dd(Auth::user());
+        return view('productos.create');
     }
 
     /**
@@ -53,13 +51,10 @@ class ProductoController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Producto  $producto
-     * @return \Illuminate\Http\Response
      */
-    public function edit(Producto $producto)
+    public function edit(Request $request)
     {
-        //
+        return view('productos.create')->with('producto', Producto::find($request->producto_id));
     }
 
     /**
