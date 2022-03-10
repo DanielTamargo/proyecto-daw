@@ -11562,6 +11562,7 @@ form {
   border-radius: 4px;
 }
 .contenedor-productos > div .contenedor-imagen {
+  cursor: pointer;
   box-shadow: none;
   border-radius: 0;
   position: relative;
@@ -11600,6 +11601,9 @@ form {
   background-color: #8540f5;
   padding: 0px 10px 10px 10px;
   width: 100%;
+}
+.contenedor-productos > div .contenedor-info .nombre, .contenedor-productos > div .contenedor-info .precio {
+  cursor: pointer;
 }
 .contenedor-productos > div:hover .contenedor-imagen {
   height: 300px;
@@ -11960,6 +11964,273 @@ form {
   transform: scale(0.95);
   border-radius: 50%;
   border: none;
+}
+
+.contenedor-show {
+  min-height: calc(100vh - 125px + 175px);
+  background-color: #a370f7;
+  position: relative;
+  top: -75px;
+}
+.contenedor-show p {
+  margin: 0;
+}
+.contenedor-show.contenedor-1 {
+  padding-top: 71px;
+}
+.contenedor-show.contenedor-1 .contenedor {
+  flex-flow: row;
+  justify-content: space-evenly;
+}
+.contenedor-show.contenedor-1 .contenedor .imagen {
+  width: 45%;
+}
+.contenedor-show.contenedor-1 .contenedor .imagen img {
+  min-width: 80%;
+  max-width: 100%;
+}
+.contenedor-show.contenedor-1 .contenedor .detalles {
+  width: 45%;
+  color: white;
+}
+.contenedor-show.contenedor-1 .contenedor .detalles > p {
+  margin: 0;
+}
+.contenedor-show.contenedor-1 .contenedor .detalles #twitter {
+  height: 40px;
+}
+.contenedor-show.contenedor-1 .contenedor .detalles #twitter:visited {
+  color: #1d9bf0;
+}
+.contenedor-show.contenedor-1 .contenedor .detalles #twitter:hover {
+  cursor: pointer;
+  color: #1d9bf0;
+}
+.contenedor-show.contenedor-1 .contenedor .detalles #nombre {
+  font-size: 3em;
+}
+.contenedor-show.contenedor-1 .contenedor .detalles #precio {
+  font-size: 4em;
+}
+.contenedor-show.contenedor-1 .contenedor .detalles #descripcion {
+  font-size: 0.9em;
+}
+.contenedor-show.contenedor-2 {
+  background-color: white;
+}
+.contenedor-show .contenedor {
+  justify-content: flex-start;
+}
+.contenedor-show .wave-decoration {
+  width: 100%;
+  position: absolute;
+}
+.contenedor-show .wave-decoration svg {
+  position: relative;
+  top: -100px;
+  max-height: 100px;
+  min-width: 100%;
+  max-width: none;
+}
+.contenedor-show .wave-decoration .parallax > use {
+  -webkit-animation: moveForever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+  animation: moveForever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+}
+.contenedor-show .wave-decoration .parallax > use:nth-child(1) {
+  -webkit-animation-delay: -2s;
+  animation-delay: -2s;
+  -webkit-animation-duration: 10s;
+  animation-duration: 10s;
+}
+.contenedor-show .wave-decoration .parallax > use:nth-child(2) {
+  -webkit-animation-delay: -3s;
+  animation-delay: -3s;
+  -webkit-animation-duration: 13s;
+  animation-duration: 13s;
+}
+.contenedor-show .wave-decoration .parallax > use:nth-child(3) {
+  -webkit-animation-delay: -4s;
+  animation-delay: -4s;
+  -webkit-animation-duration: 16s;
+  animation-duration: 16s;
+}
+.contenedor-show .wave-decoration .parallax > use:nth-child(4) {
+  -webkit-animation-delay: -5s;
+  animation-delay: -5s;
+  -webkit-animation-duration: 23s;
+  animation-duration: 23s;
+}
+
+.container-btn {
+  width: auto;
+  height: auto;
+  margin: auto;
+  padding: 0;
+}
+
+.el-wrap {
+  width: 200px;
+  height: 50px;
+  border-radius: 0.8em;
+  position: relative;
+  box-shadow: 0 3px 20px -3px #4a74c9;
+}
+
+.el-wrap-shield:after {
+  width: 200px;
+  height: 50px;
+  border-radius: 0.8em;
+  content: "";
+  background: transparent;
+  border: 5px solid transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+}
+
+/* Button */
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 200px;
+  height: 50px;
+  border-radius: 0.8em;
+  position: absolute;
+  background: #1462ff;
+  border-color: #1462ff;
+  border-width: 5px;
+  border-style: solid;
+  transition: background 299ms ease, border-color 299ms ease;
+  z-index: 3;
+}
+
+.btn-clickable {
+  cursor: pointer;
+}
+.btn-clickable:hover {
+  background: #2870ff;
+  border-color: #2870ff;
+  transition: background 299ms ease, border-color 299ms ease;
+}
+
+/* Slider */
+.slider {
+  width: 200px;
+  height: 50px;
+  border-radius: 0.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  justify-content: flex-end;
+  position: absolute;
+  background: #1462ff;
+  border: 5px solid #1462ff;
+  opacity: 0;
+  z-index: 0;
+  transition: background 299ms ease, border-color 299ms ease, opacity 299ms ease;
+}
+
+.sldr-opa {
+  opacity: 1;
+  transition: opacity 149.5ms ease;
+}
+
+.sldr-pos {
+  z-index: 5;
+}
+
+.sldr-drag {
+  background: #2870ff;
+  border-color: #2870ff;
+  transition: background 299ms ease, border-color 299ms ease;
+}
+
+/* Inside Slider */
+.slider-text {
+  width: 200px;
+  height: 50px;
+  border-radius: 0.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.text-d {
+  opacity: 0.3;
+  transition: opacity 299ms ease;
+}
+
+.controller {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+  width: 48px;
+  height: 48px;
+  background: #7aa6ff;
+  border: 2px solid #adc8ff;
+  border-radius: 0.55em;
+  position: absolute;
+  top: 1.5px;
+  left: 0;
+}
+
+.endpoint-container {
+  width: 200px;
+  height: 50px;
+  border-radius: 0.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  justify-content: flex-end;
+  background: trasparent;
+}
+
+.endpoint {
+  border: 3px solid transparent;
+  height: 50px;
+  width: 50px;
+  border-radius: 7px;
+  margin: 0;
+  position: relative;
+}
+
+.icon {
+  color: #ffffff;
+  margin-top: 0px;
+  width: 28px;
+  height: 28px;
+  transition: opacity 299ms ease;
+}
+
+.icon-opa {
+  opacity: 0;
+  transition: opacity 299ms ease;
+}
+
+.button .icon {
+  margin-left: 4px;
+  margin-top: 4px;
+}
+
+.icon-check {
+  display: none;
+}
+
+/* Text */
+.text {
+  font-size: 1.2em;
+  color: #ffffff;
+  transition: opacity 299ms ease;
 }
 
 @media screen and (max-width: 1000px) {

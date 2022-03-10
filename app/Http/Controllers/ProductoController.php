@@ -45,9 +45,10 @@ class ProductoController extends Controller
      * @param  \App\Models\Producto  $producto
      * @return \Illuminate\Http\Response
      */
-    public function show(Producto $producto)
+    public function show(Request $request)
     {
-        //
+        $producto = Producto::find($request->id);
+        return view('productos.show',compact('producto'));
     }
 
     /**
