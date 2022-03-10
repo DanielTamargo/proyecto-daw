@@ -11550,9 +11550,9 @@ form {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 25px;
-  align-items: start;
+  align-items: stretch;
 }
-.contenedor-productos div {
+.contenedor-productos > div {
   position: relative;
   color: white;
   display: flex;
@@ -11561,7 +11561,7 @@ form {
   justify-content: center;
   border-radius: 4px;
 }
-.contenedor-productos div .contenedor-imagen {
+.contenedor-productos > div .contenedor-imagen {
   box-shadow: none;
   border-radius: 0;
   position: relative;
@@ -11573,7 +11573,7 @@ form {
   overflow: hidden;
   transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.contenedor-productos div .contenedor-imagen:after {
+.contenedor-productos > div .contenedor-imagen:after {
   content: "";
   background-color: #8540f5;
   position: absolute;
@@ -11583,23 +11583,34 @@ form {
   transform: rotate(-5deg);
   transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.contenedor-productos div .contenedor-imagen img {
-  width: 100%;
-  height: auto;
+.contenedor-productos > div .contenedor-imagen img {
+  user-drag: none;
+  -webkit-user-drag: none;
   -o-object-fit: cover;
      object-fit: cover;
+  width: 100%;
 }
-.contenedor-productos div .contenedor-info {
+.contenedor-productos > div .contenedor-info {
+  flex-grow: 1;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
   box-shadow: none;
   border-radius: 0;
   background-color: #8540f5;
   padding: 0px 10px 10px 10px;
   width: 100%;
 }
-.contenedor-productos div:hover .contenedor-imagen {
+.contenedor-productos > div:hover .contenedor-imagen {
   height: 300px;
 }
-.contenedor-productos div:hover .contenedor-imagen:after {
+.contenedor-productos > div:hover .contenedor-imagen img {
+  min-width: 100%;
+  min-height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.contenedor-productos > div:hover .contenedor-imagen:after {
   transform: rotate(5deg);
 }
 
@@ -11954,19 +11965,13 @@ form {
 @media screen and (max-width: 1000px) {
   .contenedor-productos {
     padding: 0 10px;
-    display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 25px;
-    align-items: start;
   }
 }
 @media screen and (max-width: 660px) {
   .contenedor-productos {
     padding: 0 10px;
-    display: grid;
     grid-template-columns: repeat(1, 1fr);
-    grid-gap: 25px;
-    align-items: start;
   }
 }
 @media screen and (max-width: 600px) {
