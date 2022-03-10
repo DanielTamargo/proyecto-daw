@@ -1,7 +1,17 @@
 @extends('layouts.app')
 
 @section('styleScripts')
-
+  <style>
+        .comentario {
+            width: 100%;    
+        }
+        hr.separadorComentarios {
+            border: 0;
+            height: 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+  </style>
 @endsection
 
 
@@ -91,6 +101,33 @@
                 </svg>
             </div>
 
+            {{-- Lista de comentarios del producto --}}
+            <div class="comentarios py-3">
+                {{--  
+                    Badges
+                    <span class="badge bg-secondary">Admin</span> 
+                    <span class="badge bg-secondary">Compra confirmada</span> 
+                --}}
+                @php
+                    $i = 0;
+                @endphp
+                @forelse ($producto->comentarios as $comentario)
+                    @php
+                        $i++;
+                    @endphp
+                    <div class="comentario">
+                        <h5>asdfsadf <span class="badge bg-secondary">Admin</span></h5>
+                        <p>asdfasdf</p>
+                        @if ($i < count($producto->comentarios))
+                            <hr class="separadorComentarios">
+                        @endif
+                    </div>
+                @empty
+                    <div class="sin-comentarios">
+                        <h3 class="text-muted">El producto no tiene comentarios</h3>
+                    </div>
+                @endforelse
+            </div>
         </div>
     </div>
 @endsection
