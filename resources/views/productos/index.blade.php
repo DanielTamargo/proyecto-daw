@@ -52,6 +52,7 @@
         @endforeach
         </div>
     </div>
+    <input type="hidden" id="nyb_cl" value="{{ Auth::user() ? 'true' : '' }}">
     <input type="hidden" id="url_api" value="{{ route('api.carrito.actualizarproducto') }}">
     <input type="hidden" id="url_login" value="{{ route('login') }}">
     

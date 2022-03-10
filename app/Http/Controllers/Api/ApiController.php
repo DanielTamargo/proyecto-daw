@@ -37,39 +37,29 @@ class ApiController extends Controller
     }
 
     /**
-     * API que recibirá el id del producto, cantidad del producto en el carrito y cliente que lo está añadiendo / quitando
-     * 
-     * Borrará del carrito todas las veces que exista el producto en la lista del carrito y luego los añadirá tantas veces como
-     * cantidad haya sido indicado
-     * 
-     * Esto se debe a que la BBDD está planteada con una tabla de relación muchos a muchos entre cliente y producto donde se sonsacan
-     * los productos que existen en el carrito, sin un atributo que controle la cantidad
-     * Supondrá un exceso de trabajo para la BBDD pero el tiempo disponible en el proyecto es mínimo y daremos prioridad 
-     * a otras funcionalidades
-     * Aunque de esta manera podremos emplear esta petición tanto para añadir, eliminar, aumentar cantidad y disminuir cantidad
-     * 
+     * API que recibirá el id del producto y del cliente y actualizará la cantidad en el carrito
+     * Si no existe lo añadirá
+     * Si existía y la cantidad es superior a 0, lo actualizará
+     * Si existía pero la cantidad es 0 o inferior, lo eliminará
      */
     public function actualizarProductoCarrito(Request $request) {
 
-        // return response()->json([
-        //     'ok' => true,
-        //     'mensaje' => 'Petición válida',
-        //     'producto_id' => $request->producto_id,
-        //     'producto_cantidad' => $request->producto_cantidad,
-        //     'cliente_id' => Auth::user()->id
-        // ], 200);
-
-        // Borramos para actualizar
+        // Buscamos
         $cliente = Auth::user();
-        ProductosCarrito::where('producto_id', $request->producto_id)->where('cliente_id', $cliente->id)->delete();
+        $productosCarrito = ProductosCarrito::where('producto_id', $request->producto_id)->where('cliente_id', $cliente->id)->first();
 
-        // Añadimos tantas veces como exista
-        for ($i = 0; $i < $request->producto_cantidad; $i++) {
-            ProductosCarrito::create(['producto_id' => $request->producto_id, 'cliente_id' => $cliente->id]);
+        // Trabajamos con los datos
+        if (!$productosCarrito && $request->producto_cantidad > 0) {
+            // Si no existe (y la cantidad es positiva), lo añadimos
+            ProductosCarrito::create(['cliente_id' => $cliente->id, 'producto_id' => $request->producto_id, 'cantidad' => $request->producto_cantidad]);
+        } else if ($request->producto_cantidad > 0) {
+            // Si sí que existe y la cantidad es positiva, actualizamos
+            $productosCarrito->cantidad = $request->producto_cantidad;
+            $productosCarrito->save();
+        } else {
+            // Si ya existía pero la cantidad es 0 (o inferior), eliminamos
+            $productosCarrito->delete();
         }
-
-        // Obtenemos número de productos en total
-        $count_carrito = count(ProductosCarrito::where('cliente_id', $cliente->id)->get());
 
         // Devolvemos la respuesta
         return response()->json([

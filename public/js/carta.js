@@ -6,6 +6,7 @@ const accionRestar = 'restar';
 const urlLogin = document.getElementById('url_login').value;
 const urlAPI = document.getElementById('url_api').value;
 const token_cliente = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+const cliente_loggeado = document.getElementById('nyb_cl').value;
 
 // TODO si el cliente NO está loggeado
 
@@ -77,7 +78,7 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
 
     button.addEventListener('click', e => {
         // Si NO está loggeado, redirigimos al login
-        if (!cliente_id) {
+        if (!cliente_loggeado) {
             window.location.href = urlLogin;
             return;
         }
