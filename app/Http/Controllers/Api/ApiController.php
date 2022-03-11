@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Producto;
 use App\Models\ProductosCarrito;
 use App\Models\User;
+use App\Models\Pedido;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -92,5 +93,17 @@ class ApiController extends Controller
 
     public function obtenerProductosCarrito() {
 
+    }
+
+
+    public function obtenerEstadoPedido(Request $request) {
+        $pedido = Pedido::find($request->pedido_id);
+
+        // Devolvemos la respuesta
+        return response()->json([
+            'ok' => true,
+            'mensaje' => 'Petición válida',
+            'estado' => $pedido->estado,
+        ], 200);
     }
 }

@@ -13,11 +13,59 @@
 
 
 @section('content')
+    <style>
+        
+    </style>
+
     <div class="contenedor">
+        <p>Fecha del pedido: {{ $pedido->created_at }}</p>
+        <p>Contenido del pedido</p>
+        <div class="col-11">
+        <div class="progress">
+            <div id="progress" class="progress-bar" role="progressbar">
+                Oido
+            </div>
+        </div>
+        </div>
+        <input type="hidden" id="estado" value="{{ $pedido->estado }}">
+        <input type="hidden" id="id_pedido" value="{{ $pedido->id }}">
+        <input type="hidden" id="url_api" value="{{ route('api.pedido.obtenerestadopedido') }}">
     </div>
 @endsection
 
 
 @section('scripts')
+<script src="{{ asset('js/lib/jquery-3.6.0.min.js') }}"></script>
+<script>
+const token_cliente = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+const pedido_id = document.querySelector('#id_pedido').getAttribute('value');
+var datos;
 
+actualizarBarra();
+
+setInterval(() => {
+    peticionAPIActualizarDatos();
+}, 5000);
+function actualizarBarra(estado) {
+
+    $('#progress').attr('class', 'progress-bar '+estado);
+}
+
+
+function peticionAPIActualizarDatos() {
+    
+    fetch(document.querySelector('#url_api').getAttribute('value'), {
+        method: 'POST',
+        body: JSON.stringify({
+            'pedido_id' : Number(pedido_id),
+        }),
+        headers:{
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token_cliente
+        }
+    }).then(res => res.json())
+    .then(response => console.log('Success:', response),datos=response['estado'])
+    .catch(error => console.error('Error:', error));
+}
+</script>
 @endsection
