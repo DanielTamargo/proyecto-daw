@@ -81,6 +81,10 @@
 <script src="{{asset('js/boton.js')}}"></script>
 
     <script>
+        function despues() {
+            // code here
+        }
+
         document.querySelectorAll('#cuerpo-carrito tr').forEach(el => {
             let id = el.children[0].children[0].getAttribute('alt');
             el.addEventListener('click', function() {

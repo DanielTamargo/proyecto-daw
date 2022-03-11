@@ -46,7 +46,7 @@ class PedidoController extends Controller
      */
     public function show(Pedido $pedido)
     {
-        //
+        
     }
 
     /**

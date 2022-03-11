@@ -71,7 +71,7 @@
                                 </li>
                                 @if(Auth::user() && Auth::user()->rol == App\Models\Constants::ROL_ADMINISTRADOR)
                                     <li class="nav-item">
-                                        <a class="nav-link @isset($nav_activa_pedidos) active @endisset" href="#">Pedidos</a>    
+                                        <a class="nav-link @isset($nav_activa_pedidos) active @endisset" href="{{ route('pedidos.index') }}">Pedidos</a>    
                                     </li>
                                 @endif
                             </ul>

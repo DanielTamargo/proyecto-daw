@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\UsuarioController;
 
 use Illuminate\Support\Facades\Auth;
@@ -76,6 +77,9 @@ Route::delete('/carrito/{id}', [CarritoController::class, 'remove'])->name('carr
 Route::post('/comprar', [CarritoController::class, 'buy'])->name('carrito.buy')->middleware('auth');
 Route::post('/carrito/vaciar', [CarritoController::class, 'clear'])->name('carrito.clear')->middleware('auth');
 
+/*--  PEDIDOS --*/
+Route::get('/pedidos', [PedidoController::class, 'index'])->name('pedidos.index'); // productos.index
+Route::get('/pedidos/{id}', [PedidoController::class, 'show'])->name('pedidos.show');
 
 /*-- PRUEBAS -- */
 Route::get('/pruebas/relaciones', function () {
