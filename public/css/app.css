@@ -12276,12 +12276,12 @@ form {
   background: linear-gradient(90deg, #a370f7);
 }
 
-.progress-bar.proceso {
+.progress-bar.enproceso {
   width: 50%;
   background: linear-gradient(90deg, #a370f7, #8540f5);
 }
 
-.progress-bar.preparado {
+.progress-bar.listo {
   width: 75%;
   background: linear-gradient(90deg, #a370f7, #8540f5, #6610f2);
 }
