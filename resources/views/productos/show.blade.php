@@ -6,7 +6,7 @@
 
 
 @section('content')
-<div class="show-container">
+<div class="contenedor">
     <div class="contenedor-show contenedor-1">
         <div class="contenedor">
             <div class="imagen">
@@ -91,7 +91,6 @@
                     </g>
                 </svg>
             </div>
-
         </div>
     </div>
 </div>

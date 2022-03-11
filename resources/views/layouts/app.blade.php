@@ -86,7 +86,7 @@
             </div>
         </nav>
 
-        <section id="separador">&nbsp;</section>
+        <section @if(Route::is('productos.show') ) style="background-color: #a370f7;" @endif id="separador">&nbsp;</section>
 
         <main>
             @yield('content')

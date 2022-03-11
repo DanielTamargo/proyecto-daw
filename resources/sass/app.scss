@@ -711,12 +711,9 @@ form {
     p {
         margin: 0;
     }
-    min-height: calc(100vh - 125px + 175px);
     background-color: $indigo-300;
-    position: relative;
-    top: -75px;
     &.contenedor-1 {
-        padding-top: 71px;
+        padding-bottom: 50px;
         .contenedor {
             flex-flow: row;
             justify-content: space-evenly;
@@ -762,8 +759,8 @@ form {
     }
 
     &.contenedor-2 {
+        width: 100%;
         background: white;
-        top: 0 !important;
     }
     .contenedor {
         justify-content: flex-start;
@@ -812,14 +809,6 @@ form {
                     animation-duration: 23s;
         }
     }
-}
-
-.show-container {
-    position: absolute;
-    top: -50px;
-    overflow: hidden;
-    width: 100%;
-    background-color: $indigo-300;
 }
 
 
@@ -1041,7 +1030,6 @@ form {
 @media screen and (max-width: 800px) {
     .contenedor-show {
         &.contenedor-1 {
-            padding-top: 71px;
             .contenedor {
                 flex-flow: column;
                 justify-content: center;

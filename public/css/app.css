@@ -11971,16 +11971,13 @@ form {
 }
 
 .contenedor-show {
-  min-height: calc(100vh - 125px + 175px);
   background-color: #a370f7;
-  position: relative;
-  top: -75px;
 }
 .contenedor-show p {
   margin: 0;
 }
 .contenedor-show.contenedor-1 {
-  padding-top: 71px;
+  padding-bottom: 50px;
 }
 .contenedor-show.contenedor-1 .contenedor {
   flex-flow: row;
@@ -12020,8 +12017,8 @@ form {
   font-size: 0.9em;
 }
 .contenedor-show.contenedor-2 {
+  width: 100%;
   background: white;
-  top: 0 !important;
 }
 .contenedor-show .contenedor {
   justify-content: flex-start;
@@ -12064,14 +12061,6 @@ form {
   animation-delay: -5s;
   -webkit-animation-duration: 23s;
   animation-duration: 23s;
-}
-
-.show-container {
-  position: absolute;
-  top: -50px;
-  overflow: hidden;
-  width: 100%;
-  background-color: #a370f7;
 }
 
 .container-btn {
@@ -12260,9 +12249,6 @@ form {
   }
 }
 @media screen and (max-width: 800px) {
-  .contenedor-show.contenedor-1 {
-    padding-top: 71px;
-  }
   .contenedor-show.contenedor-1 .contenedor {
     flex-flow: column;
     justify-content: center;
