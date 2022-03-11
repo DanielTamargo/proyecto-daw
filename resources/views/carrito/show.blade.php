@@ -1,44 +1,85 @@
 @extends('layouts.app')
 
 @section('styleScripts')
-    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 @endsection
 
 
 @section('content')
-    <div class="contenedor justify-content-start row g-3">
-    <table class="table table-striped table-hover align-middle">
-        <thead>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Precio</th>
-                <th scope="col">N&uacute;mero</th>
-                <th scope="col">Eliminar</th>
-            </tr>
-        </thead>
-        <tbody id="cuerpo-carrito">
-            @foreach($productos as $producto)
-                <tr>
-                    <td><img src="{{ asset('img/'.$producto->foto) }}" alt="{{ $producto->id }}"></td>
-                    <td>{{ $producto->nombre }}</td>
-                    <td>{{ $producto->precio }}&euro;</td>
-                    <td>{{ $producto->cantidadEnCarrito(Auth::user()) }}</td>
-                    <td>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
-                        </svg>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <div class="contenedor @if(count($productos)!=0) justify-content-start row g-3">
         
+        <table class="table table-responsive table-striped table-hover align-middle">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Nombre</th>
+                    <th class="text-center" scope="col">Precio</th>
+                    <th class="text-center" scope="col">Cantidad</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpo-carrito">
+                @foreach($productos as $producto)
+                    <tr>
+                        <td><img src="{{ asset('img/'.$producto->foto) }}" alt="{{ $producto->id }}"></td>
+                        <td class="text-overflow-ellipsis">{{ $producto->nombre }}</td>
+                        <td class="text-center">{{ $producto->precio }}&euro;</td>
+                        <td class="text-center">
+                            <div class="d-flex flex-row flex-nowrap justify-content-center">
+                                <button class="btn btn-primary"><i class="bi bi-caret-left-fill"></i></button>
+                                <span class="p-2">{{ $producto->cantidadEnCarrito(Auth::user()) }}</span>
+                                <button class="btn btn-primary"><i class="bi bi-caret-right-fill"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <div class="d-flex flex-row justify-content-evenly">
+            <div class="boton-confirmar">
+                <div class='container-btn'>
+                    <div class='el-wrap'>
+                        <div class='slider'>
+                            <div class='slider-text'>
+                                <div class='text'>
+                                Confirmar
+                                </div>
+                            </div>
+                            <div class='slider-trigger'>
+                                <div class='controller' id='controller'>
+                                    <i load-hicon='chevron-right' class='icon icon-opa'></i>
+                                </div>
+                                <div class='endpoint-container'>
+                                    <div class='endpoint' id='controllerDrop'></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='button btn-clickable'>
+                            <p class='m-0 text text-c'>Comprar</p>
+                            <i load-hicon='check' class='icon icon-check'></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-danger">Vaciar carrito</button>
+        </div>
+        @else 
+        justify-content-center">
+        <p class="display-4">No hay nada aqu&iacute; todav&iacute;a</p>
+        <p class="display-1"><i class="bi bi-emoji-frown text-primary"></i></p>
+        <a href="{{ url()->previous() }}" class="btn btn-primary fs-2"><i class="bi bi-caret-left-fill"></i> Volver</a>
+        @endif
     </div>
 @endsection
 
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/gh/coswise/hicon-js@latest/hicon.min.js"></script>
+<script src="{{asset('js/lib/jquery-3.6.0.min.js')}}"></script>
+<script src="{{asset('js/lib/Draggable3.min.js')}}"></script>
+<script src="{{asset('js/lib/gsap.min.js')}}"></script>
+<script src="{{asset('js/lib/TweenMax.min.js')}}"></script>
+<script src="{{asset('js/boton.js')}}"></script>
+
     <script>
         document.querySelectorAll('#cuerpo-carrito tr').forEach(el => {
             let id = el.children[0].children[0].getAttribute('alt');

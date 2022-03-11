@@ -12,6 +12,10 @@
     height: 125px;
 }
 
+.text-overflow-ellipsis {
+    text-overflow: ellipsis;
+}
+
 .menu {
     --color: #fff;
     width: 36px;
@@ -1018,12 +1022,13 @@ form {
   }
 
     .table {
+        tbody{
         tr:hover {
             cursor: pointer;
         }
         img {
             max-height: 75px;
-        }
+        }}
     }
 
 @media screen and (max-width: 1000px) {

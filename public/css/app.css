@@ -11291,6 +11291,10 @@ textarea.form-control-lg {
   height: 125px;
 }
 
+.text-overflow-ellipsis {
+  text-overflow: ellipsis;
+}
+
 .menu {
   --color: #fff;
   width: 36px;
@@ -12242,10 +12246,10 @@ form {
   transition: opacity 299ms ease;
 }
 
-.table tr:hover {
+.table tbody tr:hover {
   cursor: pointer;
 }
-.table img {
+.table tbody img {
   max-height: 75px;
 }
 
