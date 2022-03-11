@@ -7,7 +7,7 @@
 
 @section('navActiva')
     @php
-    // si es el admin que está mirando a otro usuario no marcamos como activa la ruta en la navbar
+    // Si es el admin que está mirando a otro usuario no marcamos como activa la ruta en la navbar
     if(!(Auth::user() && isset($user->id) && Auth::user()->id != $user->id))
         $nav_activa_perfil = true;
     @endphp

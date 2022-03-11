@@ -36,15 +36,21 @@ class ProductoController extends Controller
     {
         // Crear producto
         $producto = new Producto();
-        $producto->nombre = $request->nombre;
-        $producto->descripcion = $request->descripcion;
-        $producto->precio = $request->precio;
+        $producto->nombre = trim($request->nombre);
+        $producto->descripcion = trim($request->descripcion);
+        $producto->precio = number_format($request->precio, 2);
+        $producto->creado_por = Auth::user()->id;
         $producto->save();
 
         // Almacenar la imagen
-        $foto_nombre = 'producto-' . $producto->id . '.'. $request->foto->extension();
-        $request->foto->move(public_path('img'), $foto_nombre);
-        $producto->foto = $foto_nombre;
+        try {
+            $foto_nombre = 'producto-' . $producto->id . '.'. $request->foto->extension();
+            $request->foto->move(public_path('img'), $foto_nombre);
+            $producto->foto = $foto_nombre;
+            $producto->save();
+        } catch(\Exception $ex) {
+            return back()->with('imposible_subir_foto', 'true');
+        }
 
         // Redirigir
         return redirect()->route('inicio')->with('producto_creado', 'Producto creado con éxito');
@@ -67,7 +73,7 @@ class ProductoController extends Controller
      */
     public function edit(Request $request)
     {
-        return view('productos.create')->with('producto', Producto::find($request->producto_id));
+        return view('productos.create')->with('producto', Producto::find($request->id));
     }
 
     /**
@@ -91,10 +97,14 @@ class ProductoController extends Controller
 
         // Si ha subido una nueva foto, reemplazar
         if($request->hasFile('foto')) {
-            // Almacenar la imagen
-            $foto_nombre = 'producto-' . $producto->id . '.'. $request->foto->extension();
-            $request->foto->move(public_path('img'), $foto_nombre);
-            $producto->foto = $foto_nombre;
+            try {
+                // Almacenar la imagen
+                $foto_nombre = 'producto-' . $producto->id . '.'. $request->foto->extension();
+                $request->foto->move(public_path('img'), $foto_nombre);
+                $producto->foto = $foto_nombre;
+            } catch(\Exception $ex) {
+                return back()->with('imposible_subir_foto', 'true');
+            }
         }
 
         // Guardar cambios

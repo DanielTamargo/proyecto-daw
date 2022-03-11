@@ -50,11 +50,11 @@ Route::get('/', function () { return redirect()->route('inicio'); });
 
 /*-- PRODUCTOS --*/
 Route::get('/carta', [ProductoController::class, 'index'])->name('inicio'); // productos.index
-Route::get('/productos/crear', [ProductoController::class, 'create'])->name('productos.create')->middleware('auth.admin');
 Route::get('/carta/{id}', [ProductoController::class, 'show'])->name('productos.show');
-Route::get('/productos/editar', [ProductoController::class, 'edit'])->name('productos.edit')->middleware('auth.admin');
-Route::put('/productos/editar', [ProductoController::class, 'update'])->name('productos.update')->middleware('auth.admin');
+Route::get('/productos/nuevo', [ProductoController::class, 'create'])->name('productos.create')->middleware('auth.admin');
 Route::post('/productos/nuevo', [ProductoController::class, 'store'])->name('productos.store')->middleware('auth.admin');
+Route::get('/productos/editar/{id}', [ProductoController::class, 'edit'])->name('productos.edit')->middleware('auth.admin');
+Route::put('/productos/editar', [ProductoController::class, 'update'])->name('productos.update')->middleware('auth.admin');
 Route::delete('/productos/eliminar', [ProductoController::class, 'destroy'])->name('productos.destroy')->middleware('auth.admin');
 
 
@@ -66,7 +66,7 @@ Route::delete('/usuarios/eliminar', [UsuarioController::class, 'destroy'])->name
 
 
 /*-- COMENTARIOS --*/
-Route::post('/productos/{producto_id}', [ComentarioController::class, 'store'])->name('comentarios.store')->middleware('auth');
+Route::post('/comentarios/{producto_id}', [ComentarioController::class, 'store'])->name('comentarios.store')->middleware('auth');
 
 
 /*-- MOSTRAR CARRITO / AÑADIR O QUITAR PRODUCTOS / LIMPIAR CARRITO / REALIZAR PEDIDO --*/

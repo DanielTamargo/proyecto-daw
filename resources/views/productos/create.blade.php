@@ -24,6 +24,7 @@
             @csrf
             <h3>{{ isset($producto) ? 'Editar producto' : 'Nuevo producto'}}</h3>
             @if(isset($producto))
+                @method('PUT')
                 <input type="hidden" name="producto_id" value="{{ $producto->id }}">
             @endif
             <div class="form-group my-3">
@@ -31,7 +32,7 @@
                 <input type="file" class="form-control-file" id="foto" name="foto" aria-describedby="fotoHelp" accept="image/.jpg,.jpg,.jpeg,.png,.gif,.jfif" 
                         {{ isset($producto) ? '' : 'required' }}>
                 @if(isset($producto))
-                    <small id="fotoHelp" class="form-text text-muted">Añade una imagen para sobreescribir la existente</small>
+                    <br><small id="fotoHelp" class="form-text text-muted">Añade una imagen para sobreescribir la existente</small>
                 @endif
             </div>
             <div class="form-group my-3">
@@ -46,8 +47,8 @@
             </div>
             <div class="form-group my-3">
                 <label for="precio">Precio</label>
-                <input type="number" class="form-control" id="precio" name="precio" placeholder="Precio asequible" required
-                        value={{ isset($producto) ? $producto->precio : '' }} pattern="^\d*(\.\d{0,2})?$">
+                <input type="number" class="form-control" id="precio" name="precio" placeholder="Precio asequible" step="0.01" pat="true" required
+                        value={{ isset($producto) ? $producto->precio : '' }}>
             </div>
             <button type="submit" class="btn btn-primary my-3">{{ isset($producto) ? 'Editar' : 'Registrar producto'}}</button>
         </form>
@@ -59,10 +60,11 @@
 @section('scripts')
 <script src="{{ asset('js/lib/jquery-3.6.0.min.js') }}"></script>
 <script>
-    $(document).on('keydown', 'input[pattern]', function(e){
+    $(document).on('keydown', 'input[pat]', function(e){
+        console.log('si');
         var input = $(this);
         var oldVal = input.val();
-        var regex = new RegExp(input.attr('pattern'), 'g');
+        var regex = new RegExp(/^\d*(\.\d{0,2})?$/, 'g');
 
         setTimeout(function(){
             var newVal = input.val();
