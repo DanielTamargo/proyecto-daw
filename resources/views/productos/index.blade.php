@@ -38,6 +38,9 @@
                     <p class="nombre col-8 text-center fw-bold pb-2 fs-4 m-0">{{ $producto->nombre }}</p>
                     <p class="precio">{{ $producto->precio }}€</p>
                     <div class="annadir-carrito">
+                    @if(Auth::user() && Auth::user()->rol == \App\Models\Constants::ROL_ADMINISTRADOR)
+                        <button class="btn btn-danger" id="eliminar{{ $producto->id }}">Eliminar</button>
+                    @else
                         <div class="btn-menos">
                             <button><b>-</b></button>
                         </div>
@@ -60,6 +63,7 @@
                         <div class="btn-mas">
                             <button><b>+</b></button>
                         </div>
+                    @endif
                     </div>
                 </div>
             </div>

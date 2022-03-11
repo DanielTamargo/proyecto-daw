@@ -14,15 +14,48 @@
 
 @section('content')
     <div class="contenedor">
-        <p>Fecha del pedido: {{ $pedido->created_at }}</p>
-        <p>Contenido del pedido</p>
+    
         <div class="col-11">
+            <table class="table table-responsive table-striped table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Nombre</th>
+                        <th class="text-center" scope="col">Precio</th>
+                        <th class="text-center" scope="col">Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpo-carrito">
+                @php $total = 0; @endphp
+                    @foreach($pedido->productos as $producto)
+                    @php $total += $producto->precio; @endphp
+                        <tr>
+                            <td><img src="{{ asset('img/'.$producto->foto) }}" alt="{{ $producto->id }}"></td>
+                            <td class="text-overflow-ellipsis">{{ $producto->nombre }}</td>
+                            <td class="text-center">{{ $producto->precio }}&euro;</td>
+                            <td class="text-center">
+                                <div class="d-flex flex-row flex-nowrap justify-content-center">
+                                    <span class="p-2">Placeholder</span>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="d-flex justify-content-evenly"><b>Precio total:</b><span>{{ $total }}€</span></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
             <div class="progress col-12">
-                <div id="progress" class="{{ $pedido->estado }} progress-bar" role="progressbar">
+                <div id="progress" class="progress-bar {{ $pedido->estado }}" role="progressbar">
                 </div>
             </div>
             <div class="col-12 d-flex justify-content-between">
-                <span> </span>
+                <span></span>
                 <span>Oído cocina</span>
                 <span>En preparacion</span>
                 <span>Listo</span>
@@ -43,8 +76,6 @@ const token_cliente = document.querySelector('meta[name="csrf-token"]').getAttri
 const pedido_id = document.querySelector('#id_pedido').getAttribute('value');
 var datos = document.querySelector('#estado').getAttribute('value');
 const urlAPI = document.querySelector('#url_api').getAttribute('value');
-
-actualizarBarra();
 
 setInterval(() => {
     peticionAPIActualizarDatos();
