@@ -46,7 +46,8 @@ class PedidoController extends Controller
      */
     public function show(Pedido $pedido)
     {
-        //
+        $pedido = Pedido::find(request('id'));
+        return view('pedidos.show', compact('pedido'));
     }
 
     /**

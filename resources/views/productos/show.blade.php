@@ -38,27 +38,31 @@
                 </p>
                 <p id="descripcion">{{ $producto->descripcion }}</p>
                 <div class="botonera d-flex flex-column justify-content-center align-items-center p-3">
-                <div class="boton-confirmar mb-3">
-                    <div class='container-btn'>
-                        <div class='el-wrap'>
-                            <div class='slider'>
-                                <div class='slider-text'>
-                                    <div class='text'>
-                                    Confirmar
+                @if(Auth::user() && Auth::user()->rol == \App\Models\Constants::ROL_ADMINISTRADOR)
+                    <button class="btn btn-danger" id="eliminar{{ $producto->id }}">Eliminar</button>
+                @else
+                    <div class="boton-confirmar mb-3">
+                        <div class='container-btn'>
+                            <div class='el-wrap'>
+                                <div class='slider'>
+                                    <div class='slider-text'>
+                                        <div class='text'>
+                                        Confirmar
+                                        </div>
+                                    </div>
+                                    <div class='slider-trigger'>
+                                        <div class='controller' id='controller'>
+                                            <i load-hicon='chevron-right' class='icon icon-opa'></i>
+                                        </div>
+                                        <div class='endpoint-container'>
+                                            <div class='endpoint' id='controllerDrop'></div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class='slider-trigger'>
-                                    <div class='controller' id='controller'>
-                                        <i load-hicon='chevron-right' class='icon icon-opa'></i>
-                                    </div>
-                                    <div class='endpoint-container'>
-                                        <div class='endpoint' id='controllerDrop'></div>
-                                    </div>
+                                <div class='button btn-clickable'>
+                                    <p class='text text-c'>Comprar</p>
+                                    <i load-hicon='check' class='icon icon-check'></i>
                                 </div>
-                            </div>
-                            <div class='button btn-clickable'>
-                                <p class='text text-c'>Comprar</p>
-                                <i load-hicon='check' class='icon icon-check'></i>
                             </div>
                         </div>
                     </div>
@@ -79,15 +83,15 @@
                                         <div></div>
                                         <div></div>
                                     </div>
-                                </div>
-                                <div class="dots"></div>
-                            </button>
-                        </div>
-                        <div class="btn-mas">
-                            <button><b>+</b></button>
+                                    <div class="dots"></div>
+                                </button>
+                            </div>
+                            <div class="btn-mas">
+                                <button><b>+</b></button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
     </div>

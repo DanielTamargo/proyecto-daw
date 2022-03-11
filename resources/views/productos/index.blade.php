@@ -16,7 +16,7 @@
     <div class="contenedor justify-content-start">
         @if(Auth::user() && Auth::user()->rol == \App\Models\Constants::ROL_ADMINISTRADOR)
         <a href="{{ route('productos.create') }}" id="btn-nuevo-producto" class="text-light btn btn-circle btn-xl btn-success">
-            <svg xmlns="http://www.w3.org/2000/svg" width="auto" height="auto" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" width="" height="" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
             </svg>
         </a>
@@ -38,6 +38,9 @@
                     <p class="nombre col-8 text-center fw-bold pb-2 fs-4 m-0">{{ $producto->nombre }}</p>
                     <p class="precio">{{ $producto->precio }}€</p>
                     <div class="annadir-carrito">
+                    @if(Auth::user() && Auth::user()->rol == \App\Models\Constants::ROL_ADMINISTRADOR)
+                        <button class="btn btn-danger" id="eliminar{{ $producto->id }}">Eliminar</button>
+                    @else
                         <div class="btn-menos">
                             <button><b>-</b></button>
                         </div>
@@ -60,6 +63,7 @@
                         <div class="btn-mas">
                             <button><b>+</b></button>
                         </div>
+                    @endif
                     </div>
                 </div>
             </div>

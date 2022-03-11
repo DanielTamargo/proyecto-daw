@@ -12267,6 +12267,30 @@ form {
   line-height: 1.42857;
 }
 
+.progress-bar {
+  transition: 0.6s;
+}
+
+.progress-bar.recibido {
+  width: 25%;
+  background: linear-gradient(90deg, #a370f7);
+}
+
+.progress-bar.enproceso {
+  width: 50%;
+  background: linear-gradient(90deg, #a370f7, #8540f5);
+}
+
+.progress-bar.listo {
+  width: 75%;
+  background: linear-gradient(90deg, #a370f7, #8540f5, #6610f2);
+}
+
+.progress-bar.entregado {
+  width: 100%;
+  background: linear-gradient(90deg, #a370f7, #8540f5, #6610f2, #520dc2);
+}
+
 @media screen and (max-width: 1000px) {
   .contenedor-productos {
     padding: 0 10px;

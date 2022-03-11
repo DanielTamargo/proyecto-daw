@@ -88,6 +88,10 @@ hicon.replace();
                 });
                 $(".slider").toggleClass("sldr-drag");
                 $(".slider-text").toggleClass("text-d");
+                setTimeout(function() {
+                    despues();
+                }, 700);
+                
             }
         })
     };

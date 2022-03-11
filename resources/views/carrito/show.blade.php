@@ -90,6 +90,9 @@
             Actualizar cantidad en el carrito
             Nota: si baja a 0 no borrarlo, se deja a 0 por si quiere volver a añadirlo
         ***/
+        function despues() {
+            // code here
+        }
 
         document.querySelectorAll('#cuerpo-carrito tr').forEach(el => {
             let id = el.children[0].children[0].getAttribute('alt');
