@@ -81,11 +81,11 @@
                                         <a class="nav-link @isset($nav_activa_perfil) active @endisset" href="{{ route('usuarios.profile') }}">Mi perfil</a>
                                     @endauth
                                 </li>
-                                <li class="nav-item">
-                                    @if(Auth::user()->rol == App\Models\Constants::ROL_ADMINISTRADOR)
-                                        <a class="nav-link" href="#">Pedidos</a>    
-                                    @endif
-                                </li>
+                                @if(Auth::user() && Auth::user()->rol == App\Models\Constants::ROL_ADMINISTRADOR)
+                                    <li class="nav-item">
+                                        <a class="nav-link @isset($nav_activa_pedidos) active @endisset" href="#">Pedidos</a>    
+                                    </li>
+                                @endif
                             </ul>
                         </div>
                     </div>
