@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Pedido extends Model
 {
@@ -34,5 +35,24 @@ class Pedido extends Model
     public function productos()
     {
         return $this->belongsToMany(Producto::class, 'productos_pedidos', 'pedido_id', 'producto_id');
+    }
+
+    /**
+     * Devuelve el precio total del pedido
+     */
+    public function precioTotal()
+    {
+        try {
+            $total = array_sum(array_column(DB::table('productos_pedidos')
+                ->join('productos', 'productos_pedidos.producto_id', '=', 'productos.id')
+                ->where('productos_pedidos.pedido_id', $this->id)
+                ->selectRaw('SUM(productos.precio * productos_pedidos.cantidad) AS total')
+                ->get()
+                ->toArray(), 'total'));
+        } catch(\Exception $e) {
+            $total = 0;
+        }
+        
+        return $total;
     }
 }

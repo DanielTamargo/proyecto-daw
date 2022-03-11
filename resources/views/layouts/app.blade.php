@@ -41,7 +41,7 @@
                         <a class="navbar-brand" href="{{ route('inicio') }}">{{ config('app.name', 'Hosteleria') }}</a>
                         <div id="derecha">
                             <div id="boton-carrito" class="d-inline-block me-5">
-                                @auth
+                                @if(Auth::user() && Auth::user()->rol != App\Models\Constants::ROL_ADMINISTRADOR)
                                     <a href="{{ route('carrito.show') }}">
                                         @php
                                             $cantidadProductosCarrito = 0;
@@ -57,7 +57,7 @@
                                             </svg>
                                         </div>
                                     </a>
-                                @endauth
+                                @endif
                             </div>
                             <button class="menu navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                                 <svg viewBox="0 0 64 48">

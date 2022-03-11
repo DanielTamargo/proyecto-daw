@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             //$table->timestamps(); // created_at, updated_at
 
+            $table->integer('cantidad')->default(1);
             // Referencia al pedido sobre el que se añaden los productos comprados
             $table->unsignedBigInteger('pedido_id');
             $table->foreign('pedido_id')

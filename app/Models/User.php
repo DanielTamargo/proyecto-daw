@@ -91,6 +91,25 @@ class User extends Authenticatable
     }
 
     /**
+     * Devuelve el precio total del carrito
+     */
+    public function precioTotalCarrito()
+    {
+        try {
+            $total = array_sum(array_column(DB::table('productos_carritos')
+                ->join('productos', 'productos_carritos.producto_id', '=', 'productos.id')
+                ->where('productos_carritos.cliente_id', $this->id)
+                ->selectRaw('SUM(productos.precio * productos_carritos.cantidad) AS total')
+                ->get()
+                ->toArray(), 'total'));
+        } catch(\Exception $e) {
+            $total = 0;
+        }
+        
+        return $total;
+    }
+
+    /**
      * Recibe un id de producto y devuelve true si en algún momento lo ha comprado
      */
     public function compraVerificada($producto_id) {

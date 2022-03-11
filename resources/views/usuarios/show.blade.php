@@ -37,10 +37,12 @@
                     Productos registrados: {{ count($user->productosCreados) }} <br>
                 @endif
             </p>
+            @if(Auth::user() && Auth::user()->id == $user->id)
             <form action="{{ route('logout') }}" method="post">
                 @csrf
                 <button class="align-self-start btn btn-outline-danger">Cerrar sesión</button>
             </form>
+            @endif
         </div>
     </div>
     

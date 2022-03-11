@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Constants;
 use App\Models\Pedido;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,13 @@ class PedidoController extends Controller
      */
     public function index()
     {
-        //
+        // Obtenemos los pedidos finalizados por un lado y los pendientes por otro
+        $pedidos_finalizados = Pedido::wherein('estado', [Constants::ESTADO_ENTREGADO, Constants::ESTADO_CANCELADO])->orderByDesc('id')->get();
+        $pedidos_pendientes = Pedido::whereNotIn('estado', [Constants::ESTADO_ENTREGADO, Constants::ESTADO_CANCELADO])->orderByDesc('id')->get();
+
+        return view('pedidos.index')
+            ->with('pedidos_finalizados', $pedidos_finalizados)
+            ->with('pedidos_pendientes', $pedidos_pendientes);
     }
 
     /**

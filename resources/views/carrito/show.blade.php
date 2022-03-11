@@ -33,7 +33,11 @@
                     </tr>
                 @endforeach
             </tbody>
+
         </table>
+        {{-- TODO: styles aquí --}}
+        <h5>Total: {{ Auth::user() ? Auth::user()->precioTotalCarrito() : 'Error' }}</h5>
+        <p>Toquetear que si sube o baja la cantidad el precio del producto varie, también el total</p>
         <div class="d-flex flex-row justify-content-evenly">
             <div class="boton-confirmar">
                 <div class='container-btn'>
