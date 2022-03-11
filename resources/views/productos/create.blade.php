@@ -61,7 +61,6 @@
 <script src="{{ asset('js/lib/jquery-3.6.0.min.js') }}"></script>
 <script>
     $(document).on('keydown', 'input[pat]', function(e){
-        console.log('si');
         var input = $(this);
         var oldVal = input.val();
         var regex = new RegExp(/^\d*(\.\d{0,2})?$/, 'g');

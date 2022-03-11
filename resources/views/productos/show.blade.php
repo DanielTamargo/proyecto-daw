@@ -68,7 +68,10 @@
                             <button><b>-</b></button>
                         </div>
                         <div class="btn-principal">
-                            <button class="add-to-cart">
+                            <button producto_id="{{ $producto->id }}" class="add-to-cart 
+                            @if ($producto->cantidadEnCarrito(Auth::user()) > 0)
+                                added
+                            @endif">
                                 <div class="default">Añadir al carrito</div>
                                 <div class="success">{{ $producto->cantidadEnCarrito(Auth::user()) }}</div>
                                 <div class="cart">
@@ -147,6 +150,10 @@
                 @endforeach
             </div>
         </div>
+
+        <input type="hidden" id="nyb_cl" value="{{ Auth::user() ? 'true' : '' }}">
+        <input type="hidden" id="url_api" value="{{ route('api.carrito.actualizarproducto') }}">
+        <input type="hidden" id="url_login" value="{{ route('login') }}">
     </div>
 @endsection
 
@@ -159,15 +166,6 @@
 <script src="{{asset('js/lib/TweenMax.min.js')}}"></script>
 <script src="{{asset('js/boton.js')}}"></script>
 
-<script>
-document.querySelectorAll('.add-to-cart').forEach(button => {
-        let btnMenos = button.parentElement.parentElement.children[0];
-        let btnMas = button.parentElement.parentElement.children[2];
-        button.addEventListener('click', e => {
-            button.classList.toggle('added');
-            btnMenos.classList.toggle('visible');
-            btnMas.classList.toggle('visible');
-        });
-    });
-    </script>
+<script src="{{asset('js/producto.js')}}"></script>
+
 @endsection

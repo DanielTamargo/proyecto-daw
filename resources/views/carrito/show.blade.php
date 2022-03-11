@@ -25,9 +25,9 @@
                         <td class="text-center">{{ $producto->precio }}&euro;</td>
                         <td class="text-center">
                             <div class="d-flex flex-row flex-nowrap justify-content-center">
-                                <button class="btn btn-primary"><i class="bi bi-caret-left-fill"></i></button>
-                                <span class="p-2">{{ $producto->cantidadEnCarrito(Auth::user()) }}</span>
-                                <button class="btn btn-primary"><i class="bi bi-caret-right-fill"></i></button>
+                                <button producto_id="{{ $producto->id }}" class="btn btn-primary sumar-cantidad"><i class="bi bi-caret-left-fill"></i></button>
+                                <span producto_id="{{ $producto->id }}" class="p-2">{{ $producto->cantidadEnCarrito(Auth::user()) }}</span>
+                                <button producto_id="{{ $producto->id }}" class="btn btn-primary restar-cantidad"><i class="bi bi-caret-right-fill"></i></button>
                             </div>
                         </td>
                     </tr>
@@ -81,6 +81,16 @@
 <script src="{{asset('js/boton.js')}}"></script>
 
     <script>
+        /***
+            TODO:
+            Evitar que al clicar en el botón se vaya
+            Sumar cantidad (API)
+            Restar cantidad (API)
+            Actualizar cantidad del producto
+            Actualizar cantidad en el carrito
+            Nota: si baja a 0 no borrarlo, se deja a 0 por si quiere volver a añadirlo
+        ***/
+
         document.querySelectorAll('#cuerpo-carrito tr').forEach(el => {
             let id = el.children[0].children[0].getAttribute('alt');
             el.addEventListener('click', function() {
