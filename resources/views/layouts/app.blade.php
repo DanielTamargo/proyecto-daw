@@ -30,7 +30,7 @@
                         <div id="derecha">
                             <div id="boton-carrito" class="d-inline-block me-5">
                                 @auth
-                                    <a href="">
+                                    <a href="{{ route('carrito.show') }}">
                                         @php
                                             $cantidadProductosCarrito = 0;
                                             if (Auth::user()) $cantidadProductosCarrito = App\Models\User::find(Auth::user()->id)->cantidadProductosEnCarrito();
@@ -65,6 +65,8 @@
                                     @guest
                                         <a class="nav-link @if(isset($nav_activa_login) || isset($nav_activa_register)) active @endif" href="{{ route('login') }}">Iniciar sesión</a>                                        
                                     @endguest
+                                </li>
+                                <li>
                                     @auth
                                         <a class="nav-link @isset($nav_activa_perfil) active @endisset" href="{{ route('usuarios.profile') }}">Mi perfil</a>
                                         @if(Auth::user()->rol == App\Models\Constants::ROL_ADMINISTRADOR)
@@ -90,7 +92,7 @@
             </div>
         </nav>
 
-        <section id="separador">&nbsp;</section>
+        <section @if(Route::is('productos.show') ) style="background-color: #a370f7;" @endif id="separador">&nbsp;</section>
 
         <main>
             @yield('content')

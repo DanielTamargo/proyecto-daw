@@ -15,10 +15,10 @@ class CarritoController extends Controller
     public function show()
     {
         // Obtenemos los productos del carrito del usuario
-        // $productos = Auth::user()->productosCarrito;
+        $productos = Auth::user()->productosCarrito;
 
         // Vamos a la vista del carrito y enviamos los productos
-
+        return view('carrito.show', compact('productos'));
         // Recorremos la colección y preparamos un array con producto y cantidad del producto
     }
 
