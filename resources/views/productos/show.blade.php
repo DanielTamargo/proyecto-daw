@@ -17,7 +17,6 @@
 
 
 @section('content')
-<div class="contenedor">
     <div class="contenedor-show contenedor-1">
         <div class="contenedor">
             <div class="imagen">
@@ -149,7 +148,6 @@
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 

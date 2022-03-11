@@ -12031,8 +12031,7 @@ form {
   position: relative;
   top: -100px;
   height: 100px;
-  min-width: 100%;
-  max-width: none;
+  width: 100%;
 }
 .contenedor-show .wave-decoration .parallax > use {
   -webkit-animation: moveForever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
