@@ -20,14 +20,19 @@ const tipoDispositivo = () => {
     return "desktop";
 };
 
+var productoSeleccionado = undefined;
+
 // Listeners de la tarjetas de cada producto, que nos llevará a ver el producto
 //   a través de la delegación de eventos actuará en toda la tarjeta excepto en los botones añadir al carrito, sumar o restar
 document.querySelectorAll('div[tipo="tarjeta-producto"]').forEach(tarjeta => {
     tarjeta.addEventListener('click', evt => {
-        if (tipoDispositivo() == 'desktop') {
+        let idProducto = tarjeta.id.split('-')[1];
+        if (idProducto == productoSeleccionado || tipoDispositivo() == 'desktop') {
             if (!elementoTieneOCualquierPadreTieneClase(evt.target, 'annadir-carrito')) {
-                window.location.href += '/' + tarjeta.id.split('-')[1];
+                window.location.href += '/' + idProducto;
             }
+        } else {
+            productoSeleccionado = idProducto;
         }
     }, true)
 });

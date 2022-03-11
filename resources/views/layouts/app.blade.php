@@ -19,6 +19,18 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @yield('styleScripts')
+    <!-- Style Toasts -->
+    <style>
+        /* Alertas toast sweet alert 2*/
+        .colored-toast.swal2-icon-error {
+            color: white;
+            background-color: #c26262 !important;
+        }
+        .colored-toast.swal2-icon-success {
+            color: white;
+            background-color: #3a7e56 !important;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -93,6 +105,42 @@
         </nav>
 
         <section @if(Route::is('productos.show') ) style="background-color: #a370f7;" @endif id="separador">&nbsp;</section>
+
+        {{-- Toasts SweetAlert2 --}}
+        @if (isset($toast_error) || isset($toast_success))
+            @php
+                if (isset($toast_error)) {
+                    $mensajeToast = $toast_error;
+                    $iconoToast = "error";
+                } else if (isset($toast_success)) {
+                    $mensajeToast = $toast_success;
+                    $iconoToast = "success";
+                } else {
+                    $mensajeToast = "Error al ejecutar la operación";
+                    $iconoToast = "error";
+                }
+            @endphp
+            <input type="hidden" name="icono-toast" value="{{$iconoToast}}">
+            <input type="hidden" name="mensaje-toast" value="{{$mensajeToast}}">
+            <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script type="text/javascript">
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-right',
+                    iconColor: 'white',
+                    customClass: {
+                        popup: 'colored-toast'
+                    },
+                    showConfirmButton: false,
+                    timer: 2500,
+                    timerProgressBar: true
+                })
+                Toast.fire({
+                    icon: document.getElementById('icono-toast').value,
+                    title: document.getElementById('mensaje-toast').value
+                })
+            </script>
+        @endif
 
         <main>
             @yield('content')
