@@ -17,11 +17,17 @@
         <p>Fecha del pedido: {{ $pedido->created_at }}</p>
         <p>Contenido del pedido</p>
         <div class="col-11">
-        <div class="progress">
-            <div id="progress" class="{{ $pedido->estado }} progress-bar" role="progressbar">
-                Oido
+            <div class="progress col-12">
+                <div id="progress" class="{{ $pedido->estado }} progress-bar" role="progressbar">
+                </div>
             </div>
-        </div>
+            <div class="col-12 d-flex justify-content-between">
+                <span> </span>
+                <span>Oído cocina</span>
+                <span>En preparacion</span>
+                <span>Listo</span>
+                <span>Recogido</span>
+            </div>
         </div>
         <input type="hidden" id="estado" value="{{ $pedido->estado }}">
         <input type="hidden" id="id_pedido" value="{{ $pedido->id }}">
