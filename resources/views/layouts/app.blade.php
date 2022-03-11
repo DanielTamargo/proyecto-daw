@@ -65,14 +65,14 @@
                                     @guest
                                         <a class="nav-link @if(isset($nav_activa_login) || isset($nav_activa_register)) active @endif" href="{{ route('login') }}">Iniciar sesión</a>                                        
                                     @endguest
-                                </li>
-                                <li>
                                     @auth
                                         <a class="nav-link @isset($nav_activa_perfil) active @endisset" href="{{ route('usuarios.profile') }}">Mi perfil</a>
-                                        @if(Auth::user()->rol == App\Models\Constants::ROL_ADMINISTRADOR)
-                                            <a class="nav-link" href="#">Pedidos</a>
-                                        @endif
                                     @endauth
+                                </li>
+                                <li class="nav-item">
+                                    @if(Auth::user()->rol == App\Models\Constants::ROL_ADMINISTRADOR)
+                                        <a class="nav-link" href="#">Pedidos</a>    
+                                    @endif
                                 </li>
                             </ul>
                         </div>
