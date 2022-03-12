@@ -21,7 +21,7 @@ class AuthAdmin
         // Comprobamos que está accediendo un usuario registrado y que se trata de un usuario administrador
         $user = Auth::user();
         if (!$user || $user->rol != Constants::ROL_ADMINISTRADOR) {
-            return view('errors.403');
+            return redirect()->route('error.403');
         }
 
         return $next($request);

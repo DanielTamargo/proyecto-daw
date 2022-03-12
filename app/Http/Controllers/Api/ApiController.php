@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Constants;
 use App\Models\Producto;
 use App\Models\ProductosCarrito;
 use App\Models\User;
@@ -72,16 +73,28 @@ class ApiController extends Controller
 
     /**
      * API para modificar el estado de un pedido
+     * 
+     * Recibe: pedido_id, estado
+     * 
+     * Rol necesario: administrador
      */
     public function modificarEstadoPedido(Request $request) {
-        // Obtenemos el producto
-        $producto = Producto::find($request->producto_id);
+        // Comprobamos que el usuario es administrador
+        if (!Auth::user() || Auth::user()->rol != Constants::ROL_ADMINISTRADOR) {
+            return response()->json([
+                'ok' => false,
+                'mensaje' => 'Acceso denegado',
+            ], 403);
+        }
+
+        // Obtenemos el pedido
+        $pedido = Pedido::find($request->pedido_id);
         
         // Modificamos el estado
-        $producto->estado = $request->producto_estado;
+        $pedido->estado = $request->estado;
 
         // Guardamos
-        $producto->save();
+        $pedido->save();
 
         // Devolvemos la respuesta
         return response()->json([
@@ -95,7 +108,9 @@ class ApiController extends Controller
 
     }
 
-
+    /**
+     * API para obtener el estado de un pedido
+     */
     public function obtenerEstadoPedido(Request $request) {
         $pedido = Pedido::find($request->pedido_id);
 

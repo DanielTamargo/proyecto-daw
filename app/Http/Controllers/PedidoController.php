@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Constants;
 use App\Models\Pedido;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PedidoController extends Controller
 {
@@ -15,6 +16,8 @@ class PedidoController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->rol != Constants::ROL_ADMINISTRADOR) return view('errors.403');
+
         // Obtenemos los pedidos finalizados por un lado y los pendientes por otro
         $pedidos_finalizados = Pedido::wherein('estado', [Constants::ESTADO_ENTREGADO, Constants::ESTADO_CANCELADO])->orderByDesc('id')->get();
         $pedidos_pendientes = Pedido::whereNotIn('estado', [Constants::ESTADO_ENTREGADO, Constants::ESTADO_CANCELADO])->orderByDesc('id')->get();
@@ -25,24 +28,14 @@ class PedidoController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Creamos un nuevo pedido asociado al usuario que está realizando dicho pedido y 
+     * volcamos los productos del carrito en productos asociados al pedido
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -55,39 +48,5 @@ class PedidoController extends Controller
     {
         $pedido = Pedido::find(request('id'));
         return view('pedidos.show', compact('pedido'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Pedido  $pedido
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Pedido $pedido)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Pedido  $pedido
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Pedido $pedido)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Pedido  $pedido
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Pedido $pedido)
-    {
-        //
     }
 }

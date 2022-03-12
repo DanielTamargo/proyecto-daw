@@ -1,15 +1,27 @@
 @extends('layouts.app')
 
 @section('styleScripts')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <style>
         .datos-pedido:not(:last-of-type) {
             border-bottom: 1px solid gray;
         }
         .info-principal {
-            width: 90%;
+            width: 92%;
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+        .info-pedido {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between
+        }
+        .info-pedido-estado {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-end;
         }
     </style>
 @endsection
@@ -25,15 +37,15 @@
 @section('content')
     <div class="container mt-3">
         <div class="btn-group" role="group">
-            <button type="button" class="btn btn-primary">Todos</button>
-            <button type="button" class="btn btn-secondary">Pendientes</button>
-            <button type="button" class="btn btn-secondary">Finalizados</button>
+            <button onclick="filtrarPedidos(1)" id="pedidos-boton-todos" type="button" class="btn btn-primary">Todos</button>
+            <button onclick="filtrarPedidos(2)" id="pedidos-boton-pendientes" type="button" class="btn btn-secondary">Pendientes</button>
+            <button onclick="filtrarPedidos(3)" id="pedidos-boton-finalizados" type="button" class="btn btn-secondary">Finalizados</button>
         </div>
 
         {{-- Pendientes --}}
-        <div class="card my-3">
+        <div class="card my-3" id="lista-pedidos-pendientes">
             <div class="card-header">
-                Lista de pedidos sin finalizar
+                Lista de pedidos <b>sin finalizar</b>
             </div>
             <div class="card-body">
                 @if (count($pedidos_pendientes) <= 0)
@@ -43,15 +55,64 @@
                 @else
                     <div class="accordion" id="accordion-pedidos-pendientes">
                         @foreach ($pedidos_pendientes as $pedido)
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="heading-{{ $pedidos->id }}">
+                        <div class="accordion-item datos-pedido">
+                            <h2 class="accordion-header" id="heading-{{ $pedido->id }}">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ $pedido->id }}" aria-expanded="false" aria-controls="collapse-{{ $pedido->id }}">
-                                    Pedido nº{{ $pedido->id }}
+                                    <div class="info-principal">
+                                        <h5 class="m-0 pedido-ref">Pedido nº{{ $pedido->id }} 
+                                        @switch($pedido->estado)
+                                            @case(\App\Models\Constants::ESTADO_RECIBIDO)
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-primary">Recibido</span>
+                                                @break
+                                            @case(\App\Models\Constants::ESTADO_ENPROCESO)
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-info">En proceso</span>
+                                                @break
+                                            @case(\App\Models\Constants::ESTADO_LISTO)
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-success">Listo</span>
+                                                @break
+                                            @case(\App\Models\Constants::ESTADO_CANCELADO)
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-danger">Cancelado</span>
+                                                @break
+                                            @default
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-secondary">Finalizado</span>
+                                        @endswitch
+                                        </h5>
+                                        <p class="m-0 pedido-fecha">{{ date('d-m-Y H:i:s', strtotime($pedido->fecha_pedido)) }}</p>
+                                    </div> 
                                 </button>
                             </h2>
-                            <div id="collapse-{{ $pedido->id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ $pedidos->id }}" data-bs-parent="#accordion-pedidos-pendientes">
+                            <div id="collapse-{{ $pedido->id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ $pedido->id }}" {{--data-bs-parent="#accordion-pedidos-finalizados"--}}>
                                 <div class="accordion-body">
-                                    <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                    <div class="info-pedido">
+                                        <div class="info-pedido-datos">
+                                            <p class="mb-0"><i class="bi bi-person-fill me-2"></i><strong>{{ ucwords(strtolower($pedido->cliente->nombre)) }}</strong></p>
+                                            <p class="mb-0"><i class="bi bi-credit-card-2-front-fill me-2"></i>{{ strtoupper($pedido->cliente->dni) }}</p>
+                                            <p><i class="bi bi-telephone-fill me-2"></i>{{ $pedido->cliente->telefono }}</p>
+        
+                                            <p class="mb-0">Total pedido: {{ $pedido->precioTotal() }}€</p>
+                                            <p class="mb-0">Pago realizado: Sí</p>
+                                        </div>
+                                        <div class="info-pedido-estado">
+                                            <select class="form-select" pedido_id="{{ $pedido->id }}" onchange="peticionAPIActualizarEstadoPedido(this)">
+                                                <option value="{{App\Models\Constants::ESTADO_RECIBIDO}}" 
+                                                        @selected($pedido->estado == App\Models\Constants::ESTADO_RECIBIDO)
+                                                        >Recibido</option>
+                                                <option value="{{App\Models\Constants::ESTADO_ENPROCESO}}" 
+                                                        @selected($pedido->estado == App\Models\Constants::ESTADO_ENPROCESO)
+                                                        >En proceso</option>
+                                                <option value="{{App\Models\Constants::ESTADO_LISTO}}" 
+                                                        @selected($pedido->estado == App\Models\Constants::ESTADO_LISTO)
+                                                        >Listo</option>
+                                                <option value="{{App\Models\Constants::ESTADO_ENTREGADO}}" 
+                                                        @selected($pedido->estado == App\Models\Constants::ESTADO_ENTREGADO)
+                                                        >Entregado</option>
+                                                <option value="{{App\Models\Constants::ESTADO_CANCELADO}}" 
+                                                        @selected($pedido->estado == App\Models\Constants::ESTADO_CANCELADO)
+                                                        >Cancelado</option>
+                                            </select>
+                                            <a href="#">Ver factura</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -64,7 +125,7 @@
         </div>
 
         {{-- Finalizados --}}
-        <div class="card my-3">
+        <div class="card my-3" id="lista-pedidos-finalizados">
             <div class="card-header">
                 Lista de pedidos <b>finalizados</b>
             </div>
@@ -83,20 +144,19 @@
                                         <h5 class="m-0 pedido-ref">Pedido nº{{ $pedido->id }} 
                                         @switch($pedido->estado)
                                             @case(\App\Models\Constants::ESTADO_RECIBIDO)
-                                                <span class="badge bg-primary">Recibido</span>
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-primary">Recibido</span>
                                                 @break
                                             @case(\App\Models\Constants::ESTADO_ENPROCESO)
-                                                <span class="badge bg-info">En proceso</span>
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-info">En proceso</span>
                                                 @break
                                             @case(\App\Models\Constants::ESTADO_LISTO)
-                                                <span class="badge bg-success">Listo</span>
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-success">Listo</span>
                                                 @break
                                             @case(\App\Models\Constants::ESTADO_CANCELADO)
-                                                <span class="badge bg-danger">Cancelado</span>
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-danger">Cancelado</span>
                                                 @break
                                             @default
-                                                <span class="badge bg-secondary">Finalizado</span>
-                                                
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-secondary">Finalizado</span>
                                         @endswitch
                                         </h5>
                                         <p class="m-0 pedido-fecha">{{ date('d-m-Y H:i:s', strtotime($pedido->fecha_pedido)) }}</p>
@@ -105,15 +165,36 @@
                             </h2>
                             <div id="collapse-{{ $pedido->id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ $pedido->id }}" {{--data-bs-parent="#accordion-pedidos-finalizados"--}}>
                                 <div class="accordion-body">
-                                    <p class="mb-0"><strong>{{ ucwords(strtolower($pedido->cliente->nombre)) }}</strong></p>
-                                    <p class="mb-0">{{ strtoupper($pedido->cliente->dni) }}</p>
-                                    <p>{{ $pedido->cliente->telefono }}</p>
-
-
-                                    <p class="mb-0">Total pedido: {{ $pedido->precioTotal() }}</p>
-                                    <p class="mb-0">Pago realizado: Sí</p>
-                                    
-                                    
+                                    <div class="info-pedido">
+                                        <div class="info-pedido-datos">
+                                            <p class="mb-0"><i class="bi bi-person-fill me-2"></i><strong>{{ ucwords(strtolower($pedido->cliente->nombre)) }}</strong></p>
+                                            <p class="mb-0"><i class="bi bi-credit-card-2-front-fill me-2"></i>{{ strtoupper($pedido->cliente->dni) }}</p>
+                                            <p><i class="bi bi-telephone-fill me-2"></i>{{ $pedido->cliente->telefono }}</p>
+        
+                                            <p class="mb-0">Total pedido: {{ $pedido->precioTotal() }}€</p>
+                                            <p class="mb-0">Pago realizado: Sí</p>
+                                        </div>
+                                        <div class="info-pedido-estado">
+                                            <select class="form-select" pedido_id="{{ $pedido->id }}" onchange="peticionAPIActualizarEstadoPedido(this)">
+                                                <option value="{{App\Models\Constants::ESTADO_RECIBIDO}}" 
+                                                        @selected($pedido->estado == App\Models\Constants::ESTADO_RECIBIDO)
+                                                        >Recibido</option>
+                                                <option value="{{App\Models\Constants::ESTADO_ENPROCESO}}" 
+                                                        @selected($pedido->estado == App\Models\Constants::ESTADO_ENPROCESO)
+                                                        >En proceso</option>
+                                                <option value="{{App\Models\Constants::ESTADO_LISTO}}" 
+                                                        @selected($pedido->estado == App\Models\Constants::ESTADO_LISTO)
+                                                        >Listo</option>
+                                                <option value="{{App\Models\Constants::ESTADO_ENTREGADO}}" 
+                                                        @selected($pedido->estado == App\Models\Constants::ESTADO_ENTREGADO)
+                                                        >Entregado</option>
+                                                <option value="{{App\Models\Constants::ESTADO_CANCELADO}}" 
+                                                        @selected($pedido->estado == App\Models\Constants::ESTADO_CANCELADO)
+                                                        >Cancelado</option>
+                                            </select>
+                                            <a href="#">Ver factura</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -124,12 +205,11 @@
         </div>
         
         
-
-
+        <input type="hidden" id="url_api" value="{{ route('api.pedido.modificarestado') }}">
     </div>
 @endsection
 
 
 @section('scripts')
-
+<script src="{{ asset('js/pedidos.js') }}"></script>
 @endsection

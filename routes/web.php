@@ -29,6 +29,7 @@ Auth::routes();
 Route::get('/register', [RegisterController::class, 'load'])->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
+
 /*-- CERRAR SESIÓN DURANTE LAS PRUEBAS --*/
 Route::get('/logout', function () { 
     Session::flush();
@@ -41,8 +42,9 @@ Route::get('/logout', function () {
 Route::get('/api/usuario/comprobar-campo-unico', [ApiController::class, 'comprobarUsuarioCampoUnico']);
 Route::post('/api/carrito/producto-carrito', [ApiController::class, 'actualizarProductoCarrito'])->name('api.carrito.actualizarproducto')->middleware('auth');
 Route::get('/api/carrito/obtener-productos', [ApiController::class, 'obtenerProductosCarrito'])->name('api.carrito.obtenerproductos');
-Route::get('/api/producto/modificar-estado', [ApiController::class, 'modificarEstadoPedido'])->middleware('auth.admin');
-Route::post('/api/producto/obtener-estado', [ApiController::class, 'obtenerEstadoPedido'])->name('api.pedido.obtenerestadopedido')->middleware('auth');
+Route::post('/api/pedido/modificar-estado', [ApiController::class, 'modificarEstadoPedido'])->name('api.pedido.modificarestado')->middleware('auth');
+Route::post('/api/pedido/obtener-estado', [ApiController::class, 'obtenerEstadoPedido'])->name('api.pedido.obtenerestadopedido')->middleware('auth');
+
 
 /*-- REDIRECCIONES INICIO / HOME --*/
 Route::get('/inicio', function () { return redirect()->route('inicio'); });
@@ -78,9 +80,15 @@ Route::delete('/carrito/{id}', [CarritoController::class, 'remove'])->name('carr
 Route::post('/comprar', [CarritoController::class, 'buy'])->name('carrito.buy')->middleware('auth');
 Route::post('/carrito/vaciar', [CarritoController::class, 'clear'])->name('carrito.clear')->middleware('auth');
 
+
 /*--  PEDIDOS --*/
-Route::get('/pedidos', [PedidoController::class, 'index'])->name('pedidos.index'); // productos.index
+Route::get('/pedidos', [PedidoController::class, 'index'])->name('pedidos.index')->middleware('auth');
 Route::get('/pedidos/{id}', [PedidoController::class, 'show'])->name('pedidos.show')->middleware('auth');
+
+
+/*-- ACCESO PROHIBIDO --*/
+Route::get('/acceso-prohibido', function() { return view('errors.403'); })->name('error.403');
+
 
 /*-- PRUEBAS -- */
 Route::get('/pruebas/relaciones', function () {
