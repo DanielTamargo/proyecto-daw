@@ -160,3 +160,18 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
         }
     });
 });
+
+
+// Función que pide confirmación para eliminar el producto
+function eliminarProducto(btn) {
+    Swal.fire({
+        title: '¿Estás seguro? Esta acción será irreversible',
+        showCancelButton: true,
+        cancelButtonText: 'Mejor no',
+        confirmButtonText: 'Eliminar',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.forms["eliminar-producto-" + btn.getAttribute('producto_id')].submit();
+        }
+    });
+}

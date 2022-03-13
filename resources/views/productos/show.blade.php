@@ -39,7 +39,12 @@
                 <p id="descripcion">{{ $producto->descripcion }}</p>
                 <div class="botonera d-flex flex-column justify-content-center align-items-center p-3">
                 @if(Auth::user() && Auth::user()->rol == \App\Models\Constants::ROL_ADMINISTRADOR)
-                    <button class="btn btn-danger" id="eliminar{{ $producto->id }}">Eliminar</button>
+                    <form id="eliminar-producto-{{ $producto->id }}" action="{{ route('productos.destroy') }}" method="post">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="producto_id" value="{{ $producto->id }}">
+                    </form>
+                    <button class="btn btn-danger" producto_id="{{ $producto->id }}" onclick="eliminarProducto(this)">Eliminar</button>
                 @else
                     <div class="boton-confirmar mb-3">
                         <div class='container-btn'>

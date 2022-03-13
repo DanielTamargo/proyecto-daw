@@ -22,12 +22,12 @@
                     <tr>
                         <td><img src="{{ asset('img/'.$producto->foto) }}" alt="{{ $producto->id }}"></td>
                         <td class="text-overflow-ellipsis">{{ $producto->nombre }}</td>
-                        <td class="text-center">{{ $producto->precio }}&euro;</td>
+                        <td id="precio-producto-{{ $producto->id }}" class="text-center precio-producto">{{ $producto->precioProductoEnCarrito(Auth::user()) }}&euro;</td>
                         <td class="text-center">
                             <div class="d-flex flex-row flex-nowrap justify-content-center">
-                                <button producto_id="{{ $producto->id }}" class="btn btn-primary sumar-cantidad"><i class="bi bi-caret-left-fill"></i></button>
-                                <span producto_id="{{ $producto->id }}" class="p-2">{{ $producto->cantidadEnCarrito(Auth::user()) }}</span>
-                                <button producto_id="{{ $producto->id }}" class="btn btn-primary restar-cantidad"><i class="bi bi-caret-right-fill"></i></button>
+                                <button onclick="restarCantidad(this)" producto_precio="{{ $producto->precio }}" producto_id="{{ $producto->id }}" class="btn btn-primary sumar-cantidad"><i class="bi bi-caret-left-fill"></i></button>
+                                <span producto_id="{{ $producto->id }}" id="cantidad-producto-{{ $producto->id }}" class="p-2">{{ $producto->cantidadEnCarrito(Auth::user()) }}</span>
+                                <button onclick="sumarCantidad(this)" producto_precio="{{ $producto->precio }}" producto_id="{{ $producto->id }}" class="btn btn-primary restar-cantidad"><i class="bi bi-caret-right-fill"></i></button>
                             </div>
                         </td>
                     </tr>
@@ -36,7 +36,7 @@
 
         </table>
         {{-- TODO: styles a esto --}}
-        <h5>Total: {{ Auth::user() ? Auth::user()->precioTotalCarrito() : 'Error' }}</h5>
+        <h5 id="precio-total-carrito">Total: {{ Auth::user() ? Auth::user()->precioTotalCarrito() : 'Error' }}€</h5>
         <p>Toquetear que si sube o baja la cantidad el precio del producto varie, también el total</p>
         <div class="d-flex flex-row justify-content-evenly">
             <div class="boton-confirmar">
@@ -73,6 +73,8 @@
         <a href="{{ url()->previous() }}" class="btn btn-primary fs-2"><i class="bi bi-caret-left-fill"></i> Volver</a>
         @endif
     </div>
+
+    <input type="hidden" id="url_api" value="{{ route('api.carrito.actualizarproducto') }}">
 @endsection
 
 
@@ -84,25 +86,6 @@
 <script src="{{asset('js/lib/TweenMax.min.js')}}"></script>
 <script src="{{asset('js/boton.js')}}"></script>
 
-    <script>
-        /***
-            TODO:
-            Evitar que al clicar en el botón se vaya
-            Sumar cantidad (API)
-            Restar cantidad (API)
-            Actualizar cantidad del producto
-            Actualizar cantidad en el carrito
-            Nota: si baja a 0 no borrarlo, se deja a 0 por si quiere volver a añadirlo
-        ***/
-        function despues() {
-            // code here
-        }
+<script src="{{asset('js/carrito.js')}}"></script>
 
-        document.querySelectorAll('#cuerpo-carrito tr').forEach(el => {
-            let id = el.children[0].children[0].getAttribute('alt');
-            el.addEventListener('click', function() {
-                window.location.href = '/carta/' + id;
-            })
-        });
-    </script>
 @endsection

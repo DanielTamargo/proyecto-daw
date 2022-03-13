@@ -20,44 +20,4 @@ class CarritoController extends Controller
         // Vamos a la vista del carrito y enviamos los productos
         return view('carrito.show', compact('productos'));
     }
-
-    /**
-     * Añade un producto al carrito
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function add(Request $request)
-    {
-        // Añadimos el producto tantas veces como cantidad haya indicado
-    }
-
-    /**
-     * Elimina un producto del carrito
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function removeOne(Request $request)
-    {
-        // Eliminar UNO de productos_carritos donde producto_id = request->producto_id y cliente_id = user->id
-    }
-
-    /**
-     * Elimina un producto del carrito
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function removeAll(Request $request)
-    {
-        // Eliminar TODOS de productos_carritos donde producto_id = request->producto_id y cliente_id = user->id
-    }
-
-    /**
-     * Vacía el carrito
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function clear()
-    {
-        // Eliminar de productos_carritos donde cliente_id = user->id
-    }
 }

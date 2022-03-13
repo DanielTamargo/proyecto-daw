@@ -145,12 +145,25 @@ class ProductoController extends Controller
      * @param  \App\Models\Producto  $producto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Producto $producto)
+    public function destroy(Request $request)
     {
         // Comprobamos que está accediendo un usuario registrado y que se trata de un usuario administrador
         $user = Auth::user();
         if (!$user || $user->rol != Constants::ROL_ADMINISTRADOR) {
             return back();
         }
+
+        $producto = Producto::find($request->producto_id);
+        if (!$producto) {
+            return back()->with('toast_error', 'El producto que intentas eliminar no existe');
+        }
+
+        // Eliminamos la imagen
+        try {
+            unlink(public_path('img') . '/' . $producto->foto);
+        } catch (\Exception $e) {}
+
+        $producto->delete();
+        return redirect()->route('inicio')->with('toast_success', 'Producto eliminado con éxito');
     }
 }

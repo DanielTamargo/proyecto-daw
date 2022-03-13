@@ -83,4 +83,19 @@ class Producto extends Model
         else
             return 0;
     }
+
+    /**
+     * Devuelve el precio total del producto en el carrito (precio * cantidad)
+     * 
+     * Recibe el cliente para buscar su carrito
+     */
+    public function precioProductoEnCarrito($cliente)
+    {
+        if(!$cliente) return 0;
+        $productoCarrito = ProductosCarrito::where('cliente_id', $cliente->id)->where('producto_id', $this->id)->first();
+
+        if (!$productoCarrito) return 0;
+
+        return $productoCarrito->cantidad * $this->precio;
+    }
 }
