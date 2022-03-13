@@ -64,6 +64,6 @@ class UsuarioController extends Controller
         }
 
         // Volvemos a la vista
-        return back()->with('usuario_eliminado', 'true');
+        return back()->with('toast_success', 'Usuario eliminado con éxito');
     }
 }

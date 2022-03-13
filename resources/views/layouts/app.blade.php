@@ -30,6 +30,10 @@
             color: white;
             background-color: #3a7e56 !important;
         }
+        .swal2-container {
+            z-index: 1000000 !important;
+            /*padding-top: 6em !important;*/
+        }
     </style>
 </head>
 <body>
@@ -107,6 +111,16 @@
         <section @if(Route::is('productos.show') ) style="background-color: #a370f7;" @endif id="separador">&nbsp;</section>
 
         {{-- Toasts SweetAlert2 --}}
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        @php
+            if (session('toast_success')) {
+                $toast_success = session('toast_success');
+            }
+
+            if(session('toast_error')) {
+                $toast_error = session('toast_error');
+            }
+        @endphp
         @if (isset($toast_error) || isset($toast_success))
             @php
                 if (isset($toast_error)) {
@@ -120,25 +134,23 @@
                     $iconoToast = "error";
                 }
             @endphp
-            <input type="hidden" name="icono-toast" value="{{$iconoToast}}">
-            <input type="hidden" name="mensaje-toast" value="{{$mensajeToast}}">
-            <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <input type="hidden" id="icono-toast" value="{{$iconoToast}}">
+            <input type="hidden" id="mensaje-toast" value="{{$mensajeToast}}">
             <script type="text/javascript">
-                const Toast = Swal.mixin({
+                Swal.mixin({
                     toast: true,
                     position: 'top-right',
                     iconColor: 'white',
                     customClass: {
                         popup: 'colored-toast'
                     },
-                    showConfirmButton: false,
                     timer: 2500,
+                    showConfirmButton: false,
                     timerProgressBar: true
-                })
-                Toast.fire({
+                }).fire({
                     icon: document.getElementById('icono-toast').value,
                     title: document.getElementById('mensaje-toast').value
-                })
+                });
             </script>
         @endif
 

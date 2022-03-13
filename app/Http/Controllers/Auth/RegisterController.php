@@ -90,7 +90,7 @@ class RegisterController extends Controller
 
         
         // Redirigimos a la ventana de inicio
-        return redirect()->route('inicio', ['usuario_creado' => true]);
+        return redirect()->route('inicio')->with('toast_success', 'Registro realizado con éxito');
     }
 
     /**

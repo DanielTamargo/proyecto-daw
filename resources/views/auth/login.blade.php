@@ -22,13 +22,34 @@
         <input type="hidden" name="nuevo-administrador" id="nuevo-administrador" value="true">
     @endif
 
-    @if ($errors->any()) {{-- Cambiar por un alert/toast --}}
-        @if ($errors->has('username')) {{-- Login error --}}
-            
+    {{-- Notificar errores, si es del registro saldrán más feuchos, si es del login saldrá toast con credenciales incorrectas --}}
+    @if ($errors->any())
+        @if(session('registrar_usuario'))
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @else
+        <script type="text/javascript">
+            Swal.mixin({
+                toast: true,
+                position: 'top-right',
+                iconColor: 'white',
+                customClass: {
+                    popup: 'colored-toast'
+                },
+                timer: 2500,
+                showConfirmButton: false,
+                timerProgressBar: true
+            }).fire({
+                icon: 'error',
+                title: 'Credenciales incorrectas'
+            });
+        </script>
         @endif
-        <div class="alert alert-danger">
-            <p>{{ $errors }}</p>
-        </div>
     @endif
     <div class="loginCard">
         <div id="form1" class="form1">

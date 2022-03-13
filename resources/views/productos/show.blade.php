@@ -129,8 +129,23 @@
                     </div>
                 @endif
 
-                <div class="nuevo-comentario">
-
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+                <div class="nuevo-comentario mb-5">
+                    <h5 class="text-start">Añadir un nuevo comentario</h5>
+                    <form action="{{ route('comentarios.store') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="producto_id" value="{{ $producto->id }}">
+                        <textarea minlength="8" maxlength="255" class="form-control mb-3" id="texto" name="texto" rows="3" required>{{ old('texto') }}</textarea>
+                        <button type="submit" class="btn btn-primary align-self-start">Añadir comentario</button>
+                    </form>
                 </div>
 
                 @foreach ($producto->comentarios as $comentario)

@@ -62,11 +62,11 @@ class ProductoController extends Controller
             $producto->foto = $foto_nombre;
             $producto->save();
         } catch(\Exception $ex) {
-            return back()->with('imposible_subir_foto', 'true');
+            return back()->with('toast_error', 'Imposible subir la imagen');
         }
 
         // Redirigir
-        return redirect()->route('inicio')->with('producto_creado', 'Producto creado con éxito');
+        return redirect()->route('inicio')->with('toast_success', 'Producto creado con éxito');
     }
 
     /**
@@ -113,7 +113,7 @@ class ProductoController extends Controller
         // Obtener producto
         $producto = Producto::find($request->producto_id);
 
-        if (!$producto) return back()->with('imposible_actualizar', 'Imposible actualizar, producto no encontrado...');
+        if (!$producto) return back()->with('toast_error', 'Imposible actualizar, producto no encontrado...');
 
         // Editar producto
         $producto->nombre = $request->nombre;
@@ -128,7 +128,7 @@ class ProductoController extends Controller
                 $request->foto->move(public_path('img'), $foto_nombre);
                 $producto->foto = $foto_nombre;
             } catch(\Exception $ex) {
-                return back()->with('imposible_subir_foto', 'true');
+                return back()->with('toast_error', 'Imposible subir la imagen');
             }
         }
 
@@ -136,7 +136,7 @@ class ProductoController extends Controller
         $producto->save();
 
         // Redirigir
-        return redirect()->route('inicio')->with('producto_editado', 'Producto editado con éxito');
+        return redirect()->route('inicio')->with('toast_success', 'Producto editado con éxito');
     }
 
     /**
