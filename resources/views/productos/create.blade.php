@@ -38,17 +38,16 @@
             <div class="form-group my-3">
                 <label for="nombre">Nombre</label>
                 <input type="text" class="form-control" id="nombe" name="nombre" placeholder="Un nombre llamativo" required
-                        value={{ isset($producto) ? $producto->nombre : '' }}>
+                        value="{{ isset($producto) ? $producto->nombre : '' }}">
             </div>
             <div class="form-group my-3">
                 <label for="descripcion">Descripción</label>
-                <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Ingredientes, sabores, cómo se prepara" required
-                        value={{ isset($producto) ? $producto->descripcion : '' }}>
+                <textarea maxlength="255" class="form-control mb-3" id="descripcion" name="descripcion" rows="3" required>{{ isset($producto) ? $producto->descripcion : '' }}</textarea>
             </div>
             <div class="form-group my-3">
                 <label for="precio">Precio</label>
                 <input type="number" class="form-control" id="precio" name="precio" placeholder="Precio asequible" step="0.01" pat="true" required
-                        value={{ isset($producto) ? $producto->precio : '' }}>
+                        value="{{ isset($producto) ? $producto->precio : '' }}">
             </div>
             <button type="submit" class="btn btn-primary my-3">{{ isset($producto) ? 'Editar' : 'Registrar producto'}}</button>
         </form>

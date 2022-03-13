@@ -44,6 +44,7 @@
                             @method('DELETE')
                             <input type="hidden" name="producto_id" value="{{ $producto->id }}">
                         </form>
+                        <a class="btn btn-primary"  href="{{ route('productos.edit', ['id' => $producto->id]) }}">Editar</a>
                         <button class="btn btn-danger" producto_id="{{ $producto->id }}" onclick="eliminarProducto(this)">Eliminar</button>
                     @else
                         <div class="btn-menos">

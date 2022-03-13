@@ -11,7 +11,7 @@
         <table class="table table-responsive table-striped table-hover align-middle">
             <thead>
                 <tr>
-                    <th scope="col"></th>
+                    <th class="d-none d-sm-table-cell" scope="col"></th>
                     <th scope="col">Nombre</th>
                     <th class="text-center" scope="col">Precio</th>
                     <th class="text-center" scope="col">Cantidad</th>
@@ -20,7 +20,7 @@
             <tbody id="cuerpo-carrito">
                 @foreach($productos as $producto)
                     <tr>
-                        <td><img src="{{ asset('img/'.$producto->foto) }}" alt="{{ $producto->id }}"></td>
+                        <td class="d-none d-sm-table-cell"><img src="{{ asset('img/'.$producto->foto) }}" alt="{{ $producto->id }}"></td>
                         <td class="text-overflow-ellipsis">{{ $producto->nombre }}</td>
                         <td id="precio-producto-{{ $producto->id }}" class="text-center precio-producto">{{ $producto->precioProductoEnCarrito(Auth::user()) }}&euro;</td>
                         <td class="text-center">
@@ -36,8 +36,7 @@
 
         </table>
         {{-- TODO: styles a esto --}}
-        <h5 id="precio-total-carrito">Total: {{ Auth::user() ? Auth::user()->precioTotalCarrito() : 'Error' }}€</h5>
-        <p>Toquetear que si sube o baja la cantidad el precio del producto varie, también el total</p>
+        <h4 id="precio-total-carrito" class="text-end pe-5 mb-4">Total: {{ Auth::user() ? Auth::user()->precioTotalCarrito() : 'Error' }}€</h4>
         <div class="d-flex flex-row justify-content-evenly">
             <div class="boton-confirmar">
                 <div class='container-btn'>
