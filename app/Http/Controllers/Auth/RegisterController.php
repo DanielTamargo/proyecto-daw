@@ -72,18 +72,18 @@ class RegisterController extends Controller
 
 
         // Enviamos email al nuevo usuario
-        /*
-        $detalles = [
-            'asunto' => 'Usuario Registrado',
-            'rol_destinatario' => 'nuevo-empleado',
-            'nombre' => $request->nombre,
-            'usuario' => $request->email,
-            'password' => $request->password
+        $details = [
+            'asunto' => '¡Bienvenido/a a Hostelería DAW!',
+            'plantilla_email' => 'emails.nuevo-usuario',
+            'rol' => $user->rol,
+            'nombre' => $user->nombre,
+            'usuario' => $user->username,
+            'password' => $request->password //<- sin encriptar para los nuevos admins que son registrados por otros admins
         ];
-        */
-
-        // TODO enviar email
-
+       
+        try {
+            \Illuminate\Support\Facades\Mail::to(Constants::EMAIL_DESTINATARIO)->send(new \App\Mail\HosteleriaMail($details));
+        } catch (\Exception $e) {}
 
         // Loggeamos al nuevo usuario si no es un administrador que crea otro administrador
         if (!Auth::user()) Auth::login($user);

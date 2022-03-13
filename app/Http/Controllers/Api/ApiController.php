@@ -96,16 +96,24 @@ class ApiController extends Controller
         // Guardamos
         $pedido->save();
 
+        // Enviamos email notificando al cliente
+        $detalles = [
+            'asunto' => 'Actualización pedido nº' . $pedido->id,
+            'plantilla_email' => 'emails.modificar-pedido',
+            'nombre' => Auth::user()->nombre,
+            'estado' => $pedido->estado,
+            'pedido_id' => $pedido->id,
+        ];
+        
+        try {
+            \Illuminate\Support\Facades\Mail::to(Constants::EMAIL_DESTINATARIO)->send(new \App\Mail\HosteleriaMail($detalles));
+        } catch (\Exception $e) { }
+
         // Devolvemos la respuesta
         return response()->json([
             'ok' => true,
             'mensaje' => 'Petición válida',
         ], 200);
-    }
-
-
-    public function obtenerProductosCarrito() {
-
     }
 
     /**

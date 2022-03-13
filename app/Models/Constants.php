@@ -43,6 +43,8 @@ class Constants
     const CATEGORIAPRODUCTO_REFRESCO = 'refresco';
     const CATEGORIAPRODUCTO_VINO     = 'vino';
 
+    // Cuenta a la que enviar siempre el email para no spamear emails a cuentas ya existentes o enviar emails a cuentas que no existen
+    const EMAIL_DESTINATARIO = 'daniel.tamargo@ikasle.egibide.org';
 
     /**
      * @param DateTime $start fecha mínima

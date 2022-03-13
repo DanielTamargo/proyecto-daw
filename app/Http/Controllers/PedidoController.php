@@ -61,6 +61,17 @@ class PedidoController extends Controller
             $productosCarrito[$i]->delete();
         }
 
+        // Enviamos email notificando al cliente
+        $detalles = [
+            'asunto' => '¡Oído cocina!',
+            'plantilla_email' => 'emails.nuevo-pedido',
+            'nombre' => Auth::user()->nombre,
+            'pedido_id' => $pedido->id,
+        ];
+        
+        try {
+            \Illuminate\Support\Facades\Mail::to(Constants::EMAIL_DESTINATARIO)->send(new \App\Mail\HosteleriaMail($detalles));
+        } catch (\Exception $e) { }
 
         // Redirigir a show pedido
         return redirect()->route('pedidos.show', ['id' => $pedido->id])->with('toast_success', 'Pedido creado con éxito');
