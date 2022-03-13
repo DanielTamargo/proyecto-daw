@@ -8,6 +8,8 @@ const urlAPI = document.getElementById('url_api').value;
 const token_cliente = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 const cliente_loggeado = document.getElementById('nyb_cl').value;
 
+var addAnimacion = true;
+
 // Función que actualiza la cantidad total del carrito
 function actualizarCantidadCarrito(accion) {
     let elm_carrito = document.getElementById('indicador-carrito');
@@ -109,15 +111,18 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
                 btnMenos.classList.toggle(visible);
                 btnMas.classList.toggle(visible);
 
-                button.innerHTML += `
-                <div class="cart">
-                    <div>
-                        <div></div>
-                        <div></div>
+                if (addAnimacion) {
+                    addAnimacion = false;
+                    button.innerHTML += `
+                    <div class="cart">
+                        <div>
+                            <div></div>
+                            <div></div>
+                        </div>
                     </div>
-                </div>
-                <div class="dots"></div>
-                `;
+                    <div class="dots"></div>
+                    `;
+                }
             }
         }
     });

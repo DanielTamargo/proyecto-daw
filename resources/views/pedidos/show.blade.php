@@ -16,26 +16,36 @@
     <div class="contenedor">
     
         <div class="col-11">
-            <table class="table table-responsive table-striped table-hover align-middle">
+            <div class="progress col-12">
+                <div id="progress" class="progress-bar {{ $pedido->estado }}" role="progressbar">
+                </div>
+            </div>
+            <div class="col-12 d-flex justify-content-between  mb-5">
+                <span></span>
+                <span>Oído cocina</span>
+                <span>En preparacion</span>
+                <span>Listo</span>
+                <span>Recogido</span>
+            </div>
+            <h4>Lista de productos del pedido</h4>
+            <table class="table table-striped table-hover align-middle">
                 <thead>
                     <tr>
-                        <th scope="col"></th>
+                        <th class="d-none d-sm-table-cell" scope="col"></th>
                         <th scope="col">Nombre</th>
                         <th class="text-center" scope="col">Precio</th>
                         <th class="text-center" scope="col">Cantidad</th>
                     </tr>
                 </thead>
                 <tbody id="cuerpo-carrito">
-                @php $total = 0; @endphp
                     @foreach($pedido->productos as $producto)
-                    @php $total += $producto->precio; @endphp
                         <tr>
-                            <td><img src="{{ asset('img/'.$producto->foto) }}" alt="{{ $producto->id }}"></td>
+                            <td class="d-none d-sm-table-cell" ><img src="{{ asset('img/'.$producto->foto) }}" alt="{{ $producto->id }}"></td>
                             <td class="text-overflow-ellipsis">{{ $producto->nombre }}</td>
-                            <td class="text-center">{{ $producto->precio }}&euro;</td>
+                            <td class="text-center">{{ number_format($producto->precio * $producto->cantidadEnPedido($pedido), 2) }}&euro;</td>
                             <td class="text-center">
                                 <div class="d-flex flex-row flex-nowrap justify-content-center">
-                                    <span class="p-2">Placeholder</span>
+                                    <span class="p-2">{{ $producto->cantidadEnPedido($pedido) }}</span>
                                 </div>
                             </td>
                         </tr>
@@ -43,24 +53,13 @@
                 </tbody>
                 <tfoot>
                     <tr>
+                        <td class="d-none d-sm-table-cell" ></td>
                         <td></td>
                         <td></td>
-                        <td class="d-flex justify-content-evenly"><b>Precio total:</b><span>{{ $total }}€</span></td>
-                        <td></td>
+                        <td class="d-flex justify-content-evenly"><b>Precio total:</b><span>&nbsp;{{ $pedido->precioTotal() }}€</span></td>
                     </tr>
                 </tfoot>
             </table>
-            <div class="progress col-12">
-                <div id="progress" class="progress-bar {{ $pedido->estado }}" role="progressbar">
-                </div>
-            </div>
-            <div class="col-12 d-flex justify-content-between">
-                <span></span>
-                <span>Oído cocina</span>
-                <span>En preparacion</span>
-                <span>Listo</span>
-                <span>Recogido</span>
-            </div>
         </div>
         <input type="hidden" id="estado" value="{{ $pedido->estado }}">
         <input type="hidden" id="id_pedido" value="{{ $pedido->id }}">

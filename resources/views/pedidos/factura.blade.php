@@ -98,10 +98,15 @@
                 <h4 class="text-end me-2">Total pedido: {{ $pedido->precioTotal() }}&euro;</h4>
             </div>
         </div>
+        <input type="hidden" id="url_carta" value="{{ route('inicio') }}">
     </div>
 @endsection
 
 
 @section('scripts')
-<script src="{{ asset('js/pedidos.js') }}"></script>
+<script>
+    function verProducto(linea) {
+    window.location.href = document.querySelector('#url_carta').getAttribute('value') + '/' + linea.getAttribute('producto_id');
+}
+</script>
 @endsection

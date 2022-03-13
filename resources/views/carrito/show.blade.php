@@ -6,7 +6,7 @@
 
 
 @section('content')
-    <div class="contenedor @if(count($productos)!=0) justify-content-start row g-3">
+    <div class="contenedor @if(count($productos)!=0) justify-content-start row g-3 pb-4">
         
         <table class="table table-responsive table-striped table-hover align-middle">
             <thead>
@@ -64,7 +64,7 @@
                     </div>
                 </div>
             </div>
-            <button class="btn btn-danger">Vaciar carrito</button>
+            <button class="btn btn-danger" onclick="confirmarVaciarCarrito()">Vaciar carrito</button>
         </div>
         @else 
         justify-content-center">
@@ -74,7 +74,10 @@
         @endif
     </div>
 
+    {{-- Hidden form para realizar la compra --}}
+    <form id="comprar-carrito" action="{{ route('pedidos.store') }}" method="POST">@csrf</form>
     <input type="hidden" id="url_api" value="{{ route('api.carrito.actualizarproducto') }}">
+    <input type="hidden" id="url_api_vaciar_carrito" value="{{ route('api.carrito.vaciarcarrito') }}">
 @endsection
 
 

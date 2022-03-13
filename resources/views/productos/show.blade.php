@@ -19,11 +19,11 @@
 @section('content')
     <div class="contenedor-show contenedor-1">
         <div class="contenedor">
-            <div class="imagen">
+            <div class="imagen mb-3">
                 <img src="{{ asset('img/'.$producto->foto) }}" alt="foto">
             </div>
             <div class="detalles">
-                <p id="nombre">{{ $producto->nombre }}</p>
+                <p style="line-height: 1em !important;" id="nombre">{{ $producto->nombre }}</p>
                 <p class="d-flex justify-content-between" id="precio">
                     <span>
                         {{ $producto->precio }}€
@@ -37,56 +37,32 @@
                     </span>
                 </p>
                 <p id="descripcion">{{ $producto->descripcion }}</p>
-                <div class="botonera d-flex flex-column justify-content-center align-items-center p-3">
-                @if(Auth::user() && Auth::user()->rol == \App\Models\Constants::ROL_ADMINISTRADOR)
-                    <form id="eliminar-producto-{{ $producto->id }}" action="{{ route('productos.destroy') }}" method="post">
-                        @csrf
-                        @method('DELETE')
-                        <input type="hidden" name="producto_id" value="{{ $producto->id }}">
-                    </form>
-                    <button class="btn btn-danger" producto_id="{{ $producto->id }}" onclick="eliminarProducto(this)">Eliminar</button>
-                @else
-                    <div class="boton-confirmar mb-3">
-                        <div class='container-btn'>
-                            <div class='el-wrap'>
-                                <div class='slider'>
-                                    <div class='slider-text'>
-                                        <div class='text'>
-                                        Confirmar
-                                        </div>
-                                    </div>
-                                    <div class='slider-trigger'>
-                                        <div class='controller' id='controller'>
-                                            <i load-hicon='chevron-right' class='icon icon-opa'></i>
-                                        </div>
-                                        <div class='endpoint-container'>
-                                            <div class='endpoint' id='controllerDrop'></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class='button btn-clickable'>
-                                    <p class='text text-c'>Comprar</p>
-                                    <i load-hicon='check' class='icon icon-check'></i>
-                                </div>
+                <div class="botonera d-flex flex-row justify-content-center align-items-center p-3">
+                    @if(Auth::user() && Auth::user()->rol == \App\Models\Constants::ROL_ADMINISTRADOR)
+                        <form id="eliminar-producto-{{ $producto->id }}" action="{{ route('productos.destroy') }}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <input type="hidden" name="producto_id" value="{{ $producto->id }}">
+                        </form>
+                        <a class="btn btn-primary mb-5"  href="{{ route('productos.edit', ['id' => $producto->id]) }}">Editar</a>
+                        <button class="btn btn-danger ms-3 mb-5" producto_id="{{ $producto->id }}" onclick="eliminarProducto(this)">Eliminar</button>
+                    @else
+                        <div class="annadir-carrito">
+                            <div class="btn-menos">
+                                <button><b>-</b></button>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="annadir-carrito">
-                        <div class="btn-menos">
-                            <button><b>-</b></button>
-                        </div>
-                        <div class="btn-principal">
-                            <button producto_id="{{ $producto->id }}" class="add-to-cart 
-                            @if ($producto->cantidadEnCarrito(Auth::user()) > 0)
-                                added
-                            @endif">
-                                <div class="default">Añadir al carrito</div>
-                                <div class="success">{{ $producto->cantidadEnCarrito(Auth::user()) }}</div>
-                                <div class="cart">
-                                    <div>
-                                        <div></div>
-                                        <div></div>
+                            <div class="btn-principal">
+                                <button producto_id="{{ $producto->id }}" class="add-to-cart 
+                                    @if ($producto->cantidadEnCarrito(Auth::user()) > 0)
+                                        added
+                                    @endif">
+                                    <div class="default">Añadir al carrito</div>
+                                    <div class="success">{{ $producto->cantidadEnCarrito(Auth::user()) }}</div>
+                                    <div class="cart">
+                                        <div>
+                                            <div></div>
+                                            <div></div>
+                                        </div>
                                     </div>
                                     <div class="dots"></div>
                                 </button>
@@ -95,8 +71,8 @@
                                 <button><b>+</b></button>
                             </div>
                         </div>
-                    </div>
-                @endif
+                    @endif
+                </div>
             </div>
         </div>
     </div>

@@ -158,9 +158,10 @@ class ProductoController extends Controller
             return back()->with('toast_error', 'El producto que intentas eliminar no existe');
         }
 
-        // Eliminamos la imagen
+        // Eliminamos la imagen (excepto si es un placeholder)
         try {
-            unlink(public_path('img') . '/' . $producto->foto);
+            if (!str_contains($producto->foto, 'placeholder'))
+                unlink(public_path('img') . '/' . $producto->foto);
         } catch (\Exception $e) {}
 
         $producto->delete();

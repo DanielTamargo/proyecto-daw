@@ -121,4 +121,23 @@ class ApiController extends Controller
             'estado' => $pedido->estado,
         ], 200);
     }
+
+    /**
+     * API para vaciar el carrito
+     */
+    public function vaciarCarrito(Request $request) {
+        try {
+            ProductosCarrito::where('cliente_id', Auth::user()->id)->delete();
+        } catch (\Exception $e) {
+            return response()->json([
+                'ok' => false,
+                'mensaje' => 'Error al eliminar: ' . $e->getMessage()
+            ], 200);
+        }
+
+        return response()->json([
+            'ok' => true,
+            'mensaje' => 'Petición válida'
+        ], 200);
+    }
 }

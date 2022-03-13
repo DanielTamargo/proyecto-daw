@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Constants;
 use App\Models\Pedido;
+use App\Models\ProductosCarrito;
+use App\Models\ProductosPedido;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,7 +43,27 @@ class PedidoController extends Controller
      */
     public function store(Request $request)
     {
-        
+        // Crear nuevo pedido
+        $pedido = new Pedido;
+        $pedido->cliente_id = Auth::user()->id;
+        $pedido->save();
+
+        $productosCarrito = ProductosCarrito::where('cliente_id', $pedido->cliente_id)->get();
+        for ($i = 0; $i < $productosCarrito->count(); $i++) { 
+            // Insertar en productos pedido
+            ProductosPedido::create([
+                'producto_id' => $productosCarrito[$i]->producto_id,
+                'cantidad' => $productosCarrito[$i]->cantidad,
+                'pedido_id' => $pedido->id,
+            ]);
+
+            // Eliminar de productos carrito
+            $productosCarrito[$i]->delete();
+        }
+
+
+        // Redirigir a show pedido
+        return redirect()->route('pedidos.show', ['id' => $pedido->id])->with('toast_success', 'Pedido creado con éxito');
     }
 
     /**

@@ -147,15 +147,17 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
                 btnMenos.classList.toggle(visible);
                 btnMas.classList.toggle(visible);
 
-                button.innerHTML += `
-                <div class="cart">
-                    <div>
-                        <div></div>
-                        <div></div>
+                if (!button.innerHTML.includes('cart')) {
+                    button.innerHTML += `
+                    <div class="cart">
+                        <div>
+                            <div></div>
+                            <div></div>
+                        </div>
                     </div>
-                </div>
-                <div class="dots"></div>
-                `;
+                    <div class="dots"></div>
+                    `;
+                }
             }
         }
     });

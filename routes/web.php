@@ -42,6 +42,7 @@ Route::get('/logout', function () {
 Route::get('/api/usuario/comprobar-campo-unico', [ApiController::class, 'comprobarUsuarioCampoUnico']);
 Route::post('/api/carrito/producto-carrito', [ApiController::class, 'actualizarProductoCarrito'])->name('api.carrito.actualizarproducto')->middleware('auth');
 Route::get('/api/carrito/obtener-productos', [ApiController::class, 'obtenerProductosCarrito'])->name('api.carrito.obtenerproductos')->middleware('auth');
+Route::post('/api/carrito/vaciar-carrito', [ApiController::class, 'vaciarCarrito'])->name('api.carrito.vaciarcarrito')->middleware('auth');
 Route::post('/api/pedido/modificar-estado', [ApiController::class, 'modificarEstadoPedido'])->name('api.pedido.modificarestado')->middleware('auth');
 Route::post('/api/pedido/obtener-estado', [ApiController::class, 'obtenerEstadoPedido'])->name('api.pedido.obtenerestadopedido')->middleware('auth');
 
@@ -82,6 +83,7 @@ Route::post('/carrito/vaciar', [CarritoController::class, 'clear'])->name('carri
 
 /*--  PEDIDOS --*/
 Route::get('/pedidos', [PedidoController::class, 'index'])->name('pedidos.index')->middleware('auth');
+Route::post('/pedidos', [PedidoController::class, 'store'])->name('pedidos.store')->middleware('auth');
 Route::get('/pedidos/{id}', [PedidoController::class, 'show'])->name('pedidos.show')->middleware('auth');
 
 

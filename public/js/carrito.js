@@ -1,10 +1,11 @@
 const urlAPI = document.getElementById('url_api').value;
+const urlAPIVaciarCarrito = document.getElementById('url_api_vaciar_carrito').value;
 const token_cliente = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 const accionSumar = 'sumar';
 const accionRestar = 'restar';
 
 function despues() {
-    // code here
+    document.forms["comprar-carrito"].submit();
 }
 
 // Redirección a producto si clica en la celda
@@ -94,4 +95,65 @@ function peticionAPIActualizarCarrito(producto_id, producto_cantidad) {
       }).then(res => res.json())
       .then(response => console.log('Success:', response))
       .catch(error => console.error('Error:', error));
+}
+
+// Pide confirmación para vaciar el carrito
+function confirmarVaciarCarrito() {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        showCancelButton: true,
+        cancelButtonText: 'Mejor no',
+        confirmButtonText: 'Sí',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            peticionAPIVaciarCarrito();
+        }
+    });
+}
+
+// Petición API que vacía el carrito
+function peticionAPIVaciarCarrito() {
+    fetch(urlAPIVaciarCarrito, {
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': token_cliente
+        }
+      }).then(res => res.json())
+      .then(response => {
+          if (response.ok) {
+              window.location.reload();
+          } else {
+            Swal.mixin({
+                toast: true,
+                position: 'top-right',
+                iconColor: 'white',
+                customClass: {
+                    popup: 'colored-toast'
+                },
+                timer: 2500,
+                showConfirmButton: false,
+                timerProgressBar: true
+            }).fire({
+                icon: 'error',
+                title: 'Error al vaciar el carrito ＞﹏＜'
+            });
+          }
+      })
+      .catch(error => {
+        Swal.mixin({
+            toast: true,
+            position: 'top-right',
+            iconColor: 'white',
+            customClass: {
+                popup: 'colored-toast'
+            },
+            timer: 2500,
+            showConfirmButton: false,
+            timerProgressBar: true
+        }).fire({
+            icon: 'error',
+            title: 'Error en la petición'
+        });
+      });
 }
