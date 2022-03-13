@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Constants;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +24,12 @@ class ProductoController extends Controller
      */
     public function create()
     {
+        // Comprobamos que está accediendo un usuario registrado y que se trata de un usuario administrador
+        $user = Auth::user();
+        if (!$user || $user->rol != Constants::ROL_ADMINISTRADOR) {
+            return view('errors.403');
+        }
+
         return view('productos.create');
     }
 
@@ -34,6 +41,12 @@ class ProductoController extends Controller
      */
     public function store(Request $request)
     {
+        // Comprobamos que está accediendo un usuario registrado y que se trata de un usuario administrador
+        $user = Auth::user();
+        if (!$user || $user->rol != Constants::ROL_ADMINISTRADOR) {
+            return back();
+        }
+
         // Crear producto
         $producto = new Producto();
         $producto->nombre = trim($request->nombre);
@@ -73,6 +86,12 @@ class ProductoController extends Controller
      */
     public function edit(Request $request)
     {
+        // Comprobamos que está accediendo un usuario registrado y que se trata de un usuario administrador
+        $user = Auth::user();
+        if (!$user || $user->rol != Constants::ROL_ADMINISTRADOR) {
+            return view('errors.403');
+        }
+
         return view('productos.create')->with('producto', Producto::find($request->id));
     }
 
@@ -85,6 +104,12 @@ class ProductoController extends Controller
      */
     public function update(Request $request, Producto $producto)
     {
+        // Comprobamos que está accediendo un usuario registrado y que se trata de un usuario administrador
+        $user = Auth::user();
+        if (!$user || $user->rol != Constants::ROL_ADMINISTRADOR) {
+            return back();
+        }
+
         // Obtener producto
         $producto = Producto::find($request->producto_id);
 
@@ -122,6 +147,10 @@ class ProductoController extends Controller
      */
     public function destroy(Producto $producto)
     {
-        //
+        // Comprobamos que está accediendo un usuario registrado y que se trata de un usuario administrador
+        $user = Auth::user();
+        if (!$user || $user->rol != Constants::ROL_ADMINISTRADOR) {
+            return back();
+        }
     }
 }

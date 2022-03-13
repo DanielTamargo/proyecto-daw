@@ -14,6 +14,7 @@ use App\Models\Producto;
 use App\Models\ProductosPedido;
 use App\Models\User;
 use DateTime;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -27,8 +28,10 @@ class DatabaseSeeder extends Seeder
         // VARIABLES CONTROL SEEDER
 
         /* -- CLIENTES -- */
-        $clientes_min = 10;
-        $clientes_max = 20;
+        $fecha_min = new DateTime('2005-01-01');
+
+        $clientes_min = 20;
+        $clientes_max = 40;
 
         /* -- PRODUCTOS -- */
         $productos_min = 50;
@@ -37,15 +40,18 @@ class DatabaseSeeder extends Seeder
         $categoria_probabilidad = 25;
 
         /* -- PEDIDOS -- */
-        $fecha_min = new DateTime('2005-01-01');
+        $fecha_min_pedido = new DateTime('2021-01-01');
         $fecha_max = new DateTime();
 
-        $pedidos_min = 20;
-        $pedidos_max = 40;
+        $pedidos_min = 150;
+        $pedidos_max = 250;
         $pedido_probabilidad_cancelado = 10;
 
         $productos_pedido_min = 1;
-        $productos_pedido_max = 8;
+        $productos_pedido_max = 12;
+
+        $cantidad_producto_pedido_min = 1;
+        $cantidad_producto_pedido_max = 5;
 
         /* -- PEDIDOS PENDIENTES -- */
         $pedidos_pdtes_min = 2;
@@ -56,7 +62,7 @@ class DatabaseSeeder extends Seeder
 
         /* -- COMENTARIOS -- */
         $comentarios_min = 0;
-        $comentarios_max = 10;
+        $comentarios_max = 80;
         $probabilidad_punt_1 = 5;
         $probabilidad_punt_2 = 15;
         $probabilidad_punt_3 = 40;
@@ -65,13 +71,13 @@ class DatabaseSeeder extends Seeder
 
         
         // COMIENZA EL SEEDER
-        $this->command->warn("Starting Seeding. ");
+        $this->command->warn("Creando datos fijos");
 
         // Creamos dos administradores
         User::create([
             'email' => 'daniel.tamargo@ikasle.egibide.org',
-            'username' => 'dani',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'username' => 'daniel.tamargo',
+            'password' => Hash::make('12345Abcde'), // 12345Abcde
             'rol' => Constants::ROL_ADMINISTRADOR,
             'dni' => '72831820C',
             'nombre' => 'Daniel Tamargo',
@@ -82,8 +88,8 @@ class DatabaseSeeder extends Seeder
         ]);
         User::create([
             'email' => 'raul.melgosa@ikasle.egibide.org',
-            'username' => 'raul',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'username' => 'raul.melgosa',
+            'password' => Hash::make('12345Abcde'), // 12345Abcde
             'rol' => Constants::ROL_ADMINISTRADOR,
             'dni' => '95495990J',
             'nombre' => 'Raúl Melgosa',
@@ -92,8 +98,24 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
             'email_verified_at' => now(),
         ]);
+        // Creamos un cliente fijo
+        User::create([
+            'email' => 'irune.mendez@ikasle.egibide.org',
+            'username' => 'irune.mendez',
+            'password' => Hash::make('12345Abcde'), // 12345Abcde
+            'rol' => Constants::ROL_CLIENTE,
+            'dni' => '98443116B',
+            'nombre' => 'Irune Mendez',
+            'telefono' => '+34 675 324 187',
+            'direccion' => 'C/Panama 3, 01010',
+            'remember_token' => Str::random(10),
+            'email_verified_at' => now(),
+            'created_at' => $fecha_min,
+            'updated_at' => $fecha_min
+        ]);
+        $this->command->info("Datos fijos creados");
 
-
+        $this->command->warn("Creando clientes");
         // Creamos clientes
         $clientes = User::factory(rand($clientes_min, $clientes_max))->create();
         // Cambiamos la fecha de creación y actualización del cliente (para simular que se registraron a través de los años)
@@ -103,8 +125,9 @@ class DatabaseSeeder extends Seeder
             $cliente->updated_at = $fecha_random;
             $cliente->save();
         }
+        $this->command->info("Clientes creados");
 
-
+        $this->command->warn("Creando categorías");
         // Creamos categorías (hardcodeadas, serán categorías fijas)
         Categoria::create(['nombre' => Constants::CATEGORIAPRODUCTO_ENTRANTE]);
         Categoria::create(['nombre' => Constants::CATEGORIAPRODUCTO_PRIMERO]);
@@ -120,12 +143,14 @@ class DatabaseSeeder extends Seeder
         
         Categoria::create(['nombre' => Constants::CATEGORIAPRODUCTO_REFRESCO]);
         Categoria::create(['nombre' => Constants::CATEGORIAPRODUCTO_VINO]);
+        $this->command->info("Categorías creadas");
 
-
+        $this->command->warn("Creando productos");
         // Creamos productos
         $productos = Producto::factory(rand($productos_min, $productos_max))->create();
+        $this->command->info("Productos creados");
 
-
+        $this->command->warn("Creando categorías producto");
         // Creamos categorías productos (utilizando el pivot)
         $maxId = Categoria::all()->last()->id;
         foreach ($productos as $producto) {
@@ -139,15 +164,21 @@ class DatabaseSeeder extends Seeder
                 }
             }
         }
+        $this->command->info("Categorías producto creadas");
 
-
+        $this->command->warn("Creando pedidos");
         // Creamos pedidos
         for ($i = 0; $i < rand($pedidos_min, $pedidos_max); $i++) {
-            $fecha_pedido = Constants::randomTimestampEntreFechas($fecha_min, $fecha_max);
+            $fecha_pedido = $fecha_min_pedido;
+            // Si se pasa de la fecha actual, no lo hace
+            if ($fecha_pedido > $fecha_max) continue;
 
             // Comprobamos que, en base a la fecha a utilizar para el pedido, ya existían productos publicados y clientes registrados
             $productos_disponibles = Producto::where('fecha_publicacion', '<', $fecha_pedido)->get();
             $clientes_disponibles = User::where('created_at', '<', $fecha_pedido)->where('rol', Constants::ROL_CLIENTE)->get();
+
+            // Incrementamos la fecha pedido para el siguiente pedido con un número random de días minutos y segundos
+            $fecha_min_pedido->setTimestamp($fecha_pedido->getTimestamp() + (rand(1, 5) * rand(5, 17) * rand(10, 60) * 60));
 
             // Si por fecha no encuentra productos que estuvieran disponibles, repite
             if (count($productos_disponibles) <= 0 || count($clientes_disponibles) <= 0) {
@@ -164,12 +195,21 @@ class DatabaseSeeder extends Seeder
 
             // Asociamos productos
             // De entre los productos disponibles, añade una serie de productos aleatoriamente al pedido
+            $productos_pedido = [];
             $num_productos_pedido = rand($productos_pedido_min, $productos_pedido_max);
             for ($j = 0; $j < $num_productos_pedido; $j++) {
-                ProductosPedido::create([
-                    'producto_id' => $productos_disponibles[rand(0, count($productos_disponibles) - 1)]->id,
-                    'pedido_id' => $pedido->id
-                ]);
+                $producto = $productos_disponibles[rand(0, count($productos_disponibles) - 1)]->id;
+                if (!in_array($producto, $productos_pedido)) {
+                    ProductosPedido::create([
+                        'producto_id' => $producto,
+                        'pedido_id' => $pedido->id,
+                        'cantidad' => rand($cantidad_producto_pedido_min, $cantidad_producto_pedido_max)
+                    ]);
+                    array_push($productos_pedido, $producto);
+                } else {
+                    if (count($productos_pedido) >= count($productos_disponibles)) break;
+                    else $j--;
+                }
             }
 
             // Actualizamos timestamps
@@ -177,27 +217,44 @@ class DatabaseSeeder extends Seeder
             $pedido->updated_at = $fecha_pedido;
             $pedido->save();
         }
-        
+        $this->command->info("Pedidos creados");
+
+        $this->command->warn("Creando pedidos pendientes");
         // Creamos pedidos pendientes
         for ($i = 0; $i < rand($pedidos_pdtes_min, $pedidos_pdtes_max); $i++) {
             // Creamos el pedido
+
+            // 33% de probabilidad para cada estado recibido, enproceso y listo
+            $num = rand(0, 100);
+            if ($num < 33) $estado = Constants::ESTADO_RECIBIDO;
+            else if ($num < 66) $estado = Constants::ESTADO_ENPROCESO;
+            else $estado = Constants::ESTADO_LISTO;
+
             $pedido = Pedido::create([
                 'cliente_id' => $clientes_disponibles[rand(0, count($clientes_disponibles) - 1)]->id,
-                'estado' => rand(0, 100) > $pedido_probabilidad_cancelado ? Constants::ESTADO_ENTREGADO : Constants::ESTADO_CANCELADO,
-                'fecha_pedido' => $fecha_pedido
+                'estado' => $estado,
             ]);
 
             // Asociamos productos
             $num_productos_pedido = rand($productos_pedido_pdte_min, $productos_pedido_pdte_max);
+            $productos_pedido = [];
             for ($j = 0; $j < $num_productos_pedido; $j++) {
-                ProductosPedido::create([
-                    'producto_id' => $productos[rand(0, count($productos) - 1)]->id,
-                    'pedido_id' => $pedido->id
-                ]);
+                $producto = $productos[rand(0, count($productos) - 1)]->id;
+                if (!in_array($producto, $productos_pedido)) {
+                    ProductosPedido::create([
+                        'producto_id' => $producto,
+                        'pedido_id' => $pedido->id,
+                        'cantidad' => rand($cantidad_producto_pedido_min, $cantidad_producto_pedido_max)
+                    ]);
+                    array_push($productos_pedido, $producto);
+                } else {
+                    $j--;
+                }
             }
         }
+        $this->command->info("Pedidos pendientes creados");
 
-
+        $this->command->warn("Creando comentarios");
         // Comentarios
         foreach ($productos as $producto) {
             for ($i = 0; $i < rand($comentarios_min, $comentarios_max); $i++) {
@@ -231,6 +288,7 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+        $this->command->info("Comentarios creados");
 
     }
 }

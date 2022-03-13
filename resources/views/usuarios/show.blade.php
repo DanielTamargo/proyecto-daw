@@ -64,7 +64,7 @@
                         </thead>
                         <tbody>
                             @foreach (array_reverse($user->pedidos->sortBy('id')->all()) as $pedido)
-                                <tr>
+                                <tr pedido_id="{{ $pedido->id }}" onclick="verPedido(this)">
                                     <th scope="row">{{ $pedido->id }}</th>
                                     <td>{{ date('d-m-Y H:i:s', strtotime($pedido->fecha_pedido)) }}</td>
                                     <td>
@@ -145,13 +145,19 @@
                         por lo que mínimo 1 usuario existe...)
                     </p>
                 @endif
-            </div>
+            </div>            
         </div>
-    @endif
 
+        @endif
+        
+        <input type="hidden" id="url_pedidos" value="{{ route('pedidos.index') }}">
 </div>
 @endsection
 
 @section('scripts')
-
+<script>
+    function verPedido(linea) {
+        window.location.href = document.querySelector('#url_pedidos').getAttribute('value') + '/' + linea.getAttribute('pedido_id');
+    }
+</script>
 @endsection

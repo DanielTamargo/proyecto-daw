@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Constants;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,16 +11,6 @@ use Illuminate\Support\Facades\Session;
 class UsuarioController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view('welcome');
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  \App\Models\Usuario  $usuario
@@ -27,6 +18,12 @@ class UsuarioController extends Controller
      */
     public function show(Request $request)
     {
+        // Comprobamos que está accediendo un usuario registrado y que se trata de un usuario administrador
+        $user = Auth::user();
+        if (!$user || $user->rol != Constants::ROL_ADMINISTRADOR) {
+            return view('errors.403');
+        }
+
         $usuario = User::find($request->id);
         if (!$usuario) return view('errors.404');
 
@@ -48,6 +45,12 @@ class UsuarioController extends Controller
      */
     public function destroy(Request $request)
     {
+        // Comprobamos que está accediendo un usuario registrado y que se trata de un usuario administrador
+        $user = Auth::user();
+        if (!$user || $user->rol != Constants::ROL_ADMINISTRADOR) {
+            return back();
+        }
+
         $usuario = User::find($request->user_id);
         
         // Eliminamos el usuario

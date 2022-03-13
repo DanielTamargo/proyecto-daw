@@ -51,7 +51,7 @@ class Producto extends Model
     }
 
     /**
-     * Devuelve cuántas veces está añadido el producto en el carrito del cliente
+     * Devuelve la cantidad del producto en el carrito
      * 
      * Recibe el cliente loggeado, si es null devolverá un 0
      * Devuelve un número entero con el resultado
@@ -63,5 +63,24 @@ class Producto extends Model
 
         if ($productoCarrito) 
             return $productoCarrito->cantidad;
+        else
+            return 0;
+    }
+
+    /**
+     * Devuelve la cantidad del producto en el pedido
+     * 
+     * Recibe el pedido, si es null devolverá un 0
+     * Devuelve un número entero con el resultado
+     */
+    public function cantidadEnPedido($pedido)
+    {
+        if(!$pedido) return 0;
+        $productoPedido = ProductosPedido::where('pedido_id', $pedido->id)->where('producto_id', $this->id)->first();
+
+        if ($productoPedido) 
+            return $productoPedido->cantidad;
+        else
+            return 0;
     }
 }

@@ -47,7 +47,7 @@
             <div class="card-header">
                 Lista de pedidos <b>sin finalizar</b>
             </div>
-            <div class="card-body">
+            <div class="card-body p-0">
                 @if (count($pedidos_pendientes) <= 0)
                     <p class="card-text">
                         Sin pedidos pendientes
@@ -62,19 +62,19 @@
                                         <h5 class="m-0 pedido-ref">Pedido nº{{ $pedido->id }} 
                                         @switch($pedido->estado)
                                             @case(\App\Models\Constants::ESTADO_RECIBIDO)
-                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-primary">Recibido</span>
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="ms-2 badge bg-primary">Recibido</span>
                                                 @break
                                             @case(\App\Models\Constants::ESTADO_ENPROCESO)
-                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-info">En proceso</span>
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="ms-2 badge bg-info">En proceso</span>
                                                 @break
                                             @case(\App\Models\Constants::ESTADO_LISTO)
-                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-success">Listo</span>
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="ms-2 badge bg-success">Listo</span>
                                                 @break
                                             @case(\App\Models\Constants::ESTADO_CANCELADO)
-                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-danger">Cancelado</span>
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="ms-2 badge bg-danger">Cancelado</span>
                                                 @break
                                             @default
-                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-secondary">Finalizado</span>
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="ms-2 badge bg-secondary">Finalizado</span>
                                         @endswitch
                                         </h5>
                                         <p class="m-0 pedido-fecha">{{ date('d-m-Y H:i:s', strtotime($pedido->fecha_pedido)) }}</p>
@@ -89,7 +89,6 @@
                                             <p class="mb-0"><i class="bi bi-credit-card-2-front-fill me-2"></i>{{ strtoupper($pedido->cliente->dni) }}</p>
                                             <p><i class="bi bi-telephone-fill me-2"></i>{{ $pedido->cliente->telefono }}</p>
         
-                                            <p class="mb-0">Total pedido: {{ $pedido->precioTotal() }}€</p>
                                             <p class="mb-0">Pago realizado: Sí</p>
                                         </div>
                                         <div class="info-pedido-estado">
@@ -110,8 +109,32 @@
                                                         @selected($pedido->estado == App\Models\Constants::ESTADO_CANCELADO)
                                                         >Cancelado</option>
                                             </select>
-                                            <a href="#">Ver factura</a>
+                                            <a href="{{ route('pedidos.show', ['id' => $pedido->id]) }}">Ver factura</a>
                                         </div>
+                                    </div>
+                                    <div class="productos-pedido mt-4">
+                                        <h4>Lista de productos del pedido</h4>
+                                        <table class="table table-responsive table-hover align-middle cursor-default">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"></th>
+                                                    <th scope="col">Nombre</th>
+                                                    <th class="text-center" scope="col">Cantidad</th>
+                                                    <th class="text-center" scope="col">Precio</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($pedido->productos as $producto)
+                                                    <tr producto_id="{{ $producto->id }}" onclick="verProducto(this)">
+                                                        <td><img src="{{ asset('img/'.$producto->foto) }}" alt="{{ $producto->id }}"></td>
+                                                        <td class="text-overflow-ellipsis">{{ $producto->nombre }}</td>
+                                                        <td class="text-center">{{ $producto->cantidadEnPedido($pedido) }}</td>
+                                                        <td class="text-center">{{ number_format($producto->cantidadEnPedido($pedido) * $producto->precio, 2) }}&euro;</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                        <h4 class="text-end me-2">Total pedido: {{ $pedido->precioTotal() }}&euro;</h4>
                                     </div>
                                 </div>
                             </div>
@@ -144,19 +167,19 @@
                                         <h5 class="m-0 pedido-ref">Pedido nº{{ $pedido->id }} 
                                         @switch($pedido->estado)
                                             @case(\App\Models\Constants::ESTADO_RECIBIDO)
-                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-primary">Recibido</span>
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="ms-2 badge bg-primary">Recibido</span>
                                                 @break
                                             @case(\App\Models\Constants::ESTADO_ENPROCESO)
-                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-info">En proceso</span>
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="ms-2 badge bg-info">En proceso</span>
                                                 @break
                                             @case(\App\Models\Constants::ESTADO_LISTO)
-                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-success">Listo</span>
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="ms-2 badge bg-success">Listo</span>
                                                 @break
                                             @case(\App\Models\Constants::ESTADO_CANCELADO)
-                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-danger">Cancelado</span>
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="ms-2 badge bg-danger">Cancelado</span>
                                                 @break
                                             @default
-                                                <span id="badge-pedido-{{ $pedido->id }}" class="badge bg-secondary">Finalizado</span>
+                                                <span id="badge-pedido-{{ $pedido->id }}" class="ms-2 badge bg-secondary">Finalizado</span>
                                         @endswitch
                                         </h5>
                                         <p class="m-0 pedido-fecha">{{ date('d-m-Y H:i:s', strtotime($pedido->fecha_pedido)) }}</p>
@@ -171,7 +194,7 @@
                                             <p class="mb-0"><i class="bi bi-credit-card-2-front-fill me-2"></i>{{ strtoupper($pedido->cliente->dni) }}</p>
                                             <p><i class="bi bi-telephone-fill me-2"></i>{{ $pedido->cliente->telefono }}</p>
         
-                                            <p class="mb-0">Total pedido: {{ $pedido->precioTotal() }}€</p>
+                                            <p class="mb-0">Total pedido: {{ $pedido->precioTotal() }}&euro;</p>
                                             <p class="mb-0">Pago realizado: Sí</p>
                                         </div>
                                         <div class="info-pedido-estado">
@@ -192,7 +215,7 @@
                                                         @selected($pedido->estado == App\Models\Constants::ESTADO_CANCELADO)
                                                         >Cancelado</option>
                                             </select>
-                                            <a href="#">Ver factura</a>
+                                            <a href="{{ route('pedidos.show', ['id' => $pedido->id]) }}">Ver factura</a>
                                         </div>
                                     </div>
                                 </div>
@@ -206,6 +229,7 @@
         
         
         <input type="hidden" id="url_api" value="{{ route('api.pedido.modificarestado') }}">
+        <input type="hidden" id="url_carta" value="{{ route('inicio') }}">
     </div>
 @endsection
 

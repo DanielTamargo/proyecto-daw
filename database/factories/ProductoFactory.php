@@ -28,7 +28,7 @@ class ProductoFactory extends Factory
         return [
             'nombre' => ucfirst($this->faker->words(rand(3, 5), true)),
             'descripcion' => $this->faker->realTextBetween(),
-            'precio' => $this->faker->randomFloat(2, 2, 80),
+            'precio' => $this->faker->randomFloat(2, 2, 20),
             'foto' => 'placeholder_' . rand(1, 6) . '.png',
             'creado_por' => $admins[rand(0, count($admins) - 1)]->id,
             'fecha_publicacion' => Constants::randomTimestampEntreFechas($fecha_min, $fecha_max),

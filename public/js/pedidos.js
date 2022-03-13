@@ -88,3 +88,7 @@ function filtrarPedidos(filtro) {
             botonActivo = botonTodos;
     }
 }
+
+function verProducto(linea) {
+    window.location.href = document.querySelector('#url_carta').getAttribute('value') + '/' + linea.getAttribute('producto_id');
+}

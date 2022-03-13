@@ -16,7 +16,13 @@ class PedidoController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->rol != Constants::ROL_ADMINISTRADOR) return view('errors.403');
+        // Si no está loggeado no tendrá permisos
+        if (!Auth::user()) return view('errors.403');
+
+        // Si no es un usuario administrador se redirigirá a perfil donde puede ver sus pedidos
+        if (Auth::user()->rol != Constants::ROL_ADMINISTRADOR) {
+            return redirect()->route('usuarios.profile');
+        }
 
         // Obtenemos los pedidos finalizados por un lado y los pendientes por otro
         $pedidos_finalizados = Pedido::wherein('estado', [Constants::ESTADO_ENTREGADO, Constants::ESTADO_CANCELADO])->orderByDesc('id')->get();
@@ -47,6 +53,21 @@ class PedidoController extends Controller
     public function show(Pedido $pedido)
     {
         $pedido = Pedido::find(request('id'));
+        
+        // Si no se encuentra, error 404
+        if (!$pedido) 
+            return view('errors.404');
+
+        // Si se encuentra pero no es el cliente o un admin, error 403
+        if (!Auth::user() || ($pedido->cliente_id != Auth::user()->id && Auth::user()->rol != Constants::ROL_ADMINISTRADOR))
+            return view('errors.403');
+
+        // Si el pedido está finalizado (en estado cancelado o entregado) o es administrador, vemos factura
+        if ($pedido->estado == Constants::ESTADO_CANCELADO || $pedido->estado == Constants::ESTADO_ENTREGADO || Auth::user()->rol == Constants::ROL_ADMINISTRADOR) {
+            return view('pedidos.factura', compact('pedido'));
+        }
+
+        // Si no está finalizado, vemos actualización estado pedido
         return view('pedidos.show', compact('pedido'));
     }
 }
