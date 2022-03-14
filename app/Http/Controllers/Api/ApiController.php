@@ -100,13 +100,13 @@ class ApiController extends Controller
         $detalles = [
             'asunto' => 'Actualización pedido nº' . $pedido->id,
             'plantilla_email' => 'emails.modificar-pedido',
-            'nombre' => Auth::user()->nombre,
+            'nombre' => $pedido->cliente->nombre,
             'estado' => $pedido->estado,
             'pedido_id' => $pedido->id,
         ];
         
         try {
-            \Illuminate\Support\Facades\Mail::to(Constants::EMAIL_DESTINATARIO)->send(new \App\Mail\HosteleriaMail($detalles));
+            \Illuminate\Support\Facades\Mail::to($pedido->cliente->email)->send(new \App\Mail\HosteleriaMail($detalles));
         } catch (\Exception $e) { }
 
         // Devolvemos la respuesta

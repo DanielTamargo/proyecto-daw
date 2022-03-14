@@ -82,7 +82,7 @@ class RegisterController extends Controller
         ];
        
         try {
-            \Illuminate\Support\Facades\Mail::to(Constants::EMAIL_DESTINATARIO)->send(new \App\Mail\HosteleriaMail($details));
+            \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\HosteleriaMail($details));
         } catch (\Exception $e) {}
 
         // Loggeamos al nuevo usuario si no es un administrador que crea otro administrador

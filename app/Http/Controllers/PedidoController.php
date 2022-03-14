@@ -70,7 +70,7 @@ class PedidoController extends Controller
         ];
         
         try {
-            \Illuminate\Support\Facades\Mail::to(Constants::EMAIL_DESTINATARIO)->send(new \App\Mail\HosteleriaMail($detalles));
+            \Illuminate\Support\Facades\Mail::to(Auth::user()->email)->send(new \App\Mail\HosteleriaMail($detalles));
         } catch (\Exception $e) { }
 
         // Redirigir a show pedido
