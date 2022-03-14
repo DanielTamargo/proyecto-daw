@@ -69,7 +69,15 @@
         justify-content-center">
         <p class="display-4">No hay nada aqu&iacute; todav&iacute;a</p>
         <p class="display-1"><i class="bi bi-emoji-frown text-primary"></i></p>
-        <a href="{{ url()->previous() }}" class="btn btn-primary fs-2"><i class="bi bi-caret-left-fill"></i> Volver</a>
+        @php
+            $volverCarta = false;
+            $url_previa = url()->previous();
+            if (str_contains($url_previa, 'carrito')) {
+                $volverCarta = true;
+                $url_previa = route('inicio');
+            }
+        @endphp
+        <a href="{{ $url_previa }}" class="btn btn-primary fs-2"><i class="bi bi-caret-left-fill"></i>{{ $volverCarta ? 'Volver a la carta' : 'Volver' }}</a>
         @endif
     </div>
 

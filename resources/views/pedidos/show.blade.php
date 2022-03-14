@@ -16,16 +16,31 @@
     <div class="contenedor">
     
         <div class="col-11">
-            <div class="progress col-12">
+
+
+            {{-- Div a mostrar cuando el pedido es cancelado --}}
+            <div id="pedido-cancelado" class="col-12 mb-5" style="display: none;">
+                <h3 class="text-muted text-center">El pedido ha sido <b>cancelado</b></h3>
+                <p class="text-muted text-center">Si consideras que se trata de un error, llama al <b>945 71 54 32</b> o contacta a <b>hosteleriadaw@gmail.com</b></p>
+            </div>
+
+            {{-- Div a mostrar cuando hay petición al recuperar la información del pedido --}}
+            <div id="error-comprobar-pedido" class="col-12 mb-5" style="display: none;">
+                <h3 class="text-muted text-center">No hemos podido actualizar el estado del pedido. Intentándolo de nuevo...</h3>
+                <p class="text-muted text-center">Si este mensaje no se oculta significa que el problema persiste, llama al <b>945 71 54 32</b> o contacta a <b>hosteleriadaw@gmail.com</b></p>
+            </div>
+
+            {{-- Div que muestra la barra de progreso del pedido --}}
+            <div id="barra-estado-pedido" class="progress col-12">
                 <div id="progress" class="progress-bar {{ $pedido->estado }}" role="progressbar">
                 </div>
             </div>
-            <div class="col-12 d-flex justify-content-between  mb-5">
+            <div id="barra-estado-pedido-textos" class="col-12 d-flex justify-content-between mb-5" style="display: flex;">
                 <span></span>
                 <span>Oído cocina</span>
-                <span>En preparacion</span>
+                <span>En preparación</span>
                 <span>Listo</span>
-                <span>Recogido</span>
+                <span id="ultimo-estado">Recogido</span>
             </div>
             <h4>Lista de productos del pedido</h4>
             <table class="table table-striped table-hover align-middle">
@@ -78,12 +93,42 @@ const urlAPI = document.querySelector('#url_api').getAttribute('value');
 
 setInterval(() => {
     peticionAPIActualizarDatos();
-    actualizarBarra(datos);
+    //actualizarBarra(datos);
 }, 1000);
 
+var error = false;
+var cancelado = false;
 
 function actualizarBarra(estado) {
-    document.querySelector('#progress').className='progress-bar '+estado;
+    if (estado.toLowerCase() !== 'cancelado' && estado.toLowerCase() !== 'error') {
+        if (error || cancelado) {
+            if (error) { 
+                error = false;
+                document.querySelector('#error-comprobar-pedido').style.display = 'none';
+            }
+            else if (cancelado) {
+                cancelado = false;
+                document.querySelector('#pedido-cancelado').style.display = 'none';
+                document.querySelector('#ultimo-estado').innerText = 'Recibido';
+            }
+        }
+
+        document.querySelector('#progress').className='progress-bar '+ estado;
+    } else if (estado.toLowerCase() === 'cancelado') {
+        if (!cancelado) {
+            cancelado = true;
+            document.querySelector('#ultimo-estado').innerText = 'Cancelado';
+            document.querySelector('#progress').className='progress-bar cancelado';
+
+            document.querySelector('#pedido-cancelado').style.display = 'block';
+        }
+
+    } else if (estado.toLowerCase() === 'error') {
+        if (!error) {
+            error = true;
+            document.querySelector('#error-comprobar-pedido').style.display = 'block';
+        }
+    }
 }
 
 
@@ -99,7 +144,14 @@ function peticionAPIActualizarDatos() {
           'X-CSRF-TOKEN': token_cliente
         }
     }).then(res => res.json())
-    .then(response => datos=response['estado'])
+    .then(response => {
+        if (response.ok) {
+            datos=response['estado'];
+        } else {
+            datos='error';
+        }
+        actualizarBarra(datos);
+    })
     .catch(error => console.error('Error:', error));
 
 }

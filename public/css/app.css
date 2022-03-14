@@ -12283,6 +12283,11 @@ form {
   background: linear-gradient(90deg, #a370f7, #8540f5, #6610f2, #520dc2);
 }
 
+.progress-bar.cancelado {
+  width: 100%;
+  background: linear-gradient(90deg, #ea868f, #e35d6a, #dc3545, #b02a37);
+}
+
 @media screen and (max-width: 1000px) {
   .contenedor-productos {
     padding: 0 10px;

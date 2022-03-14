@@ -1070,6 +1070,11 @@ form {
         background: linear-gradient(90deg, $indigo-300, $indigo-400, $indigo-500, $indigo-600);
     }
 
+    .progress-bar.cancelado{
+        width: 100%;
+        background: linear-gradient(90deg, $red-300, $red-400, $red-500, $red-600);
+    }
+
 @media screen and (max-width: 1000px) {
     .contenedor-productos {
         padding: 0 10px;

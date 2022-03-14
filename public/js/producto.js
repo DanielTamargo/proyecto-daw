@@ -26,7 +26,6 @@ function actualizarCantidadCarrito(accion) {
     else elm_carrito.innerText = '';
 }
 
-
 // Petición API que actualiza en la BBDD el carrito del usuario
 function peticionAPIActualizarCarrito(producto_id, producto_cantidad) {
     fetch(urlAPI, {
