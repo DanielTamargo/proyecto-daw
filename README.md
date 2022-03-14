@@ -1,3 +1,18 @@
+# <img src="./public/favicon.ico" alt="Hosteleria DAW" width="56"/> Hosteleria DAW
+
+[![Open Source Love png2](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://hosteleria.herokuapp.com) [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://hosteleria.herokuapp.com)
+
+Inicia sesión o regístrate, añade productos a tu carrito, realiza el pedido y... ¡disfruta de tu pedido!
+
+[Consultar el manual de usuario.](https://docs.google.com/document/d/1uOFJb3ja7CcJPsTojjTWToZ6t7TdbQ0FTmgqhT4h2y8/edit?usp=sharing)  
+
+[¡Visita la aplicación y pruébala!](https://hosteleria.herokuapp.com)  
+
+Credenciales para probar con usuarios ya existentes:
+- **Administrador**: raul.melgosa / 12345Abcde
+- **Cliente**: irune.mendez / 12345Abcde
+
+
 # Proyecto DAW
 
 > ## **Gestor de pedidos online para hostelería**
