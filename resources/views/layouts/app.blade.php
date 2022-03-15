@@ -115,10 +115,12 @@
         @php
             if (session('toast_success')) {
                 $toast_success = session('toast_success');
+                session()->forget('toast_success');
             }
 
             if(session('toast_error')) {
                 $toast_error = session('toast_error');
+                session()->forget('toast_error');
             }
         @endphp
         @if (isset($toast_error) || isset($toast_success))
